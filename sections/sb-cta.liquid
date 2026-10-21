@@ -1,0 +1,58 @@
+<style>
+  .sb-cta-scroll-bundle {
+    display: inline-block;
+    background: #B5557F;
+    color: #ffffff;
+    padding: 14px 30px;
+    font-weight: 700;
+    border-radius: 8px;
+    font-size: 16px;
+    text-decoration: none;
+    margin: 15px auto;
+    text-align: center;
+    transition: all 0.25s ease;
+    cursor: pointer;
+  }
+  .sb-cta-scroll-bundle:hover {
+    background: #98446A;
+    color: #ffffff;
+  }
+  .sb-cta-container { text-align: center; }
+  @media screen and (max-width: 768px) {
+    .sb-cta-scroll-bundle { width: 90%; }
+  }
+</style>
+<div class="sb-cta-container">
+  <a href="#!" class="sb-cta-scroll-bundle" onclick="sbScrollToBundle(); return false;">{{ section.settings.label }}</a>
+</div>
+<script>
+  function sbScrollToBundle() {
+    var target = document.querySelector('#sb-bundle, h1');
+    if (target) {
+      var top = target.getBoundingClientRect().top + window.pageYOffset - 120;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    }
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Sculpt: buy button",
+  "tag": "section",
+  "class": "sb-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Button label",
+      "default": "Get My Sculpt Brief"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sculpt: buy button",
+      "category": "Sculpt"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,211 @@
+{%- liquid
+  assign product = closest.product
+  assign unit_price = product.selected_or_first_available_variant.price
+-%}
+
+<div class="sbb" id="sb-bundle" data-sbb>
+  {%- if block.settings.heading != blank -%}
+    <div class="sbb-head"><span>{{ block.settings.heading }}</span></div>
+  {%- endif -%}
+
+  <div class="sbb-tiers" role="radiogroup">
+    {%- for i in (1..3) -%}
+      {%- liquid
+        assign qty_key = 'tier_' | append: i | append: '_qty'
+        assign total_key = 'tier_' | append: i | append: '_total'
+        assign title_key = 'tier_' | append: i | append: '_title'
+        assign badge_key = 'tier_' | append: i | append: '_badge'
+        assign qty = block.settings[qty_key]
+        assign total = block.settings[total_key] | times: 100 | round
+        assign compare = unit_price | times: qty
+        assign each = total | divided_by: qty
+        assign selected = false
+        if block.settings.default_tier == i
+          assign selected = true
+        endif
+      -%}
+      {%- if qty > 0 -%}
+        <label class="sbb-tier{% if selected %} is-active{% endif %}" data-sbb-tier data-qty="{{ qty }}">
+          {%- if block.settings[badge_key] != blank -%}
+            <span class="sbb-badge">{{ block.settings[badge_key] }}</span>
+          {%- endif -%}
+          <input type="radio" name="sbb-tier-{{ block.id }}" value="{{ qty }}" {% if selected %}checked{% endif %}>
+          <span class="sbb-radio" aria-hidden="true"></span>
+          <span class="sbb-tier-text">
+            <span class="sbb-tier-title">{{ block.settings[title_key] }}</span>
+            <span class="sbb-tier-sub">Only {{ each | money }} each</span>
+          </span>
+          <span class="sbb-tier-price">
+            <span class="sbb-now">{{ total | money }}</span>
+            {%- if compare > total -%}
+              <s class="sbb-was">{{ compare | money }}</s>
+            {%- endif -%}
+          </span>
+        </label>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <div class="sbb-items" data-sbb-items></div>
+
+  <template data-sbb-row>
+    <div class="sbb-row">
+      <span class="sbb-row-num"></span>
+      {%- for option in product.options_with_values -%}
+        <select class="sbb-select" data-sbb-option="{{ forloop.index0 }}" aria-label="{{ option.name }}">
+          {%- for value in option.values -%}
+            <option value="{{ value | escape }}">{{ value }}</option>
+          {%- endfor -%}
+        </select>
+      {%- endfor -%}
+    </div>
+  </template>
+
+  <button type="button" class="sbb-atc" data-sbb-atc>
+    <span data-sbb-label>{{ block.settings.button_label }}</span>
+  </button>
+  <p class="sbb-error" data-sbb-error hidden></p>
+
+  <script type="application/json" data-sbb-variants>
+    [{%- for variant in product.variants -%}{"id":{{ variant.id }},"options":{{ variant.options | json }},"available":{{ variant.available }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]
+  </script>
+</div>
+
+<style>
+  .sbb { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; width: 100%; }
+  .sbb-head { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: 14px; font-weight: 700; color: #1A1A1A; text-align: center; }
+  .sbb-head::before, .sbb-head::after { content: ""; flex: 1; height: 1px; background: #E5DCE1; }
+  .sbb-tiers { display: flex; flex-direction: column; gap: 12px; }
+  .sbb-tier { position: relative; display: flex; align-items: center; gap: 12px; padding: 16px 14px; border: 1.5px solid #E5DCE1; border-radius: 12px; background: #fff; cursor: pointer; transition: border-color .15s, background .15s; }
+  .sbb-tier input { position: absolute; opacity: 0; pointer-events: none; }
+  .sbb-tier.is-active { border: 2px solid #B5557F; background: #FBF3F7; }
+  .sbb-radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #C9B5BF; flex-shrink: 0; position: relative; }
+  .sbb-tier.is-active .sbb-radio { border-color: #B5557F; }
+  .sbb-tier.is-active .sbb-radio::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: #B5557F; }
+  .sbb-tier-text { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+  .sbb-tier-title { font-size: 15px; font-weight: 800; color: #1A1A1A; letter-spacing: .2px; }
+  .sbb-tier-sub { font-size: 12.5px; color: #6B5E65; }
+  .sbb-tier-price { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+  .sbb-now { font-size: 17px; font-weight: 800; color: #1A1A1A; }
+  .sbb-was { font-size: 13px; color: #9c8a90; }
+  .sbb-badge { position: absolute; top: -10px; right: 14px; background: #B5557F; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .5px; padding: 3px 10px; border-radius: 999px; }
+  .sbb-items { display: flex; flex-direction: column; gap: 8px; margin: 12px 0 0; }
+  .sbb-items:empty { display: none; }
+  .sbb-row { display: flex; align-items: center; gap: 8px; }
+  .sbb-row-num { font-size: 12.5px; font-weight: 700; color: #6B5E65; width: 22px; flex-shrink: 0; }
+  .sbb-select { flex: 1; min-width: 0; padding: 9px 10px; font-size: 14px; border: 1px solid #E5DCE1; border-radius: 8px; background: #fff; color: #1A1A1A; font-family: inherit; }
+  .sbb-atc { display: block; width: 100%; margin: 16px 0 0; padding: 17px 20px; border: 0; border-radius: 8px; background: rgb(3, 211, 137); color: #fff; font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; cursor: pointer; font-family: inherit; transition: filter .15s; }
+  .sbb-atc:hover { filter: brightness(.95); }
+  .sbb-atc[disabled] { opacity: .6; cursor: wait; }
+  .sbb-error { color: #c0392b; font-size: 13.5px; margin: 10px 0 0; text-align: center; }
+</style>
+
+<script>
+  (function () {
+    var root = document.querySelector('[data-sbb]');
+    if (!root || root.dataset.sbbReady) return;
+    root.dataset.sbbReady = '1';
+
+    var variants = JSON.parse(root.querySelector('[data-sbb-variants]').textContent);
+    var rowTemplate = root.querySelector('[data-sbb-row]');
+    var items = root.querySelector('[data-sbb-items]');
+    var tiers = root.querySelectorAll('[data-sbb-tier]');
+    var atc = root.querySelector('[data-sbb-atc]');
+    var error = root.querySelector('[data-sbb-error]');
+    var initial = variants.find(function (v) { return v.available; }) || variants[0];
+
+    function renderRows(qty) {
+      var previous = Array.prototype.map.call(items.children, readRow);
+      items.innerHTML = '';
+      for (var n = 0; n < qty; n++) {
+        var row = rowTemplate.content.firstElementChild.cloneNode(true);
+        row.querySelector('.sbb-row-num').textContent = '#' + (n + 1);
+        var opts = previous[n] || initial.options;
+        row.querySelectorAll('[data-sbb-option]').forEach(function (select) {
+          select.value = opts[+select.dataset.sbbOption];
+        });
+        items.appendChild(row);
+      }
+    }
+
+    function readRow(row) {
+      return Array.prototype.map.call(row.querySelectorAll('[data-sbb-option]'), function (s) { return s.value; });
+    }
+
+    function findVariant(options) {
+      return variants.find(function (v) {
+        return v.options.every(function (value, i) { return value === options[i]; });
+      });
+    }
+
+    tiers.forEach(function (tier) {
+      tier.addEventListener('click', function () {
+        tiers.forEach(function (t) { t.classList.toggle('is-active', t === tier); });
+        tier.querySelector('input').checked = true;
+        renderRows(+tier.dataset.qty);
+      });
+    });
+
+    atc.addEventListener('click', function () {
+      error.hidden = true;
+      var counts = {};
+      for (var r = 0; r < items.children.length; r++) {
+        var variant = findVariant(readRow(items.children[r]));
+        if (!variant || !variant.available) {
+          error.textContent = 'Item #' + (r + 1) + ' is sold out in this combination. Please pick another.';
+          error.hidden = false;
+          return;
+        }
+        counts[variant.id] = (counts[variant.id] || 0) + 1;
+      }
+      var payload = Object.keys(counts).map(function (id) { return { id: +id, quantity: counts[id] }; });
+      atc.disabled = true;
+      fetch('{{ routes.cart_add_url }}.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ items: payload })
+      })
+        .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+        .then(function (result) {
+          if (!result.ok) throw new Error(result.data.description || result.data.message);
+          window.location.href = '{{ routes.cart_url }}';
+        })
+        .catch(function (err) {
+          atc.disabled = false;
+          error.textContent = err.message || 'Something went wrong, please try again.';
+          error.hidden = false;
+        });
+    });
+
+    var active = root.querySelector('[data-sbb-tier].is-active') || tiers[0];
+    if (active) renderRows(+active.dataset.qty);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sculpt: bundle offers",
+  "tag": null,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Try it risk-free — 90-day guarantee" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Add to cart" },
+    { "type": "range", "id": "default_tier", "label": "Preselected offer", "min": 1, "max": 3, "step": 1, "default": 2 },
+    { "type": "header", "content": "Offer 1" },
+    { "type": "text", "id": "tier_1_title", "label": "Title", "default": "BUY 1 GET 1 FREE" },
+    { "type": "number", "id": "tier_1_qty", "label": "Items", "default": 2 },
+    { "type": "number", "id": "tier_1_total", "label": "Total price", "default": 39.9, "info": "Must match the automatic discount set up in Shopify." },
+    { "type": "text", "id": "tier_1_badge", "label": "Badge" },
+    { "type": "header", "content": "Offer 2" },
+    { "type": "text", "id": "tier_2_title", "label": "Title", "default": "BUY 2 GET 2 FREE" },
+    { "type": "number", "id": "tier_2_qty", "label": "Items", "default": 4 },
+    { "type": "number", "id": "tier_2_total", "label": "Total price", "default": 49.9 },
+    { "type": "text", "id": "tier_2_badge", "label": "Badge", "default": "MOST POPULAR ❤️" },
+    { "type": "header", "content": "Offer 3" },
+    { "type": "text", "id": "tier_3_title", "label": "Title", "default": "BUY 3 GET 3 FREE" },
+    { "type": "number", "id": "tier_3_qty", "label": "Items", "default": 6 },
+    { "type": "number", "id": "tier_3_total", "label": "Total price", "default": 64.9 },
+    { "type": "text", "id": "tier_3_badge", "label": "Badge", "default": "BEST VALUE 🔥" }
+  ],
+  "presets": [{ "name": "Sculpt: bundle offers", "category": "Sculpt" }]
+}
+{% endschema %}

@@ -1,0 +1,65 @@
+<div class="sb-guarantee">
+  <svg class="sb-guarantee-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    <path d="M9 12l2 2 4-4"/>
+  </svg>
+  <p class="sb-guarantee-text"><strong>Try it risk-free for 90 days.</strong> Don't love it? Reach out and we'll make it right, with a refund.</p>
+</div>
+<style>
+  .sb-guarantee {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 14px 0;
+    padding: 14px 16px;
+    background: #FBEEF4;
+    border-radius: 10px;
+  }
+  .sb-guarantee-icon {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    color: #BC5589;
+    margin-top: 1px;
+  }
+  .sb-guarantee-text {
+    font-size: 13.5px;
+    font-weight: 400;
+    color: #374151;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+  }
+  .sb-guarantee-text strong {
+    font-weight: 700;
+    color: #0F172A;
+  }
+  @media (min-width: 768px) {
+    .sb-guarantee {
+      padding: 16px 20px;
+      gap: 14px;
+    }
+    .sb-guarantee-text {
+      font-size: 14px;
+    }
+    .sb-guarantee-icon {
+      width: 30px;
+      height: 30px;
+      min-width: 30px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Sculpt: guarantee note",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Sculpt: guarantee note",
+      "category": "Sculpt"
+    }
+  ]
+}
+{% endschema %}

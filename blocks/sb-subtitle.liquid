@@ -1,0 +1,38 @@
+<style>
+  .sb-subtitle {
+    max-width: 540px;
+    margin: 6px auto 14px;
+    padding: 0 4px;
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  .sb-subtitle p {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: #475569;
+  }
+  .sb-subtitle strong { font-weight: 700; color: #B5557F; }
+  @media (max-width: 480px) {
+    .sb-subtitle p { font-size: 15.5px; }
+  }
+</style>
+<div class="sb-subtitle">
+  <p>The belly that won't go, <strong>finally gone.</strong></p>
+</div>
+
+{% schema %}
+{
+  "name": "Sculpt: subtitle",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Sculpt: subtitle",
+      "category": "Sculpt"
+    }
+  ]
+}
+{% endschema %}

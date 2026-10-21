@@ -1,0 +1,88 @@
+<div class="sb-cmp">
+  <h2 class="sb-cmp-title">Not all shapewear works the same way.</h2>
+
+  <div class="sb-cmp-grid">
+
+    <div class="sb-cmp-card sb-cmp-card--lose">
+      <img class="sb-cmp-img" width="900" height="1117" src="{{ 'sb-compare-ordinary.jpg' | asset_url }}" alt="Ordinary shapewear" loading="lazy">
+      <div class="sb-cmp-body">
+        <p class="sb-cmp-head">
+          <span class="sb-cmp-hic sb-cmp-hic--x"><svg viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="#D04545" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+          Ordinary Shapewear
+        </p>
+        <ul class="sb-cmp-list">
+          <li class="sb-cmp-item"><span class="sb-cmp-m sb-cmp-m--x"><svg viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="#D04545" stroke-width="2" stroke-linecap="round"/></svg></span><span class="sb-cmp-txt">Squeezes only the front of your belly</span></li>
+          <li class="sb-cmp-item"><span class="sb-cmp-m sb-cmp-m--x"><svg viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="#D04545" stroke-width="2" stroke-linecap="round"/></svg></span><span class="sb-cmp-txt">Rolls and slides as the day goes on</span></li>
+          <li class="sb-cmp-item"><span class="sb-cmp-m sb-cmp-m--x"><svg viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="#D04545" stroke-width="2" stroke-linecap="round"/></svg></span><span class="sb-cmp-txt">Shows lines through your clothes</span></li>
+          <li class="sb-cmp-item"><span class="sb-cmp-m sb-cmp-m--x"><svg viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="#D04545" stroke-width="2" stroke-linecap="round"/></svg></span><span class="sb-cmp-txt">The effect is gone the moment you take it off</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sb-cmp-card sb-cmp-card--win">
+      <img class="sb-cmp-img" width="900" height="1117" src="{{ 'sb-compare-ours.jpg' | asset_url }}" alt="{{ product.title | default: "Sculpt Brief" }}" loading="lazy">
+      <div class="sb-cmp-body">
+        <p class="sb-cmp-head">
+          <span class="sb-cmp-hic sb-cmp-hic--check"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10.5l4 4 8-9" stroke="#B5557F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          {{ shop.name }}
+        </p>
+        <ul class="sb-cmp-list">
+          <li class="sb-cmp-item"><span class="sb-cmp-m sb-cmp-m--check"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="#B5557F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="sb-cmp-txt"><strong>Full 360&deg; support</strong>: front, sides and back</span></li>
+          <li class="sb-cmp-item"><span class="sb-cmp-m sb-cmp-m--check"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="#B5557F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="sb-cmp-txt">Feels just like everyday underwear</span></li>
+          <li class="sb-cmp-item"><span class="sb-cmp-m sb-cmp-m--check"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="#B5557F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="sb-cmp-txt">Hidden under anything you wear</span></li>
+          <li class="sb-cmp-item"><span class="sb-cmp-m sb-cmp-m--check"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="#B5557F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="sb-cmp-txt">A visible difference in 2 to 3 weeks</span></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sb-cmp-note">
+    <span class="sb-cmp-note-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l9 5-9 5-9-5 9-5z" stroke="#B5557F" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 12.5l9 5 9-5" stroke="#B5557F" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 16.5l9 5 9-5" stroke="#B5557F" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+    <p class="sb-cmp-note-txt"><strong>Rooted in the Malaysian Bengkung:</strong> a wraparound compression technique used for centuries to help hold and support the abdominal wall after birth.</p>
+  </div>
+</div>
+<style>
+  .sb-cmp { max-width: 880px; width: 100%; margin: 28px auto; padding: 0 16px; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  .sb-cmp-title { text-align: center; font-size: 27px; font-weight: 800; color: #1A1A1A; line-height: 1.15; margin: 0 0 26px; }
+  .sb-cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .sb-cmp-card { background: #fff; border: 1.5px solid #ECECEC; border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; }
+  .sb-cmp-card--win { border: 2px solid #B5557F; box-shadow: 0 12px 32px rgba(181,85,127,.14); }
+  .sb-cmp-card--lose { opacity: .96; }
+  .sb-cmp-img { width: 100%; height: auto; display: block; }
+  .sb-cmp-body { padding: 18px 18px 20px; }
+  .sb-cmp-head { display: flex; align-items: center; gap: 9px; font-size: 16.5px; font-weight: 800; color: #1A1A1A; margin: 0 0 12px; }
+  .sb-cmp-hic { width: 22px; height: 22px; flex-shrink: 0; display: inline-flex; }
+  .sb-cmp-hic svg { width: 22px; height: 22px; }
+  .sb-cmp-list { list-style: none; margin: 0; padding: 0; }
+  .sb-cmp-item { display: flex; align-items: flex-start; gap: 9px; font-size: 14px; line-height: 1.4; padding: 8px 0; color: #3a3a3a; border-top: 1px solid #F2F2F2; }
+  .sb-cmp-item:first-child { border-top: none; }
+  .sb-cmp-txt { min-width: 0; }
+  .sb-cmp-card--lose .sb-cmp-item { color: #8a8a8a; }
+  .sb-cmp-item strong { color: inherit; font-weight: 700; }
+  .sb-cmp-m { flex-shrink: 0; width: 16px; height: 16px; margin-top: 1px; display: inline-flex; }
+  .sb-cmp-m svg { width: 16px; height: 16px; }
+  .sb-cmp-note { margin-top: 18px; background: #FBF3F7; border: 1px solid #EEDCE6; border-radius: 14px; padding: 16px 18px; display: flex; align-items: flex-start; gap: 12px; }
+  .sb-cmp-note-ic { flex-shrink: 0; width: 24px; height: 24px; display: inline-flex; }
+  .sb-cmp-note-txt { font-size: 14px; color: #555; line-height: 1.55; margin: 0; }
+  .sb-cmp-note-txt strong { color: #1A1A1A; }
+  @media (max-width: 600px) {
+    .sb-cmp-grid { grid-template-columns: 1fr; gap: 14px; }
+    .sb-cmp-title { font-size: 22px; margin-bottom: 20px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Sculpt: comparison",
+  "tag": "section",
+  "class": "sb-section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Sculpt: comparison",
+      "category": "Sculpt"
+    }
+  ]
+}
+{% endschema %}

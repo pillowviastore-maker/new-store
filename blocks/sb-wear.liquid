@@ -1,0 +1,99 @@
+<div class="sb-wear">
+  <p class="sb-wear-eyebrow">Made to wear and forget</p>
+  <div class="sb-wear-grid">
+
+    <div class="sb-wear-item">
+      <video class="sb-wear-gif" data-sb-lazy data-src="{{ 'sb-clip-2.mp4' | file_url }}" data-poster="{{ 'sb-clip-2.jpg' | asset_url }}" muted loop playsinline autoplay preload="none" width="640" height="480" aria-label="Invisible under clothes"></video>
+      <p class="sb-wear-label">Invisible under your clothes</p>
+      <p class="sb-wear-sub">Seamless edges, no ridges or lines. It disappears under dresses, jeans and leggings.</p>
+    </div>
+
+    <div class="sb-wear-item">
+      <video class="sb-wear-gif" data-sb-lazy data-src="{{ 'sb-clip-1.mp4' | file_url }}" data-poster="{{ 'sb-clip-1.jpg' | asset_url }}" muted loop playsinline autoplay preload="none" width="640" height="480" aria-label="Stays in place all day"></video>
+      <p class="sb-wear-label">Stays put, morning to night</p>
+      <p class="sb-wear-sub">Soft and breathable, it molds to you and never rolls or bunches. Slip it on and forget it.</p>
+    </div>
+
+  </div>
+</div>
+<style>
+  .sb-wear { max-width: 560px; width: 100%; margin: 14px auto; padding: 0 16px; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  .sb-wear-eyebrow { text-align: center; color: #B5557F; font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; margin: 0 0 12px; }
+  .sb-wear-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .sb-wear-item { text-align: center; }
+  .sb-wear-gif { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 12px; display: block; background: #f3eef1; }
+  .sb-wear-label { font-size: 13.5px; font-weight: 700; color: #1A1A1A; margin: 8px 0 2px; line-height: 1.25; }
+  .sb-wear-sub { font-size: 12px; color: #666; line-height: 1.4; margin: 0; }
+  @media (max-width: 420px) {
+    .sb-wear-label { font-size: 12.5px; }
+    .sb-wear-sub { font-size: 11px; }
+  }
+</style>
+<script>
+  /* {{ shop.name }} video kit (shared, loads once): autoplay when allowed; if blocked (iPhone low power mode), show a play button and let one tap anywhere start every visible video */
+  (function(){
+    if (window.sbVideoKit) return;
+    var st = document.createElement('style');
+    st.textContent = '.sb-play{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.12);border:0;margin:0;padding:0;cursor:pointer;border-radius:inherit;z-index:2;-webkit-tap-highlight-color:transparent}.sb-play span{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.18)}.sb-play span:before{content:"";margin-left:4px;border-style:solid;border-width:9px 0 9px 15px;border-color:transparent transparent transparent #B5557F}';
+    document.head.appendChild(st);
+    var blocked = 0;
+    function hideBtn(v){ if (v._sbBtn) { v._sbBtn.parentNode && v._sbBtn.parentNode.removeChild(v._sbBtn); v._sbBtn = null; blocked--; } }
+    function showBtn(v){
+      if (v._sbBtn) return;
+      var p = v.parentNode;
+      if (window.getComputedStyle(p).position === 'static') { p.style.position = 'relative'; }
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'sb-play'; b.setAttribute('aria-label', 'Play video'); b.innerHTML = '<span></span>';
+      b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); unlockAll(); });
+      p.appendChild(b); v._sbBtn = b; blocked++;
+    }
+    function play(v){
+      var pr = v.play();
+      if (pr && pr.then) { pr.then(function(){ hideBtn(v); }, function(){ if (v.getAttribute('data-sb-want') === '1') { showBtn(v); } }); }
+    }
+    function unlockAll(){
+      if (blocked <= 0) return;
+      var vids = document.querySelectorAll('video[data-sb-want="1"]');
+      for (var i = 0; i < vids.length; i++) { play(vids[i]); }
+    }
+    document.addEventListener('touchend', unlockAll, { passive: true });
+    document.addEventListener('click', unlockAll);
+    window.sbVideoKit = {
+      want: function(v, on){
+        v.setAttribute('data-sb-want', on ? '1' : '0');
+        if (on) { play(v); } else { v.pause(); hideBtn(v); }
+      }
+    };
+  })();
+
+  (function(){
+    var kit = window.sbVideoKit;
+    var vids = document.querySelectorAll('video[data-sb-lazy]:not([data-sb-obs])');
+    function load(v){
+      if (v.dataset.poster && !v.getAttribute('poster')) { v.setAttribute('poster', v.dataset.poster); }
+      if (!v.getAttribute('src')) { v.setAttribute('src', v.dataset.src); }
+    }
+    if (!('IntersectionObserver' in window)) { for (var i = 0; i < vids.length; i++) { load(vids[i]); kit.want(vids[i], true); } return; }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) { load(e.target); kit.want(e.target, true); }
+        else if (e.target.getAttribute('src')) { kit.want(e.target, false); }
+      });
+    }, { rootMargin: '400px 0px' });
+    for (var j = 0; j < vids.length; j++) { vids[j].setAttribute('data-sb-obs', '1'); io.observe(vids[j]); }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sculpt: how it wears",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Sculpt: how it wears",
+      "category": "Sculpt"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,74 @@
+<style>
+  .sbFaq2{max-width:760px;margin:0 auto;padding:8px 16px 32px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+  .sbFaq2-title{font-size:22px;font-weight:700;color:#1A1A1A;text-align:center;margin:0 0 18px;letter-spacing:-0.01em}
+  .sbFaq2-list{border-top:1px solid #eee}
+  .sbFaq2-item{border-bottom:1px solid #eee}
+  .sbFaq2-q{width:100%;background:0;border:0;padding:16px 0;font-size:15px;font-weight:600;color:#1a1a1a;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:inherit}
+  .sbFaq2-q:hover{color:#B5557F}
+  .sbFaq2-plus{font-size:22px;font-weight:300;color:#999;flex-shrink:0;transition:transform .2s,color .2s;line-height:1}
+  .sbFaq2-item.open .sbFaq2-plus{transform:rotate(45deg);color:#B5557F}
+  .sbFaq2-a{max-height:0;overflow:hidden;transition:max-height .4s ease}
+  .sbFaq2-item.open .sbFaq2-a{max-height:600px}
+  .sbFaq2-a-inner{padding:0 0 16px;font-size:14px;color:#666;line-height:1.6}
+  .sbFaq2-a-inner strong{color:#1a1a1a}
+</style>
+<div class="sbFaq2">
+  <h2 class="sbFaq2-title">Frequently Asked Questions</h2>
+  <div class="sbFaq2-list">
+    <div class="sbFaq2-item">
+      <button class="sbFaq2-q" onclick="this.parentElement.classList.toggle('open')">How is this different from a regular girdle or shaper?<span class="sbFaq2-plus">+</span></button>
+      <div class="sbFaq2-a"><div class="sbFaq2-a-inner">Most shapers and postpartum belts only compress the front of your belly, which is exactly why they roll down and only flatten one spot. The {{ product.title | default: "Sculpt Brief" }} uses a <strong>360&deg; crossed-band design</strong> that wraps front, sides and back at once, inspired by the centuries-old Malaysian Bengkung wrap. It holds your whole core evenly, so nothing slips and the result looks natural.</div></div>
+    </div>
+    <div class="sbFaq2-item">
+      <button class="sbFaq2-q" onclick="this.parentElement.classList.toggle('open')">Which size should I order?<span class="sbFaq2-plus">+</span></button>
+      <div class="sbFaq2-a"><div class="sbFaq2-a-inner">Go by your <strong>waist measurement</strong>, not your usual clothing size. After a baby the two often stop matching, and that's exactly who this is made for. Measure around the <strong>narrowest part of your torso</strong>, a couple of inches above your belly button, keeping the tape level, and if you're postpartum measure <strong>above</strong> the fullest part of your belly rather than across it. Then match it to the size chart above. Between two sizes? <strong>Size up.</strong> The range runs from S all the way up to 5XL, and the <strong>Size Calculator</strong> on this page will do it for you in ten seconds.</div></div>
+    </div>
+    <div class="sbFaq2-item">
+      <button class="sbFaq2-q" onclick="this.parentElement.classList.toggle('open')">Will it roll down or slide during the day?<span class="sbFaq2-plus">+</span></button>
+      <div class="sbFaq2-a"><div class="sbFaq2-a-inner">No. The wide crossed band wraps all the way around, so it <strong>stays put through a full day</strong>, even when you sit, bend or move. No rolling down, no riding up, no readjusting in the bathroom.</div></div>
+    </div>
+    <div class="sbFaq2-item">
+      <button class="sbFaq2-q" onclick="this.parentElement.classList.toggle('open')">Will it show under my clothes?<span class="sbFaq2-plus">+</span></button>
+      <div class="sbFaq2-a"><div class="sbFaq2-a-inner">No. The fabric is thin and <strong>seamless</strong> with no visible edges, so it disappears under fitted dresses, jeans, leggings and work clothes. Just a smooth, natural line.</div></div>
+    </div>
+    <div class="sbFaq2-item">
+      <button class="sbFaq2-q" onclick="this.parentElement.classList.toggle('open')">Is it comfortable enough to wear all day?<span class="sbFaq2-plus">+</span></button>
+      <div class="sbFaq2-a"><div class="sbFaq2-a-inner">Yes. It's soft, breathable and lightweight, and it shapes <strong>without that breath-crushing squeeze</strong> of rigid shapers. Most women say they forget they're even wearing it, from morning to night.</div></div>
+    </div>
+    <div class="sbFaq2-item">
+      <button class="sbFaq2-q" onclick="this.parentElement.classList.toggle('open')">When can I start wearing it after giving birth?<span class="sbFaq2-plus">+</span></button>
+      <div class="sbFaq2-a"><div class="sbFaq2-a-inner">Most women start around <strong>2 weeks after a vaginal birth</strong> and <strong>6 weeks after a C-section</strong>, once they've been cleared. There's no hard boning, just soft seamless support. If you're recovering from surgery, check with your provider first.</div></div>
+    </div>
+    <div class="sbFaq2-item">
+      <button class="sbFaq2-q" onclick="this.parentElement.classList.toggle('open')">Does it still help years after pregnancy?<span class="sbFaq2-plus">+</span></button>
+      <div class="sbFaq2-a"><div class="sbFaq2-a-inner">Absolutely. Whether you gave birth a few weeks ago or several years ago, it supports and holds your core the same way. Plenty of customers order it long after their last pregnancy, or simply for everyday shaping.</div></div>
+    </div>
+    <div class="sbFaq2-item">
+      <button class="sbFaq2-q" onclick="this.parentElement.classList.toggle('open')">What is it made of, and is it breathable?<span class="sbFaq2-plus">+</span></button>
+      <div class="sbFaq2-a"><div class="sbFaq2-a-inner">A soft, <strong>four-way-stretch seamless blend</strong> designed to move with you and breathe against the skin, so it stays comfortable even in warmer weather. No itchy seams, no hard plastic, no visible stitching.</div></div>
+    </div>
+    <div class="sbFaq2-item">
+      <button class="sbFaq2-q" onclick="this.parentElement.classList.toggle('open')">How do I wash and care for it?<span class="sbFaq2-plus">+</span></button>
+      <div class="sbFaq2-a"><div class="sbFaq2-a-inner">Machine wash cold on a gentle cycle (a mesh laundry bag helps) and <strong>air-dry</strong>. Avoid bleach, fabric softener and the dryer, that keeps the elastic and the 360&deg; band working like new.</div></div>
+    </div>
+    <div class="sbFaq2-item">
+      <button class="sbFaq2-q" onclick="this.parentElement.classList.toggle('open')">How soon will I see a difference, and what if it's not for me?<span class="sbFaq2-plus">+</span></button>
+      <div class="sbFaq2-a"><div class="sbFaq2-a-inner">You'll look <strong>flat and smooth under your clothes the moment you put it on</strong>. With daily wear, most women say their midsection feels firmer within 2 to 3 weeks. And it's backed by a <strong>90-day fit guarantee</strong>: wear it risk-free, and if it's not right for you, just reach out and we'll make it right, with a size exchange or your money back.</div></div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Sculpt: FAQ",
+  "tag": "section",
+  "class": "sb-section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Sculpt: FAQ",
+      "category": "Sculpt"
+    }
+  ]
+}
+{% endschema %}

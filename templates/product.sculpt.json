@@ -1,0 +1,161 @@
+{
+  "sections": {
+    "main": {
+      "type": "product-information",
+      "blocks": {
+        "media-gallery": {
+          "type": "_product-media-gallery",
+          "static": true,
+          "settings": {
+            "media_presentation": "carousel",
+            "slideshow_controls_style": "thumbnails",
+            "slideshow_mobile_controls_style": "dots",
+            "thumbnail_position": "bottom",
+            "aspect_ratio": "1",
+            "media_fit": "cover",
+            "media_radius": 12,
+            "zoom": true,
+            "constrain_to_viewport": true,
+            "hide_variants": false
+          },
+          "blocks": {}
+        },
+        "product-details": {
+          "type": "_product-details",
+          "static": true,
+          "settings": {
+            "gap": 12,
+            "sticky_details_desktop": false,
+            "padding-block-start": 16,
+            "padding-block-end": 24
+          },
+          "blocks": {
+            "review": {
+              "type": "review",
+              "settings": {},
+              "blocks": {}
+            },
+            "title": {
+              "type": "text",
+              "settings": {
+                "text": "<h1>{{ closest.product.title }}</h1>",
+                "alignment": "center",
+                "type_preset": "h2",
+                "width": "100%"
+              },
+              "blocks": {}
+            },
+            "subtitle": {
+              "type": "sb-subtitle",
+              "settings": {},
+              "blocks": {}
+            },
+            "benefits": {
+              "type": "sb-benefits",
+              "settings": {},
+              "blocks": {}
+            },
+            "reassure": {
+              "type": "sb-reassure",
+              "settings": {},
+              "blocks": {}
+            },
+            "bundle": {
+              "type": "sb-bundle",
+              "settings": {},
+              "blocks": {}
+            },
+            "size_finder": {
+              "type": "sb-size-finder",
+              "settings": {},
+              "blocks": {}
+            },
+            "guarantee": {
+              "type": "sb-guarantee-note",
+              "settings": {},
+              "blocks": {}
+            },
+            "payment": {
+              "type": "payment-icons",
+              "settings": {},
+              "blocks": {}
+            },
+            "wear": {
+              "type": "sb-wear",
+              "settings": {},
+              "blocks": {}
+            },
+            "faq": {
+              "type": "sb-mini-faq",
+              "settings": {},
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "review",
+            "title",
+            "subtitle",
+            "benefits",
+            "reassure",
+            "bundle",
+            "size_finder",
+            "guarantee",
+            "payment",
+            "wear",
+            "faq"
+          ]
+        }
+      },
+      "settings": {}
+    },
+    "videos": {
+      "type": "sb-video-carousel",
+      "settings": {}
+    },
+    "cta_1": {
+      "type": "sb-cta",
+      "settings": {
+        "label": "Get My Sculpt Brief"
+      }
+    },
+    "features": {
+      "type": "sb-features",
+      "settings": {}
+    },
+    "cta_2": {
+      "type": "sb-cta",
+      "settings": {
+        "label": "Yes, I Want a Flatter Tummy"
+      }
+    },
+    "compare": {
+      "type": "sb-compare",
+      "settings": {}
+    },
+    "guarantee": {
+      "type": "sb-guarantee",
+      "settings": {}
+    },
+    "faq": {
+      "type": "sb-faq",
+      "settings": {}
+    },
+    "cta_3": {
+      "type": "sb-cta",
+      "settings": {
+        "label": "Order Now — Ships in 24h"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "videos",
+    "cta_1",
+    "features",
+    "cta_2",
+    "compare",
+    "guarantee",
+    "faq",
+    "cta_3"
+  ]
+}

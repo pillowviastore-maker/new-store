@@ -1,0 +1,130 @@
+<div class="sb-f3">
+  <p class="sb-f3-eyebrow">Why it actually works</p>
+  <h2 class="sb-f3-title">Designed to do three things perfectly.</h2>
+
+  <div class="sb-f3-row">
+    <div class="sb-f3-media">
+      <video data-sb-lazy data-src="{{ 'sb-feature-1.mp4' | file_url }}" data-poster="{{ 'sb-feature-1.jpg' | asset_url }}" muted loop playsinline autoplay preload="none" width="540" height="540" style="aspect-ratio: 1 / 1;" aria-label="Instant flat stomach"></video>
+    </div>
+    <div class="sb-f3-text">
+      <span class="sb-f3-num">01</span>
+      <p class="sb-f3-kicker">The second you put it on</p>
+      <h3 class="sb-f3-head">A flatter stomach, instantly.</h3>
+      <p class="sb-f3-body">The high waist wraps your belly and waistline in gentle, targeted compression, so you see a smoother, more sculpted shape the moment you pull it on. No squeezing. No pinching. No discomfort.</p>
+    </div>
+  </div>
+
+  <div class="sb-f3-row sb-f3-row--reverse">
+    <div class="sb-f3-media">
+      <video data-sb-lazy data-src="{{ 'sb-feature-2.mp4' | file_url }}" data-poster="{{ 'sb-feature-2.jpg' | asset_url }}" muted loop playsinline autoplay preload="none" width="480" height="854" style="aspect-ratio: 9 / 16;" aria-label="Invisible under clothes"></video>
+    </div>
+    <div class="sb-f3-text">
+      <span class="sb-f3-num">02</span>
+      <p class="sb-f3-kicker">Invisible under everything</p>
+      <h3 class="sb-f3-head">Disappears under your clothes.</h3>
+      <p class="sb-f3-body">Seamless edges mean no lines, no marks, no telltale shapewear bulge. Tight dress, slim jeans, leggings, it vanishes. Just a smooth, natural shape that still looks like you.</p>
+    </div>
+  </div>
+
+  <div class="sb-f3-row">
+    <div class="sb-f3-media">
+      <video data-sb-lazy data-src="{{ 'sb-clip-2.mp4' | file_url }}" data-poster="{{ 'sb-clip-2.jpg' | asset_url }}" muted loop playsinline autoplay preload="none" width="640" height="480" style="aspect-ratio: 4 / 3;" aria-label="Stays put all day"></video>
+    </div>
+    <div class="sb-f3-text">
+      <span class="sb-f3-num">03</span>
+      <p class="sb-f3-kicker">All-day hold</p>
+      <h3 class="sb-f3-head">It never rolls down. Ever.</h3>
+      <p class="sb-f3-body">The soft, breathable fabric hugs your body and stays exactly where you put it. No rolling, no sliding, no readjusting in the bathroom. Put it on in the morning and forget it's there until night.</p>
+    </div>
+  </div>
+</div>
+<style>
+  .sb-f3 { max-width: 1000px; width: 100%; margin: 28px auto; padding: 0 16px; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  .sb-f3-eyebrow { text-align: center; color: #B5557F; font-size: 12.5px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; margin: 0 0 8px; }
+  .sb-f3-title { text-align: center; font-size: 28px; font-weight: 800; color: #1A1A1A; line-height: 1.15; margin: 0 0 36px; }
+  .sb-f3-row { display: flex; align-items: center; gap: 44px; margin-bottom: 40px; }
+  .sb-f3-row--reverse { flex-direction: row-reverse; }
+  .sb-f3-row:last-child { margin-bottom: 0; }
+  .sb-f3-media { flex: 1 1 50%; min-width: 0; }
+  .sb-f3-media img, .sb-f3-media video { width: 100%; height: auto; display: block; border-radius: 20px; box-shadow: 0 10px 30px rgba(181,85,127,.14); background: #f3eef1; object-fit: cover; }
+  .sb-f3-text { flex: 1 1 50%; min-width: 0; }
+  .sb-f3-num { display: inline-block; font-size: 13px; font-weight: 800; color: #fff; background: #B5557F; width: 30px; height: 30px; line-height: 30px; text-align: center; border-radius: 50%; margin-bottom: 12px; }
+  .sb-f3-kicker { color: #B5557F; font-size: 12.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 6px; }
+  .sb-f3-head { font-size: 26px; font-weight: 800; color: #1A1A1A; line-height: 1.15; margin: 0 0 12px; }
+  .sb-f3-body { font-size: 16px; color: #555; line-height: 1.6; margin: 0; }
+  @media (max-width: 768px) {
+    .sb-f3-title { font-size: 23px; margin-bottom: 26px; }
+    .sb-f3-row, .sb-f3-row--reverse { flex-direction: column; gap: 16px; margin-bottom: 36px; text-align: left; }
+    .sb-f3-head { font-size: 22px; }
+    .sb-f3-body { font-size: 15px; }
+  }
+</style>
+<script>
+  /* {{ shop.name }} video kit (shared, loads once): autoplay when allowed; if blocked (iPhone low power mode), show a play button and let one tap anywhere start every visible video */
+  (function(){
+    if (window.sbVideoKit) return;
+    var st = document.createElement('style');
+    st.textContent = '.sb-play{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.12);border:0;margin:0;padding:0;cursor:pointer;border-radius:inherit;z-index:2;-webkit-tap-highlight-color:transparent}.sb-play span{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.18)}.sb-play span:before{content:"";margin-left:4px;border-style:solid;border-width:9px 0 9px 15px;border-color:transparent transparent transparent #B5557F}';
+    document.head.appendChild(st);
+    var blocked = 0;
+    function hideBtn(v){ if (v._sbBtn) { v._sbBtn.parentNode && v._sbBtn.parentNode.removeChild(v._sbBtn); v._sbBtn = null; blocked--; } }
+    function showBtn(v){
+      if (v._sbBtn) return;
+      var p = v.parentNode;
+      if (window.getComputedStyle(p).position === 'static') { p.style.position = 'relative'; }
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'sb-play'; b.setAttribute('aria-label', 'Play video'); b.innerHTML = '<span></span>';
+      b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); unlockAll(); });
+      p.appendChild(b); v._sbBtn = b; blocked++;
+    }
+    function play(v){
+      var pr = v.play();
+      if (pr && pr.then) { pr.then(function(){ hideBtn(v); }, function(){ if (v.getAttribute('data-sb-want') === '1') { showBtn(v); } }); }
+    }
+    function unlockAll(){
+      if (blocked <= 0) return;
+      var vids = document.querySelectorAll('video[data-sb-want="1"]');
+      for (var i = 0; i < vids.length; i++) { play(vids[i]); }
+    }
+    document.addEventListener('touchend', unlockAll, { passive: true });
+    document.addEventListener('click', unlockAll);
+    window.sbVideoKit = {
+      want: function(v, on){
+        v.setAttribute('data-sb-want', on ? '1' : '0');
+        if (on) { play(v); } else { v.pause(); hideBtn(v); }
+      }
+    };
+  })();
+
+  (function(){
+    var kit = window.sbVideoKit;
+    var vids = document.querySelectorAll('video[data-sb-lazy]:not([data-sb-obs])');
+    function load(v){
+      if (v.dataset.poster && !v.getAttribute('poster')) { v.setAttribute('poster', v.dataset.poster); }
+      if (!v.getAttribute('src')) { v.setAttribute('src', v.dataset.src); }
+    }
+    if (!('IntersectionObserver' in window)) { for (var i = 0; i < vids.length; i++) { load(vids[i]); kit.want(vids[i], true); } return; }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) { load(e.target); kit.want(e.target, true); }
+        else if (e.target.getAttribute('src')) { kit.want(e.target, false); }
+      });
+    }, { rootMargin: '400px 0px' });
+    for (var j = 0; j < vids.length; j++) { vids[j].setAttribute('data-sb-obs', '1'); io.observe(vids[j]); }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sculpt: three features",
+  "tag": "section",
+  "class": "sb-section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Sculpt: three features",
+      "category": "Sculpt"
+    }
+  ]
+}
+{% endschema %}

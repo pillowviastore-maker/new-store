@@ -1,0 +1,263 @@
+<div class="sbz-trigger-wrap">
+  <button type="button" class="sbz-trigger" data-sbz-open>
+    <svg viewBox="0 0 24 24" fill="none"><path d="M3 7h18v10H3z" stroke="currentColor" stroke-width="1.6"/><path d="M7 7v3M11 7v4M15 7v3M19 7v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    Find Your Size
+  </button>
+  <p class="sbz-tip-line">Fits snug by design. Between sizes? <strong>Size up</strong> from your usual for the comfiest fit.</p>
+</div>
+
+<div class="sbz-overlay" id="sbz-modal" hidden role="dialog" aria-modal="true" aria-label="Size finder">
+  <div class="sbz-modal" role="document">
+    <header class="sbz-head">
+      <div>
+        <h2 class="sbz-title">Find your perfect fit</h2>
+        <p class="sbz-sub">{{ product.title | default: "Sculpt Brief" }}</p>
+      </div>
+      <button type="button" class="sbz-close" data-sbz-close aria-label="Close">&times;</button>
+    </header>
+
+    <nav class="sbz-tabs">
+      <button type="button" class="sbz-tab is-active" data-sbz-tab="calc">Size Calculator</button>
+      <button type="button" class="sbz-tab" data-sbz-tab="chart">Size Chart</button>
+    </nav>
+
+    <div class="sbz-body">
+            <div class="sbz-pane is-active" data-sbz-pane="calc">
+        <p class="sbz-h3">What's your waist?</p>
+        <p class="sbz-hint">Measure around the narrowest part of your torso, a couple of inches <strong>above</strong> your belly button. Postpartum tip: measure above your belly, not across the fullest part of it.</p>
+        <div class="sbz-unit" data-sbz-unit-group="calc">
+          <button type="button" class="sbz-u is-active" data-sbz-u="in">INCHES</button><span>|</span><button type="button" class="sbz-u" data-sbz-u="cm">CM</button>
+        </div>
+        <div class="sbz-input-row">
+          <input type="number" inputmode="decimal" id="sbz-waist" placeholder="e.g. 32">
+          <em class="sbz-suffix" data-sbz-suffix>in</em>
+        </div>
+        <button type="button" class="sbz-btn" data-sbz-calc>Find my size</button>
+        <p class="sbz-error" data-sbz-error hidden></p>
+        <div class="sbz-result" data-sbz-result hidden></div>
+        <button type="button" class="sbz-alt" data-sbz-nomeasure>Can't measure right now? Go one size up from your usual &rsaquo;</button>
+      </div>
+
+            <div class="sbz-pane" data-sbz-pane="chart">
+        <div class="sbz-unit" data-sbz-unit-group="chart">
+          <button type="button" class="sbz-u is-active" data-sbz-u="in">INCHES</button><span>|</span><button type="button" class="sbz-u" data-sbz-u="cm">CM</button>
+        </div>
+        <div class="sbz-table-wrap" data-sbz-table></div>
+
+        <div class="sbz-measure">
+          <img class="sbz-measure-img" width="300" height="302" src="{{ 'sb-waist.png' | asset_url }}" alt="How to measure" loading="lazy">
+          <div class="sbz-measure-txt">
+            <p><strong>How to measure.</strong> Measure around the narrowest part of your torso, a couple of inches above your belly button, keeping the tape level. If you're postpartum, measure above the fullest part of your belly, not across it.</p>
+          </div>
+        </div>
+
+        <ul class="sbz-trust">
+          <li><strong>Sizing tip.</strong> Go by your waist measurement, not your usual clothing size. After a baby the two often stop matching. Between two sizes? We recommend sizing up for the most comfortable fit.</li>
+          <li><strong>Fabric.</strong> A sculpting, four-way-stretch seamless fabric that adapts to your shape, supportive without ever feeling too tight.</li>
+          <li><strong>Easy exchange.</strong> Wrong size when it arrives? No stress, just email us and we'll ship you the right one, free.</li>
+          <li><strong>90-day fit guarantee.</strong> Try it risk-free for 90 days. If it isn't right for you, we'll make it right, with a free size exchange or your money back.</li>
+        </ul>
+      </div>
+    </div>
+    <footer class="sbz-foot">
+      <p class="sbz-guar-line">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        90-day fit guarantee &middot; Free size exchange
+      </p>
+      <button type="button" class="sbz-cta" data-sbz-bundle>Choose My Color &rsaquo;</button>
+    </footer>
+  </div>
+</div>
+<style>
+  .sbz-trigger{display:inline-flex;align-items:center;gap:8px;background:none;border:1.5px solid #B5557F;border-radius:999px;padding:9px 18px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13.5px;font-weight:600;color:#B5557F;cursor:pointer;transition:background .15s,color .15s}
+  .sbz-trigger svg{width:18px;height:18px}
+  .sbz-trigger:hover{background:#B5557F;color:#fff}
+  .sbz-trigger-wrap{text-align:center;margin:10px 0}
+  .sbz-tip-line{max-width:330px;margin:7px auto 0;font-size:12.5px;line-height:1.4;color:#8a7780;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+  .sbz-tip-line strong{color:#B5557F;font-weight:700}
+  .sbz-overlay{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:rgba(70,40,55,.5);padding:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+  .sbz-overlay[hidden]{display:none}
+  .sbz-modal{background:#FDF6F9;color:#2c2128;width:100%;max-width:560px;max-height:92vh;border-radius:18px;overflow:auto;box-shadow:0 24px 70px rgba(120,50,80,.28)}
+  .sbz-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px 16px;border-bottom:1px solid #EEDCE6}
+  .sbz-title{margin:0;font-size:20px;font-weight:800;color:#1A1A1A}
+  .sbz-sub{margin:4px 0 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#B5557F}
+  .sbz-close{background:none;border:0;font-size:28px;line-height:1;cursor:pointer;color:#9c8a90}
+  .sbz-close:hover{color:#1A1A1A}
+  .sbz-tabs{display:flex;border-bottom:1px solid #EEDCE6}
+  .sbz-tab{flex:1;background:none;border:0;border-bottom:3px solid transparent;padding:14px;font-size:15px;color:#9c8a90;cursor:pointer;font-family:inherit;font-weight:600}
+  .sbz-tab.is-active{color:#1A1A1A;border-bottom-color:#B5557F}
+  .sbz-body{padding:22px 24px 26px}
+  .sbz-pane{display:none}
+  .sbz-pane.is-active{display:block}
+  .sbz-h3{font-size:18px;font-weight:800;color:#1A1A1A;margin:0 0 4px}
+  .sbz-hint{font-size:13px;color:#8a7780;line-height:1.5;margin:0 0 14px}
+  .sbz-unit{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 16px;color:#cbb8c0}
+  .sbz-u{background:none;border:0;font-size:13px;letter-spacing:1px;color:#9c8a90;cursor:pointer;font-family:inherit;padding:0}
+  .sbz-u.is-active{color:#B5557F;font-weight:700}
+  .sbz-input-row{display:flex;align-items:center;gap:10px;max-width:220px;margin:0 auto 16px}
+  .sbz-input-row input{flex:1;min-width:0;padding:13px 15px;font-size:17px;border:1px solid #EEDCE6;border-radius:12px;font-family:inherit;background:#fff;color:#1A1A1A;text-align:center}
+  .sbz-input-row input:focus{outline:none;border-color:#B5557F;box-shadow:0 0 0 3px rgba(181,85,127,.15)}
+  .sbz-suffix{font-style:normal;color:#9c8a90;font-size:15px}
+  .sbz-btn{display:block;width:100%;background:#B5557F;color:#fff;border:0;border-radius:12px;font-size:16px;font-weight:700;padding:14px;cursor:pointer;font-family:inherit;transition:background .2s}
+  .sbz-btn:hover{background:#98446A}
+  .sbz-error{color:#c0392b;font-size:13.5px;margin:10px 0 0;text-align:center}
+  .sbz-result{margin-top:18px;border:2px solid #B5557F;background:#fff;border-radius:14px;padding:18px;text-align:center}
+  .sbz-result .sz{font-size:30px;font-weight:800;color:#1A1A1A;line-height:1.1}
+  .sbz-result .lbl{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#B5557F;margin-bottom:4px}
+  .sbz-result .us{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#B5557F;margin:4px 0 0}
+  .sbz-result .note{font-size:13px;color:#7a6770;line-height:1.5;margin:10px 0 0}
+  .sbz-result .guar{display:inline-flex;align-items:center;gap:6px;margin:12px 0 0;padding:8px 12px;background:#FAF1F5;border-radius:8px;font-size:12.5px;font-weight:600;color:#6E1E3C;line-height:1.4}
+  .sbz-alt{display:block;width:100%;background:none;border:0;margin-top:16px;color:#8a7780;font-size:13.5px;cursor:pointer;font-family:inherit;text-decoration:underline;text-decoration-color:#B5557F}
+  .sbz-alt:hover{color:#1A1A1A}
+  .sbz-table-wrap{overflow-x:auto;border:1px solid #EEDCE6;border-radius:12px}
+  .sbz-table{width:100%;border-collapse:collapse;font-size:14px}
+  .sbz-table th,.sbz-table td{border-bottom:1px solid #EEDCE6;padding:11px;text-align:center}
+  .sbz-table tr:last-child td{border-bottom:0}
+  .sbz-table th{font-weight:700;background:#6E1E3C;color:#fff}
+  .sbz-table td:first-child,.sbz-table th:first-child{font-weight:700}
+  .sbz-table tbody tr:nth-child(even){background:#FAF1F5}
+  .sbz-measure{display:flex;gap:14px;align-items:flex-start;margin:18px 0 0;padding:14px;background:#fff;border:1px solid #EEDCE6;border-radius:12px}
+  .sbz-measure-img{width:96px;height:auto;flex-shrink:0;border-radius:8px;background:#F8EBF1}
+  .sbz-measure-txt p{font-size:13px;color:#6a5760;line-height:1.5;margin:0 0 8px}
+  .sbz-measure-txt p:last-child{margin-bottom:0}
+  .sbz-measure-txt strong{color:#1A1A1A}
+  .sbz-trust{list-style:none;margin:16px 0 0;padding:0}
+  .sbz-trust li{position:relative;padding:8px 0 8px 22px;font-size:13px;color:#6a5760;line-height:1.5;border-top:1px solid #EEDCE6}
+  .sbz-trust li:first-child{border-top:0}
+  .sbz-trust li::before{content:"\2713";position:absolute;left:0;top:8px;color:#B5557F;font-weight:800}
+  .sbz-trust strong{color:#1A1A1A}
+  .sbz-foot{padding:14px 24px 22px;text-align:center;border-top:1px solid #EEDCE6;position:sticky;bottom:0;background:#FDF6F9}
+  .sbz-guar-line{display:flex;align-items:center;justify-content:center;gap:6px;margin:0 0 10px;font-size:12.5px;font-weight:600;color:#6E1E3C}
+  .sbz-guar-line svg{width:16px;height:16px;color:#B5557F;flex-shrink:0}
+  .sbz-cta{display:inline-block;width:100%;max-width:360px;background:#B5557F;color:#fff;border:0;padding:14px 28px;font-weight:700;border-radius:8px;font-size:16px;cursor:pointer;font-family:inherit;transition:background .2s}
+  .sbz-cta:hover{background:#98446A}
+  @media(max-width:480px){.sbz-modal{max-width:100%}.sbz-title{font-size:18px}.sbz-measure{flex-direction:column;align-items:center;text-align:center}.sbz-measure-img{width:120px}}
+</style>
+<script>
+(function(){
+  // Waist-based chart + US size. Source of truth = cm; inches + US for display. XS added 2026-08-18.
+  var SIZES = [
+    {label:"XS",  us:"0-2",   cmin:64,  cmax:69,  imin:25, imax:27},
+    {label:"S",   us:"4-6",   cmin:71,  cmax:74,  imin:28, imax:29},
+    {label:"M",   us:"8-10",  cmin:76,  cmax:81,  imin:30, imax:32},
+    {label:"L",   us:"12-14", cmin:86,  cmax:94,  imin:34, imax:37},
+    {label:"XL",  us:"16-18", cmin:99,  cmax:104, imin:39, imax:41},
+    {label:"2XL", us:"20-22", cmin:107, cmax:112, imin:42, imax:44},
+    {label:"3XL", us:"24-26", cmin:114, cmax:118, imin:45, imax:46},
+    {label:"4XL", us:"28-30", cmin:119, cmax:122, imin:47, imax:48},
+    {label:"5XL", us:"32-34", cmin:124, cmax:127, imin:49, imax:50}
+  ];
+  var overlay = document.getElementById('sbz-modal');
+  if(!overlay) return;
+  var calcUnit='in', chartUnit='in';
+  function $(s){ return overlay.querySelector(s); }
+  function $$(s){ return Array.prototype.slice.call(overlay.querySelectorAll(s)); }
+
+  function open(){ overlay.hidden=false; document.body.style.overflow='hidden'; }
+  function close(){ overlay.hidden=true; document.body.style.overflow=''; }
+  document.addEventListener('click', function(e){
+    if(e.target.closest('[data-sbz-open]')){ open(); }
+    else if(e.target.closest('[data-sbz-close]') || e.target===overlay){ close(); }
+  });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !overlay.hidden) close(); });
+
+  function showTab(name){
+    $$('.sbz-tab').forEach(function(t){ t.classList.toggle('is-active', t.getAttribute('data-sbz-tab')===name); });
+    $$('.sbz-pane').forEach(function(p){ p.classList.toggle('is-active', p.getAttribute('data-sbz-pane')===name); });
+  }
+  $$('.sbz-tab').forEach(function(tab){ tab.addEventListener('click', function(){ showTab(tab.getAttribute('data-sbz-tab')); }); });
+
+  $$('.sbz-unit').forEach(function(group){
+    var key = group.getAttribute('data-sbz-unit-group');
+    group.querySelectorAll('.sbz-u').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        group.querySelectorAll('.sbz-u').forEach(function(b){ b.classList.toggle('is-active', b===btn); });
+        var u = btn.getAttribute('data-sbz-u');
+        if(key==='calc'){ calcUnit=u; $('[data-sbz-suffix]').textContent=u; }
+        if(key==='chart'){ chartUnit=u; renderTable(); }
+      });
+    });
+  });
+
+  // Works in CM. Arbitrates UPWARD: shared boundary returns the larger size,
+  // and a measurement in a gap between two rows rounds up to the next size.
+  function recommend(waistCm){
+    var smallest = SIZES[0], largest = SIZES[SIZES.length-1];
+    if(waistCm < smallest.cmin) return {size:smallest, status:'below'};
+    if(waistCm > largest.cmax) return {size:largest, status:'above'};
+    var match = null;
+    for(var i=0;i<SIZES.length;i++){
+      var s = SIZES[i];
+      if(waistCm >= s.cmin && waistCm <= s.cmax){ match = s; }
+    }
+    if(match) return {size:match, status:'exact'};
+    for(var j=0;j<SIZES.length;j++){
+      if(SIZES[j].cmin > waistCm) return {size:SIZES[j], status:'between'};
+    }
+    return {size:largest, status:'exact'};
+  }
+
+  function runCalc(){
+    var err=$('[data-sbz-error]'), res=$('[data-sbz-result]');
+    err.hidden=true; res.hidden=true;
+    var raw=($('#sbz-waist').value||'').toString().trim().replace(',', '.');
+    var v=parseFloat(raw);
+    if(isNaN(v) || v<=0){ err.textContent='Please enter your waist measurement.'; err.hidden=false; return; }
+    var waistCm = calcUnit==='cm' ? v : v*2.54;
+    if(waistCm<45 || waistCm>180){ err.textContent='That measurement looks off, please double-check.'; err.hidden=false; return; }
+    var r = recommend(Math.round(waistCm));
+    var smallest = SIZES[0], largest = SIZES[SIZES.length-1];
+    var note;
+    if(r.status==='above'){
+      note = "Your measurement is above our largest size, so " + largest.label + " is the biggest fit we offer. Email us at {{ shop.email }} and we'll help you get it right before you order.";
+    } else if(r.status==='below'){
+      note = "Your measurement is below our smallest size, so " + smallest.label + " is the closest fit we offer.";
+    } else if(r.status==='between'){
+      note = "You're between two sizes, so we've rounded up to " + r.size.label + " for the most comfortable fit.";
+    } else {
+      note = "Based on your waist, this is your best fit. Prefer a softer feel? You can size up.";
+    }
+    var guar = '<p class="guar">&#10003; Backed by our 90-day fit guarantee. Wrong size? We\'ll send the right one, free.</p>';
+    res.innerHTML = '<p class="lbl">We recommend</p><div class="sz">'+r.size.label+'</div><p class="us">US '+r.size.us+'</p><p class="note">'+note+'</p>'+guar;
+    res.hidden=false;
+  }
+  $('[data-sbz-calc]').addEventListener('click', runCalc);
+  $('#sbz-waist').addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); runCalc(); } });
+
+  function range(s){
+    if(chartUnit==='cm'){ return s.cmin+'-'+s.cmax+' cm'; }
+    return (s.imin===s.imax ? s.imin : s.imin+'-'+s.imax)+' in';
+  }
+  function renderTable(){
+    var head='<tr><th>Size</th><th>US</th><th>Waist</th></tr>';
+    var body=SIZES.map(function(s){ return '<tr><td>'+s.label+'</td><td>'+s.us+'</td><td>'+range(s)+'</td></tr>'; }).join('');
+    $('[data-sbz-table]').innerHTML='<table class="sbz-table"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
+  }
+  renderTable();
+
+  function scrollToBundle(){
+    var target = document.querySelector('#sb-bundle, h1');
+    if(target){ var top = target.getBoundingClientRect().top + window.pageYOffset - 120; window.scrollTo({top:top, behavior:'smooth'}); }
+  }
+  function goToBundle(){ close(); scrollToBundle(); }
+
+  var bundleBtn = $('[data-sbz-bundle]');
+  if(bundleBtn){ bundleBtn.addEventListener('click', goToBundle); }
+  var altLink = $('[data-sbz-nomeasure]');
+  if(altLink){ altLink.addEventListener('click', goToBundle); }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Sculpt: size finder",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Sculpt: size finder",
+      "category": "Sculpt"
+    }
+  ]
+}
+{% endschema %}

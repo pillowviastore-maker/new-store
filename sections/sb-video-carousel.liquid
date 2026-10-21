@@ -1,0 +1,178 @@
+<div class="sb-rev">
+  <h2 class="sb-rev-title">{{ section.settings.title }}</h2>
+
+  <div class="sb-rev-viewport" id="sbRevVp">
+    <div class="sb-rev-track" id="sbRevTrack">
+
+            <div class="sb-rev-slide">
+        <div class="sb-rev-gifs">
+          <div class="sb-rev-media"><video class="sb-rev-gif" data-src="{{ 'sb-ugc-6.mp4' | file_url }}" data-poster="{{ 'sb-ugc-6.jpg' | asset_url }}" muted loop playsinline preload="none" aria-label="the navy {{ product.title | default: "Sculpt Brief" }}"></video></div>
+          <div class="sb-rev-media"><video class="sb-rev-gif" data-src="{{ 'sb-ugc-3.mp4' | file_url }}" data-poster="{{ 'sb-ugc-3.jpg' | asset_url }}" muted loop playsinline preload="none" aria-label="the black {{ product.title | default: "Sculpt Brief" }}"></video></div>
+          <div class="sb-rev-media"><video class="sb-rev-gif" data-src="{{ 'sb-ugc-5.mp4' | file_url }}" data-poster="{{ 'sb-ugc-5.jpg' | asset_url }}" muted loop playsinline preload="none" aria-label="a stack of {{ product.title | default: "Sculpt Brief" }}s"></video></div>
+        </div>
+      </div>
+
+            <div class="sb-rev-slide">
+        <div class="sb-rev-gifs">
+          <div class="sb-rev-media"><video class="sb-rev-gif" data-src="{{ 'sb-ugc-1.mp4' | file_url }}" data-poster="{{ 'sb-ugc-1.jpg' | asset_url }}" muted loop playsinline preload="none" aria-label="colors of the {{ product.title | default: "Sculpt Brief" }}"></video></div>
+          <div class="sb-rev-media"><video class="sb-rev-gif" data-src="{{ 'sb-ugc-2.mp4' | file_url }}" data-poster="{{ 'sb-ugc-2.jpg' | asset_url }}" muted loop playsinline preload="none" aria-label="the nude {{ product.title | default: "Sculpt Brief" }}"></video></div>
+          <div class="sb-rev-media"><video class="sb-rev-gif" data-src="{{ 'sb-ugc-4.mp4' | file_url }}" data-poster="{{ 'sb-ugc-4.jpg' | asset_url }}" muted loop playsinline preload="none" aria-label="the fuchsia {{ product.title | default: "Sculpt Brief" }}"></video></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="sb-rev-nav">
+    <button class="sb-rev-arrow" id="sbRevPrev" aria-label="Previous">&#8249;</button>
+    <div class="sb-rev-dots" id="sbRevDots"></div>
+    <button class="sb-rev-arrow sb-rev-arrow--filled" id="sbRevNext" aria-label="Next">&#8250;</button>
+  </div>
+</div>
+
+<style>
+  .sb-rev { max-width: 460px; margin: 28px auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  .sb-rev-title { font-size: 22px; font-weight: 800; color: #1A1A1A; line-height: 1.2; margin: 0 0 14px; text-align: center; }
+  .sb-rev-viewport { overflow: hidden; }
+  .sb-rev-track { display: flex; transition: transform .35s cubic-bezier(.4,0,.2,1); }
+  .sb-rev-slide { min-width: 100%; box-sizing: border-box; text-align: center; padding: 2px 2px; }
+  .sb-rev-gifs { display: flex; gap: 8px; margin: 0 0 12px; }
+  .sb-rev-media { flex: 1 1 0; aspect-ratio: 9 / 16; border-radius: 12px; overflow: hidden; background: #f3eef1; }
+  .sb-rev-gif { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .sb-rev-stars { color: #F5A623; font-size: 15px; letter-spacing: 2px; margin: 0 0 6px; }
+  .sb-rev-star-off { color: #E2D7DD; }
+  .sb-rev-head { font-size: 18px; font-weight: 700; color: #1A1A1A; margin: 0 0 8px; }
+  .sb-rev-quote { font-style: italic; font-size: 15px; color: #333; line-height: 1.5; margin: 0 auto 8px; max-width: 420px; }
+  .sb-rev-name { color: #777; font-size: 13.5px; margin: 0; }
+  .sb-rev-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 12px; }
+  .sb-rev-arrow { width: 40px; height: 40px; border-radius: 10px; border: 1.5px solid #B5557F; background: #fff; color: #B5557F; font-size: 19px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .15s, color .15s; flex: 0 0 auto; }
+  .sb-rev-arrow--filled { background: #B5557F; color: #fff; }
+  .sb-rev-dots { display: flex; gap: 7px; align-items: center; }
+  .sb-rev-dot { width: 8px; height: 8px; border-radius: 50%; background: #E2D7DD; border: none; padding: 0; cursor: pointer; transition: background .15s, transform .15s; }
+  .sb-rev-dot.is-active { background: #B5557F; transform: scale(1.25); }
+</style>
+
+<script>
+  /* {{ shop.name }} video kit (shared, loads once): autoplay when allowed; if blocked (iPhone low power mode), show a play button and let one tap anywhere start every visible video */
+  (function(){
+    if (window.sbVideoKit) return;
+    var st = document.createElement('style');
+    st.textContent = '.sb-play{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.12);border:0;margin:0;padding:0;cursor:pointer;border-radius:inherit;z-index:2;-webkit-tap-highlight-color:transparent}.sb-play span{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.18)}.sb-play span:before{content:"";margin-left:4px;border-style:solid;border-width:9px 0 9px 15px;border-color:transparent transparent transparent #B5557F}';
+    document.head.appendChild(st);
+    var blocked = 0;
+    function hideBtn(v){ if (v._sbBtn) { v._sbBtn.parentNode && v._sbBtn.parentNode.removeChild(v._sbBtn); v._sbBtn = null; blocked--; } }
+    function showBtn(v){
+      if (v._sbBtn) return;
+      var p = v.parentNode;
+      if (window.getComputedStyle(p).position === 'static') { p.style.position = 'relative'; }
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'sb-play'; b.setAttribute('aria-label', 'Play video'); b.innerHTML = '<span></span>';
+      b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); unlockAll(); });
+      p.appendChild(b); v._sbBtn = b; blocked++;
+    }
+    function play(v){
+      var pr = v.play();
+      if (pr && pr.then) { pr.then(function(){ hideBtn(v); }, function(){ if (v.getAttribute('data-sb-want') === '1') { showBtn(v); } }); }
+    }
+    function unlockAll(){
+      if (blocked <= 0) return;
+      var vids = document.querySelectorAll('video[data-sb-want="1"]');
+      for (var i = 0; i < vids.length; i++) { play(vids[i]); }
+    }
+    document.addEventListener('touchend', unlockAll, { passive: true });
+    document.addEventListener('click', unlockAll);
+    window.sbVideoKit = {
+      want: function(v, on){
+        v.setAttribute('data-sb-want', on ? '1' : '0');
+        if (on) { play(v); } else { v.pause(); hideBtn(v); }
+      }
+    };
+  })();
+
+  (function(){
+    var kit = window.sbVideoKit;
+    var vp = document.getElementById('sbRevVp');
+    var track = document.getElementById('sbRevTrack');
+    var slides = track.children;
+    var total = slides.length;
+    var dotsWrap = document.getElementById('sbRevDots');
+    var i = 0;
+    var inView = false;
+
+    for (var d = 0; d < total; d++){
+      var dot = document.createElement('button');
+      dot.className = 'sb-rev-dot' + (d === 0 ? ' is-active' : '');
+      dot.setAttribute('aria-label', 'Go to slide ' + (d + 1));
+      (function(idx){ dot.addEventListener('click', function(){ go(idx); }); })(d);
+      dotsWrap.appendChild(dot);
+    }
+    var dots = dotsWrap.children;
+
+    // Lazy-load every video inside a slide (poster first, then the video)
+    function load(idx){
+      if (idx < 0 || idx >= total) return;
+      var vids = slides[idx].querySelectorAll('.sb-rev-gif');
+      for (var k = 0; k < vids.length; k++){
+        var v = vids[k];
+        if (v.dataset.poster && !v.getAttribute('poster')) { v.setAttribute('poster', v.dataset.poster); }
+        if (v.dataset.src && !v.getAttribute('src')) { v.setAttribute('src', v.dataset.src); }
+      }
+    }
+
+    // Only the visible slide plays, and only while the carousel is on screen
+    function sync(){
+      for (var s = 0; s < total; s++){
+        var vids = slides[s].querySelectorAll('video');
+        for (var q = 0; q < vids.length; q++){
+          kit.want(vids[q], s === i && inView && !!vids[q].getAttribute('src'));
+        }
+      }
+    }
+
+    function go(n){
+      i = (n + total) % total;
+      track.style.transform = 'translateX(-' + (i * 100) + '%)';
+      for (var k = 0; k < total; k++){ dots[k].classList.toggle('is-active', k === i); }
+      load(i); load(i + 1);
+      sync();
+    }
+
+    document.getElementById('sbRevPrev').addEventListener('click', function(){ go(i - 1); });
+    document.getElementById('sbRevNext').addEventListener('click', function(){ go(i + 1); });
+
+    var x0 = null;
+    vp.addEventListener('touchstart', function(e){ x0 = e.touches[0].clientX; }, {passive: true});
+    vp.addEventListener('touchend', function(e){
+      if (x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 40){ go(dx < 0 ? i + 1 : i - 1); }
+      x0 = null;
+    }, {passive: true});
+
+    // Nothing loads until the carousel is close to the screen
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function(entries){
+        inView = entries[0].isIntersecting;
+        if (inView) { load(i); load(i + 1); }
+        sync();
+      }, { rootMargin: '400px 0px' }).observe(vp);
+    } else {
+      inView = true; load(0); load(1); sync();
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sculpt: video carousel",
+  "tag": "section",
+  "class": "sb-section",
+  "settings": [{"type": "text", "id": "title", "label": "Heading", "default": "See it in action"}],
+  "presets": [
+    {
+      "name": "Sculpt: video carousel",
+      "category": "Sculpt"
+    }
+  ]
+}
+{% endschema %}

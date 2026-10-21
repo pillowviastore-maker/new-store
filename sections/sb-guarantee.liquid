@@ -1,0 +1,60 @@
+<style>
+  .sbG { padding: 40px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  .sbG-inner { max-width: 600px; margin: 0 auto; background: #fff; border: 2px solid #B5557F; border-radius: 18px; padding: 36px 28px; text-align: center; position: relative; }
+  .sbG-inner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: #B5557F; border-radius: 18px 18px 0 0; }
+  .sbG-shield { width: 60px; height: 60px; background: #B5557F; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+  .sbG-shield svg { width: 30px; height: 30px; }
+  .sbG-inner h2 { font-size: 26px; font-weight: 800; color: #1A1A1A; margin: 0 0 4px; line-height: 1.2; }
+  .sbG-inner h2 em { color: #B5557F; font-style: italic; }
+  .sbG-inner p { font-size: 14.5px; color: #555; line-height: 1.6; margin: 12px auto 0; max-width: 470px; }
+  .sbG-badges { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 16px; font-size: 12px; color: #888; flex-wrap: wrap; }
+  .sbG-badges span { display: flex; align-items: center; gap: 4px; }
+  .sbG .sb-cta-scroll-bundle { display: inline-block; background: #B5557F; color: #fff; padding: 14px 30px; font-weight: 700; border-radius: 8px; font-size: 16px; text-decoration: none; margin: 24px auto 0; text-align: center; transition: all 0.25s ease; }
+  .sbG .sb-cta-scroll-bundle:hover { background: #98446A; color: #fff; }
+  .sbG .sb-cta-container { text-align: center; }
+  @media screen and (max-width: 768px) { .sbG .sb-cta-scroll-bundle { width: 90%; } }
+</style>
+<div class="sbG">
+  <div class="sbG-inner">
+    <div class="sbG-shield">
+      <svg viewBox="0 0 30 30" fill="none">
+        <path d="M15 2L5 7.5V14C5 21.18 9.42 27.86 15 29.5C20.58 27.86 25 21.18 25 14V7.5L15 2Z" stroke="#fff" stroke-width="2" fill="none"/>
+        <path d="M11 15L14 18L19 12" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h2><em>Love It</em> or Your Money Back</h2>
+    <p>We're so sure the {{ product.title | default: "Sculpt Brief" }} will change how you feel in your clothes that we take on all the risk. Wear it for 90 days. If you don't see a smoother, flatter shape, or it's simply not for you, just reach out and we'll make it right, with a size exchange or your money back.</p>
+    <div class="sb-cta-container">
+      <a href="#!" class="sb-cta-scroll-bundle" onclick="sbScrollToBundle(); return false;">Get My Sculpt Brief</a>
+    </div>
+    <div class="sbG-badges">
+      <span>&#10003; 90-Day Fit Guarantee</span>
+      <span>&#10003; Worldwide Shipping</span>
+      <span>&#10003; Money-Back Promise</span>
+    </div>
+  </div>
+</div>
+<script>
+  function sbScrollToBundle() {
+    var target = document.querySelector('#sb-bundle, h1');
+    if (target) {
+      var top = target.getBoundingClientRect().top + window.pageYOffset - 120;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    }
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Sculpt: guarantee",
+  "tag": "section",
+  "class": "sb-section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Sculpt: guarantee",
+      "category": "Sculpt"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,82 @@
+<style>
+  .sb-feat-grid {
+    max-width: 540px;
+    width: 100%;
+    margin: 14px auto 6px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 22px;
+    padding: 18px 4px;
+    border-top: 1px solid #ECECEC;
+    border-bottom: 1px solid #ECECEC;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  .sb-feat { display: flex; align-items: center; gap: 11px; }
+  .sb-feat svg { width: 28px; height: 28px; flex-shrink: 0; }
+  .sb-feat span { font-size: 14px; font-weight: 500; color: #1A1A1A; line-height: 1.3; }
+  .sb-feat span strong { font-weight: 700; color: #1A1A1A; }
+  .sb-feat-note {
+    max-width: 540px;
+    margin: 0 auto 14px;
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748B;
+  }
+  .sb-feat-note strong { font-weight: 700; color: #BC5589; }
+  @media (max-width: 480px) {
+    .sb-feat-grid { gap: 16px 14px; }
+    .sb-feat span { font-size: 13px; }
+    .sb-feat svg { width: 26px; height: 26px; }
+    .sb-feat-note { font-size: 12px; }
+  }
+</style>
+<div class="sb-feat-grid">
+
+    <div class="sb-feat">
+    <svg viewBox="0 0 24 24" fill="none"><rect x="3.2" y="8.6" width="17.6" height="6.8" rx="3.4" stroke="#BC5589" stroke-width="1.7"/><path d="M7 8.6v1.9M10.5 8.6v2.9M14 8.6v1.9M17.5 8.6v2.9" stroke="#BC5589" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <span><strong>Up to 2 inches off your waist</strong>, in a few days</span>
+  </div>
+
+    <div class="sb-feat">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M9 5.5v13M15 5.5v13" stroke="#BC5589" stroke-width="1.7" stroke-linecap="round"/><path d="M3.6 12h3M6.6 12l-1.3-1.1M6.6 12l-1.3 1.1M20.4 12h-3M17.4 12l1.3-1.1M17.4 12l1.3 1.1" stroke="#BC5589" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span><strong>Closes the gap</strong> pregnancy left open (diastasis)</span>
+  </div>
+
+    <div class="sb-feat">
+    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7.2" stroke="#BC5589" stroke-width="1.7"/><circle cx="12" cy="12" r="2" fill="#BC5589"/><path d="M12 4.8V7M12 17v2.2M4.8 12H7M17 12h2.2" stroke="#BC5589" stroke-width="1.7" stroke-linecap="round"/><path d="M16.6 7.4a5.2 5.2 0 0 1 .7 6.6" stroke="#BC5589" stroke-width="1.7" stroke-linecap="round"/></svg>
+    <span><strong>Patented 360° crossed band</strong>, front, sides &amp; back</span>
+  </div>
+
+    <div class="sb-feat">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M3 12s3.4-6 9-6 9 6 9 6-3.4 6-9 6c-2 0-3.7-.8-5.1-1.7" stroke="#BC5589" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="12" r="2.6" stroke="#BC5589" stroke-width="1.7"/><path d="M4 4l16 16" stroke="#BC5589" stroke-width="1.7" stroke-linecap="round"/></svg>
+    <span><strong>Invisible</strong> under your clothes, never rolls down</span>
+  </div>
+
+    <div class="sb-feat">
+    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="#BC5589" stroke-width="1.7"/><path d="M12 7.4V12l3 2" stroke="#BC5589" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span><strong>Belly back in 2-3 weeks</strong>, your jeans button again</span>
+  </div>
+
+    <div class="sb-feat">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M12 20.3S4.2 15.7 4.2 9.9c0-2.6 2-4.4 4.2-4.4 1.7 0 2.8.9 3.6 2 .8-1.1 1.9-2 3.6-2 2.2 0 4.2 1.8 4.2 4.4 0 5.8-7.8 10.4-7.8 10.4z" stroke="#BC5589" stroke-width="1.7" stroke-linejoin="round"/></svg>
+    <span><strong>Breastfeeding</strong>, <strong>C-section</strong> and <strong>menopause</strong> friendly</span>
+  </div>
+
+</div>
+<p class="sb-feat-note">Worn daily, the results <strong>build and stay with you.</strong></p>
+
+{% schema %}
+{
+  "name": "Sculpt: benefits grid",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Sculpt: benefits grid",
+      "category": "Sculpt"
+    }
+  ]
+}
+{% endschema %}
