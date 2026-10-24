@@ -16,11 +16,19 @@
     style="{% render 'spacing-style', settings: section.settings %} --border-width: {{ section.settings.divider_thickness }}px;{% if section.settings.divider_color != blank %} --divider-color: {{ section.settings.divider_color }};{% endif %} --gap: {{ section.settings.gap }}px;"
     data-testid="footer-utilities"
   >
+    {%- assign footer_logo = settings.logo_inverse | default: settings.logo -%}
+    {%- if footer_logo != blank -%}
+      <a class="sb-footer-logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+        {{ footer_logo | image_url: width: 360 | image_tag: height: 20, loading: 'lazy', alt: shop.name }}
+      </a>
+    {%- endif -%}
     {% content_for 'blocks' %}
   </div>
 </div>
 
 {% stylesheet %}
+  .sb-footer-logo { display: inline-flex; grid-column: 1 / -1; justify-self: center; }
+  .sb-footer-logo img { height: 20px; width: auto; display: block; }
   .utilities {
     width: 100%;
     display: flex;

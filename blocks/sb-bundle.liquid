@@ -1,14 +1,21 @@
 {%- liquid
   assign product = closest.product
   assign unit_price = product.selected_or_first_available_variant.price
+  assign color_option_index = -1
+  for option in product.options_with_values
+    assign option_name = option.name | downcase
+    if option_name == 'color' or option_name == 'colour'
+      assign color_option_index = forloop.index0
+    endif
+  endfor
 -%}
 
-<div class="sbb" id="sb-bundle" data-sbb>
+<div class="sbb" id="sb-bundle" data-sbb data-color-index="{{ color_option_index }}">
   {%- if block.settings.heading != blank -%}
     <div class="sbb-head"><span>{{ block.settings.heading }}</span></div>
   {%- endif -%}
 
-  <div class="sbb-tiers" role="radiogroup">
+  <div class="sbb-tiers" role="radiogroup" aria-label="Choose your bundle">
     {%- for i in (1..3) -%}
       {%- liquid
         assign qty_key = 'tier_' | append: i | append: '_qty'
@@ -24,119 +31,189 @@
         assign total = each | times: qty
         assign discount = compare | minus: total
         assign save = discount | times: 100.0 | divided_by: compare | round
-        assign selected = false
-        if block.settings.default_tier == i
-          assign selected = true
-        endif
       -%}
       {%- if qty > 0 -%}
-        <label class="sbb-tier{% if selected %} is-active{% endif %}" data-sbb-tier data-qty="{{ qty }}">
-          {%- if block.settings[badge_key] != blank -%}
-            <span class="sbb-badge">{{ block.settings[badge_key] }}</span>
-          {%- endif -%}
-          <input type="radio" name="sbb-tier-{{ block.id }}" value="{{ qty }}" {% if selected %}checked{% endif %}>
-          <span class="sbb-radio" aria-hidden="true"></span>
-          <span class="sbb-tier-text">
-            <span class="sbb-tier-title">{{ block.settings[title_key] }}{% if save > 0 %} <span class="sbb-save">Save {{ save }}%</span>{% endif %}</span>
-            <span class="sbb-tier-sub">Only {{ each | money }} each</span>
-          </span>
-          <span class="sbb-tier-price">
-            <span class="sbb-now">{{ total | money }}</span>
-            {%- if compare > total -%}
-              <s class="sbb-was">{{ compare | money }}</s>
+        <div class="sbb-tier{% if block.settings.default_tier == i %} is-active{% endif %}" data-sbb-tier data-qty="{{ qty }}" data-total="{{ total | money }}">
+          <button type="button" class="sbb-tier-head" role="radio" aria-checked="{% if block.settings.default_tier == i %}true{% else %}false{% endif %}">
+            {%- if block.settings[badge_key] != blank -%}
+              <span class="sbb-badge">{{ block.settings[badge_key] }}</span>
             {%- endif -%}
-          </span>
-        </label>
+            <span class="sbb-radio" aria-hidden="true"></span>
+            <span class="sbb-tier-text">
+              <span class="sbb-tier-title">{{ block.settings[title_key] }}{% if save > 0 %} <span class="sbb-save">Save {{ save }}%</span>{% endif %}</span>
+              <span class="sbb-tier-sub">{{ qty }} briefs · only {{ each | money }} each</span>
+            </span>
+            <span class="sbb-tier-price">
+              <span class="sbb-now">{{ total | money }}</span>
+              {%- if compare > total -%}
+                <s class="sbb-was">{{ compare | money }}</s>
+              {%- endif -%}
+            </span>
+          </button>
+          <div class="sbb-items" data-sbb-items></div>
+        </div>
       {%- endif -%}
     {%- endfor -%}
   </div>
 
-  <div class="sbb-items" data-sbb-items></div>
-
   <template data-sbb-row>
-    <div class="sbb-row">
+    <div class="sbb-row" data-sbb-row-item>
       <span class="sbb-row-num"></span>
-      {%- for option in product.options_with_values -%}
-        {%- assign option_name = option.name | downcase -%}
-        {%- if option_name == 'color' or option_name == 'colour' -%}
-          <div class="sbb-swatches" role="radiogroup" aria-label="{{ option.name }}">
-            {%- for value in option.values -%}
-              {%- liquid
-                assign swatch = value.swatch.color
-                if value.swatch.color == blank
-                  assign key = value | downcase | append: ':'
-                  assign pairs = block.settings.swatch_colors | newline_to_br | split: '<br />'
-                  assign swatch = '#cccccc'
-                  for pair in pairs
-                    assign pair_clean = pair | strip
-                    assign pair_key = pair_clean | downcase | split: ':' | first | strip | append: ':'
-                    if pair_key == key
-                      assign swatch = pair_clean | split: ':' | last | strip
+      <div class="sbb-row-fields">
+        {%- for option in product.options_with_values -%}
+          {%- if forloop.index0 == color_option_index -%}
+            <div class="sbb-color">
+              <div class="sbb-swatches" role="radiogroup" aria-label="{{ option.name }}">
+                {%- for value in option.values -%}
+                  {%- liquid
+                    assign swatch = value.swatch.color
+                    if swatch == blank
+                      assign key = value | downcase | append: ':'
+                      assign pairs = block.settings.swatch_colors | newline_to_br | split: '<br />'
+                      assign swatch = '#cccccc'
+                      for pair in pairs
+                        assign pair_clean = pair | strip
+                        assign pair_key = pair_clean | downcase | split: ':' | first | strip | append: ':'
+                        if pair_key == key
+                          assign swatch = pair_clean | split: ':' | last | strip
+                        endif
+                      endfor
                     endif
-                  endfor
-                endif
-              -%}
-              <button type="button" class="sbb-swatch" data-sbb-swatch="{{ value | escape }}" style="--swatch: {{ swatch }};" title="{{ value | escape }}" aria-label="{{ value | escape }}"></button>
-            {%- endfor -%}
-          </div>
-          <select class="sbb-select" data-sbb-option="{{ forloop.index0 }}" data-sbb-color hidden aria-hidden="true" tabindex="-1">
-            {%- for value in option.values -%}
-              <option value="{{ value | escape }}">{{ value }}</option>
-            {%- endfor -%}
-          </select>
-        {%- else -%}
-          <select class="sbb-select" data-sbb-option="{{ forloop.index0 }}" aria-label="{{ option.name }}">
-            {%- for value in option.values -%}
-              <option value="{{ value | escape }}">{{ value }}</option>
-            {%- endfor -%}
-          </select>
-        {%- endif -%}
-      {%- endfor -%}
+                  -%}
+                  <button type="button" class="sbb-swatch" role="radio" aria-checked="false" data-sbb-swatch="{{ value | escape }}" style="--swatch: {{ swatch }};" title="{{ value | escape }}" aria-label="{{ value | escape }}"></button>
+                {%- endfor -%}
+              </div>
+              <span class="sbb-color-name" data-sbb-color-name>Choose color</span>
+            </div>
+            <select class="sbb-select" data-sbb-option="{{ forloop.index0 }}" data-sbb-color hidden aria-hidden="true" tabindex="-1">
+              <option value=""></option>
+              {%- for value in option.values -%}
+                <option value="{{ value | escape }}">{{ value }}</option>
+              {%- endfor -%}
+            </select>
+          {%- else -%}
+            <select class="sbb-select" data-sbb-option="{{ forloop.index0 }}" aria-label="{{ option.name }}">
+              <option value="">{{ option.name }}</option>
+              {%- for value in option.values -%}
+                <option value="{{ value | escape }}">{{ value }}</option>
+              {%- endfor -%}
+            </select>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
     </div>
   </template>
 
   <button type="button" class="sbb-atc" data-sbb-atc>
-    <span data-sbb-label>{{ block.settings.button_label }}</span>
+    <span class="sbb-atc-label" data-sbb-label>{{ block.settings.button_label }}</span>
+    <span class="sbb-atc-total" data-sbb-atc-total></span>
+    <span class="sbb-spinner" aria-hidden="true"></span>
   </button>
-  <p class="sbb-error" data-sbb-error hidden></p>
+  <p class="sbb-error" data-sbb-error role="alert" hidden></p>
+
+  <ul class="sbb-trust">
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="7" cy="17.5" r="1.6" fill="currentColor"/><circle cx="17" cy="17.5" r="1.6" fill="currentColor"/></svg>Free US shipping</li>
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>90-day money-back</li>
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h12a4 4 0 0 1 0 8H9M4 9l4-4M4 9l4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Free size exchange</li>
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>Secure checkout</li>
+  </ul>
+
+  {%- if block.settings.show_express -%}
+    <div class="sbb-express">
+      <span class="sbb-express-label">Express checkout</span>
+      <button type="button" class="sbb-express-btn" data-sbb-express>Buy now with Shop Pay, Apple Pay or Google Pay</button>
+    </div>
+  {%- endif -%}
+
+  <div class="sbb-sticky" data-sbb-sticky aria-hidden="true">
+    <div class="sbb-sticky-text">
+      <span class="sbb-sticky-title" data-sbb-sticky-title></span>
+      <span class="sbb-sticky-price" data-sbb-sticky-price></span>
+    </div>
+    <button type="button" class="sbb-sticky-btn" data-sbb-sticky-btn tabindex="-1">{{ block.settings.sticky_label }}</button>
+  </div>
+
+  <div class="sbb-toast" data-sbb-toast role="status" aria-live="polite"></div>
 
   <script type="application/json" data-sbb-variants>
-    [{%- for variant in product.variants -%}{"id":{{ variant.id }},"options":{{ variant.options | json }},"available":{{ variant.available }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]
+    [{%- for variant in product.variants -%}{"id":{{ variant.id }},"options":{{ variant.options | json }},"available":{{ variant.available }},"image":{{ variant.featured_media.preview_image.src | default: '' | split: '?' | first | split: '/' | last | json }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]
   </script>
 </div>
 
 <style>
-  .sbb { font-family: var(--font-body--family); width: 100%; }
+  .sbb { font-family: var(--font-body--family); width: 100%; --sbb-accent: #A3426D; --sbb-line: #E5DCE1; --sbb-cta: #FFC93C; --sbb-cta-hover: #FFB800; --sbb-cta-ink: #1A1A1A; }
   .sbb-head { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: 14px; font-weight: 700; color: #1A1A1A; text-align: center; }
-  .sbb-head::before, .sbb-head::after { content: ""; flex: 1; height: 1px; background: #E5DCE1; }
+  .sbb-head::before, .sbb-head::after { content: ""; flex: 1; height: 1px; background: var(--sbb-line); }
   .sbb-tiers { display: flex; flex-direction: column; gap: 12px; }
-  .sbb-tier { position: relative; display: flex; align-items: center; gap: 12px; padding: 16px 14px; border: 1.5px solid #E5DCE1; border-radius: 12px; background: #fff; cursor: pointer; transition: border-color .15s, background .15s; }
-  .sbb-tier input { position: absolute; opacity: 0; pointer-events: none; }
-  .sbb-tier.is-active { border: 2px solid #A3426D; background: #FBF3F7; }
-  .sbb-radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #C9B5BF; flex-shrink: 0; position: relative; }
-  .sbb-tier.is-active .sbb-radio { border-color: #A3426D; }
-  .sbb-tier.is-active .sbb-radio::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: #A3426D; }
+  .sbb-tier { border: 1.5px solid var(--sbb-line); border-radius: 12px; background: #fff; transition: border-color .2s, background .2s, box-shadow .2s, transform .2s; }
+  .sbb-tier:hover { border-color: #D3B7C5; }
+  .sbb-tier.is-active { border: 2px solid var(--sbb-accent); background: #FBF3F7; box-shadow: 0 8px 22px rgba(163, 66, 109, .12); }
+  .sbb-tier-head { position: relative; display: flex; align-items: center; gap: 12px; width: 100%; padding: 16px 14px; border: 0; background: none; cursor: pointer; text-align: left; font: inherit; color: inherit; border-radius: 12px; }
+  .sbb-tier-head:focus-visible { outline: 3px solid var(--sbb-accent); outline-offset: 2px; }
+  .sbb-radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #C9B5BF; flex-shrink: 0; position: relative; transition: border-color .2s; }
+  .sbb-tier.is-active .sbb-radio { border-color: var(--sbb-accent); }
+  .sbb-radio::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--sbb-accent); transform: scale(0); transition: transform .2s cubic-bezier(.3, 1.6, .5, 1); }
+  .sbb-tier.is-active .sbb-radio::after { transform: scale(1); }
   .sbb-tier-text { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
   .sbb-tier-title { font-size: 15px; font-weight: 800; color: #1A1A1A; letter-spacing: .2px; }
-  .sbb-save { display: inline-block; vertical-align: middle; margin-left: 6px; padding: 2px 7px; border-radius: 6px; background: #FBE3EE; color: #A3426D; font-size: 11px; font-weight: 800; letter-spacing: .3px; }
+  .sbb-save { display: inline-block; vertical-align: middle; margin-left: 6px; padding: 2px 7px; border-radius: 6px; background: #FBE3EE; color: var(--sbb-accent); font-size: 11px; font-weight: 800; letter-spacing: .3px; }
   .sbb-tier-sub { font-size: 12.5px; color: #6B5E65; }
   .sbb-tier-price { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
   .sbb-now { font-size: 17px; font-weight: 800; color: #1A1A1A; }
   .sbb-was { font-size: 13px; color: #786870; }
-  .sbb-badge { position: absolute; top: -10px; right: 14px; background: #A3426D; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .5px; padding: 3px 10px; border-radius: 999px; }
-  .sbb-items { display: flex; flex-direction: column; gap: 8px; margin: 12px 0 0; }
-  .sbb-items:empty { display: none; }
-  .sbb-row { display: flex; align-items: center; gap: 8px; }
-  .sbb-row-num { font-size: 12.5px; font-weight: 700; color: #6B5E65; width: 22px; flex-shrink: 0; }
-  .sbb-swatches { display: flex; flex-wrap: wrap; gap: 6px; flex: 0 1 auto; }
-  .sbb-swatch { width: 24px; height: 24px; padding: 0; border-radius: 50%; border: 1px solid rgba(0,0,0,.18); background: var(--swatch); cursor: pointer; box-shadow: 0 0 0 2px #fff; transition: box-shadow .15s, transform .15s; }
-  .sbb-swatch:hover { transform: scale(1.08); }
-  .sbb-swatch.is-active { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #A3426D; }
-  .sbb-select { flex: 1; min-width: 0; padding: 9px 10px; font-size: 14px; border: 1px solid #E5DCE1; border-radius: 8px; background: #fff; color: #1A1A1A; font-family: inherit; }
-  .sbb-atc { display: block; width: 100%; margin: 16px 0 0; padding: 17px 20px; border: 0; border-radius: 8px; background: #0B7F52; color: #fff; font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; cursor: pointer; font-family: inherit; transition: filter .15s; }
-  .sbb-atc:hover { filter: brightness(.95); }
-  .sbb-atc[disabled] { opacity: .6; cursor: wait; }
-  .sbb-error { color: #c0392b; font-size: 13.5px; margin: 10px 0 0; text-align: center; }
+  .sbb-badge { position: absolute; top: -11px; right: 14px; background: var(--sbb-accent); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .5px; padding: 3px 10px; border-radius: 999px; }
+  .sbb-items { display: none; flex-direction: column; gap: 8px; padding: 0 14px 14px; }
+  .sbb-tier.is-active .sbb-items { display: flex; animation: sbb-open .25s ease; }
+  @keyframes sbb-open { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+  .sbb-row { display: flex; align-items: flex-start; gap: 8px; padding: 10px; background: #fff; border: 1px solid #EFE4E9; border-radius: 10px; transition: border-color .2s, background .2s; }
+  .sbb-row.is-missing { border-color: #D93B3B; background: #FFF6F6; animation: sbb-shake .35s; }
+  @keyframes sbb-shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+  .sbb-row-num { font-size: 12.5px; font-weight: 700; color: #6B5E65; width: 22px; flex-shrink: 0; padding-top: 4px; }
+  .sbb-row-fields { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; flex: 1; min-width: 0; }
+  .sbb-color { display: flex; flex-direction: column; gap: 4px; flex: 1 1 190px; min-width: 0; }
+  .sbb-swatches { display: flex; flex-wrap: wrap; gap: 7px; }
+  .sbb-swatch { width: 26px; height: 26px; padding: 0; border-radius: 50%; border: 1px solid rgba(0, 0, 0, .18); background: var(--swatch); cursor: pointer; box-shadow: 0 0 0 2px #fff; transition: box-shadow .15s, transform .15s; }
+  .sbb-swatch:hover { transform: scale(1.1); }
+  .sbb-swatch:focus-visible { outline: 2px solid var(--sbb-accent); outline-offset: 3px; }
+  .sbb-swatch.is-active { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--sbb-accent); animation: sbb-pop .25s; }
+  @keyframes sbb-pop { 50% { transform: scale(1.18); } }
+  .sbb-color-name { font-size: 12px; color: #6B5E65; }
+  .sbb-color-name.is-set { color: #1A1A1A; font-weight: 700; }
+  .sbb-select { flex: 0 1 110px; min-width: 92px; padding: 9px 10px; font-size: 14px; border: 1px solid var(--sbb-line); border-radius: 8px; background: #fff; color: #1A1A1A; font-family: inherit; }
+  .sbb-select:invalid, .sbb-select.is-empty { color: #6B5E65; }
+  .sbb-atc { position: relative; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; margin: 16px 0 0; padding: 17px 20px; border: 0; border-radius: 10px; background: var(--sbb-cta); color: var(--sbb-cta-ink); font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; cursor: pointer; font-family: inherit; box-shadow: 0 6px 16px rgba(255, 184, 0, .35); transition: background .2s, transform .15s, box-shadow .2s; }
+  .sbb-atc:hover { background: var(--sbb-cta-hover); transform: translateY(-1px); box-shadow: 0 10px 22px rgba(255, 184, 0, .42); }
+  .sbb-atc:active { transform: translateY(1px) scale(.99); }
+  .sbb-atc:focus-visible { outline: 3px solid #1A1A1A; outline-offset: 3px; }
+  .sbb-atc-total { font-weight: 700; opacity: .85; }
+  .sbb-atc-total:empty { display: none; }
+  .sbb-spinner { display: none; width: 18px; height: 18px; border: 2.5px solid rgba(26, 26, 26, .25); border-top-color: #1A1A1A; border-radius: 50%; animation: sbb-spin .7s linear infinite; }
+  .sbb-atc.is-loading { pointer-events: none; }
+  .sbb-atc.is-loading .sbb-spinner { display: inline-block; }
+  .sbb-atc.is-loading .sbb-atc-total { display: none; }
+  .sbb-atc.is-done { background: #0B7F52; color: #fff; box-shadow: none; }
+  @keyframes sbb-spin { to { transform: rotate(360deg); } }
+  .sbb-error { color: #B42318; font-size: 13.5px; margin: 10px 0 0; text-align: center; }
+  .sbb-trust { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px; }
+  .sbb-trust li { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: #4A3B42; }
+  .sbb-trust svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--sbb-accent); }
+  @media (min-width: 750px) { .sbb-trust { grid-template-columns: repeat(4, minmax(0, auto)); justify-content: space-between; } }
+  .sbb-express { display: flex; flex-direction: column; gap: 6px; margin: 10px 0 0; }
+  .sbb-express-label { font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #6B5E65; text-align: center; }
+  .sbb-express-btn { width: 100%; padding: 13px 16px; border-radius: 10px; border: 0; background: #1A1A1A; color: #fff; font: inherit; font-size: 14.5px; font-weight: 700; cursor: pointer; transition: transform .15s, background .2s; }
+  .sbb-express-btn:hover { background: #000; transform: translateY(-1px); }
+  .sbb-sticky { position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 12px; padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); background: rgba(255, 255, 255, .97); box-shadow: 0 -6px 20px rgba(0, 0, 0, .1); transform: translateY(110%); transition: transform .3s ease; }
+  .sbb-sticky.is-visible { transform: none; }
+  .sbb-sticky-text { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+  .sbb-sticky-title { font-size: 13px; font-weight: 700; color: #1A1A1A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sbb-sticky-price { font-size: 15px; font-weight: 800; color: var(--sbb-accent); }
+  .sbb-sticky-btn { flex: 0 0 auto; padding: 13px 18px; border: 0; border-radius: 10px; background: var(--sbb-cta); color: var(--sbb-cta-ink); font: inherit; font-size: 15px; font-weight: 800; cursor: pointer; }
+  @media (min-width: 990px) { .sbb-sticky { display: none; } }
+  .sbb-toast { position: fixed; z-index: 60; left: 50%; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); max-width: min(92vw, 420px); padding: 12px 16px; border-radius: 12px; background: #1A1A1A; color: #fff; font-size: 14px; font-weight: 600; box-shadow: 0 10px 30px rgba(0, 0, 0, .25); opacity: 0; transform: translate(-50%, 12px); pointer-events: none; transition: opacity .25s, transform .25s; }
+  .sbb-toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+  .sbb-toast.is-error { background: #B42318; }
+  .sbb-toast.is-success { background: #0B7F52; }
+  @media (prefers-reduced-motion: reduce) { .sbb *, .sbb *::after { animation: none !important; transition: none !important; } }
 </style>
 
 <script>
@@ -145,98 +222,252 @@
     if (!root || root.dataset.sbbReady) return;
     root.dataset.sbbReady = '1';
 
+    var STORAGE_KEY = 'lithella-bundle-v1';
     var variants = JSON.parse(root.querySelector('[data-sbb-variants]').textContent);
     var rowTemplate = root.querySelector('[data-sbb-row]');
-    var items = root.querySelector('[data-sbb-items]');
-    var tiers = root.querySelectorAll('[data-sbb-tier]');
+    var tiers = Array.prototype.slice.call(root.querySelectorAll('[data-sbb-tier]'));
     var atc = root.querySelector('[data-sbb-atc]');
+    var atcLabel = root.querySelector('[data-sbb-label]');
+    var atcTotal = root.querySelector('[data-sbb-atc-total]');
     var error = root.querySelector('[data-sbb-error]');
-    var initial = variants.find(function (v) { return v.available; }) || variants[0];
+    var toastEl = root.querySelector('[data-sbb-toast]');
+    var sticky = root.querySelector('[data-sbb-sticky]');
+    var express = root.querySelector('[data-sbb-express]');
+    var colorIndex = parseInt(root.dataset.colorIndex, 10);
+    var labelText = atcLabel.textContent;
+    var toastTimer;
 
-    function renderRows(qty) {
-      var previous = Array.prototype.map.call(items.children, readRow);
-      items.innerHTML = '';
-      for (var n = 0; n < qty; n++) {
-        var row = rowTemplate.content.firstElementChild.cloneNode(true);
-        row.querySelector('.sbb-row-num').textContent = '#' + (n + 1);
-        var opts = previous[n] || initial.options;
-        row.querySelectorAll('[data-sbb-option]').forEach(function (select) {
-          select.value = opts[+select.dataset.sbbOption];
-        });
-        bindSwatches(row);
-        items.appendChild(row);
-      }
+    function load() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { return {}; } }
+    function save() {
+      var active = activeTier();
+      var data = { tier: tiers.indexOf(active), rows: active ? rowsOf(active).map(readRow) : [] };
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) {}
     }
 
-    function bindSwatches(row) {
-      var select = row.querySelector('[data-sbb-color]');
-      if (!select) return;
-      var swatches = row.querySelectorAll('[data-sbb-swatch]');
-      function sync() {
-        swatches.forEach(function (s) {
-          var on = s.dataset.sbbSwatch === select.value;
+    function toast(message, type) {
+      clearTimeout(toastTimer);
+      toastEl.textContent = message;
+      toastEl.className = 'sbb-toast is-visible' + (type ? ' is-' + type : '');
+      toastTimer = setTimeout(function () { toastEl.className = 'sbb-toast'; }, 3200);
+    }
+
+    function activeTier() { return tiers.filter(function (t) { return t.classList.contains('is-active'); })[0]; }
+    function rowsOf(tier) { return Array.prototype.slice.call(tier.querySelectorAll('[data-sbb-row-item]')); }
+    function readRow(row) { return Array.prototype.map.call(row.querySelectorAll('[data-sbb-option]'), function (s) { return s.value; }); }
+
+    function findVariant(options) {
+      return variants.filter(function (v) {
+        return v.options.every(function (value, i) { return value === options[i]; });
+      })[0];
+    }
+
+    function showVariantImage(color) {
+      if (colorIndex < 0 || !color) return;
+      var variant = variants.filter(function (v) { return v.options[colorIndex] === color && v.image; })[0];
+      if (!variant) return;
+      var key = variant.image.replace(/\.[a-z]+$/i, '');
+      var gallery = document.querySelector('media-gallery slideshow-component, .product-information slideshow-component');
+      if (!gallery || typeof gallery.select !== 'function') return;
+      var slides = Array.prototype.slice.call(gallery.querySelectorAll('slideshow-slide'));
+      var index = slides.findIndex(function (slide) {
+        var img = slide.querySelector('img');
+        return img && (img.currentSrc || img.src).indexOf(key) !== -1;
+      });
+      if (index > -1) { try { gallery.select(index); } catch (e) {} }
+    }
+
+    function syncRow(row) {
+      var color = row.querySelector('[data-sbb-color]');
+      if (color) {
+        var name = row.querySelector('[data-sbb-color-name]');
+        row.querySelectorAll('[data-sbb-swatch]').forEach(function (s) {
+          var on = s.dataset.sbbSwatch === color.value;
           s.classList.toggle('is-active', on);
           s.setAttribute('aria-checked', on ? 'true' : 'false');
         });
+        name.textContent = color.value ? 'Color: ' + color.value : 'Choose color';
+        name.classList.toggle('is-set', !!color.value);
       }
-      swatches.forEach(function (s) {
-        s.setAttribute('role', 'radio');
-        s.addEventListener('click', function () { select.value = s.dataset.sbbSwatch; sync(); });
-      });
-      sync();
+      row.querySelectorAll('select:not([data-sbb-color])').forEach(function (s) { s.classList.toggle('is-empty', !s.value); });
+      if (readRow(row).every(Boolean)) row.classList.remove('is-missing');
     }
 
-    function readRow(row) {
-      return Array.prototype.map.call(row.querySelectorAll('[data-sbb-option]'), function (s) { return s.value; });
+    function buildRows(tier, saved) {
+      var box = tier.querySelector('[data-sbb-items]');
+      if (box.children.length) return;
+      var qty = +tier.dataset.qty;
+      for (var n = 0; n < qty; n++) {
+        var row = rowTemplate.content.firstElementChild.cloneNode(true);
+        row.querySelector('.sbb-row-num').textContent = '#' + (n + 1);
+        var values = saved && saved[n];
+        row.querySelectorAll('[data-sbb-option]').forEach(function (select) {
+          if (values && values[+select.dataset.sbbOption]) select.value = values[+select.dataset.sbbOption];
+        });
+        (function (row) {
+          row.querySelectorAll('[data-sbb-swatch]').forEach(function (s) {
+            s.addEventListener('click', function () {
+              row.querySelector('[data-sbb-color]').value = s.dataset.sbbSwatch;
+              syncRow(row);
+              showVariantImage(s.dataset.sbbSwatch);
+              save();
+            });
+          });
+          row.querySelectorAll('select:not([data-sbb-color])').forEach(function (s) {
+            s.addEventListener('change', function () { syncRow(row); save(); });
+          });
+        })(row);
+        syncRow(row);
+        box.appendChild(row);
+      }
     }
 
-    function findVariant(options) {
-      return variants.find(function (v) {
-        return v.options.every(function (value, i) { return value === options[i]; });
+    function selectTier(tier, saved) {
+      tiers.forEach(function (t) {
+        var on = t === tier;
+        t.classList.toggle('is-active', on);
+        t.querySelector('.sbb-tier-head').setAttribute('aria-checked', on ? 'true' : 'false');
       });
+      buildRows(tier, saved);
+      atcTotal.textContent = '· ' + tier.dataset.total;
+      updateSticky();
+      save();
     }
 
     tiers.forEach(function (tier) {
-      tier.addEventListener('click', function () {
-        tiers.forEach(function (t) { t.classList.toggle('is-active', t === tier); });
-        tier.querySelector('input').checked = true;
-        renderRows(+tier.dataset.qty);
-      });
+      tier.querySelector('.sbb-tier-head').addEventListener('click', function () { selectTier(tier); });
     });
 
-    atc.addEventListener('click', function () {
-      error.hidden = true;
-      var counts = {};
-      for (var r = 0; r < items.children.length; r++) {
-        var variant = findVariant(readRow(items.children[r]));
+    function collect() {
+      var tier = activeTier();
+      if (!tier) { toast('Choose a bundle first.', 'error'); return null; }
+      var rows = rowsOf(tier), counts = {}, firstMissing = null;
+      rows.forEach(function (row, i) {
+        var values = readRow(row);
+        if (!values.every(Boolean)) {
+          row.classList.remove('is-missing'); void row.offsetWidth; row.classList.add('is-missing');
+          if (firstMissing === null) firstMissing = i;
+          return;
+        }
+        var variant = findVariant(values);
         if (!variant || !variant.available) {
-          error.textContent = 'Item #' + (r + 1) + ' is sold out in this combination. Please pick another.';
-          error.hidden = false;
+          row.classList.add('is-missing');
+          if (firstMissing === null) firstMissing = i;
           return;
         }
         counts[variant.id] = (counts[variant.id] || 0) + 1;
+      });
+      if (firstMissing !== null) {
+        var row = rows[firstMissing];
+        var missingColor = row.querySelector('[data-sbb-color]') && !row.querySelector('[data-sbb-color]').value;
+        showError((missingColor ? 'Choose a color' : 'Choose a size') + ' for item #' + (firstMissing + 1) + '.');
+        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return null;
       }
-      var payload = Object.keys(counts).map(function (id) { return { id: +id, quantity: counts[id] }; });
-      atc.disabled = true;
-      fetch('{{ routes.cart_add_url }}.js', {
+      return Object.keys(counts).map(function (id) { return { id: +id, quantity: counts[id] }; });
+    }
+
+    function showError(message) {
+      error.textContent = message;
+      error.hidden = false;
+      toast(message, 'error');
+    }
+
+    function setLoading(on) {
+      atc.classList.toggle('is-loading', on);
+      atc.disabled = on;
+      if (express) express.disabled = on;
+    }
+
+    function friendly(message) {
+      if (!message) return 'Something went wrong. Please try again.';
+      if (/sold out|not available/i.test(message)) return 'One of your choices just sold out. Please pick another color or size.';
+      return message;
+    }
+
+    function addLines(lines) {
+      var actions = window.Shopify && window.Shopify.actions;
+      if (actions && actions.updateCart) {
+        return actions.updateCart(
+          { lines: lines.map(function (l) { return { merchandiseId: String(l.id), quantity: l.quantity }; }) },
+          { event: { context: 'product' } }
+        ).then(function (result) {
+          if (result && result.userErrors && result.userErrors.length) throw new Error(result.userErrors[0].message);
+          return 'drawer';
+        });
+      }
+      return fetch('{{ routes.cart_add_url }}.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ items: payload })
-      })
-        .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
-        .then(function (result) {
-          if (!result.ok) throw new Error(result.data.description || result.data.message);
-          window.location.href = '{{ routes.cart_url }}';
+        body: JSON.stringify({ items: lines })
+      }).then(function (res) {
+        return res.json().then(function (data) {
+          if (!res.ok) throw new Error(data.description || data.message);
+          return 'page';
+        });
+      });
+    }
+
+    function submit(goToCheckout) {
+      error.hidden = true;
+      var lines = collect();
+      if (!lines) return;
+      setLoading(true);
+      addLines(lines)
+        .then(function (mode) {
+          setLoading(false);
+          if (goToCheckout) { window.location.href = '{{ routes.root_url }}checkout'.replace('//checkout', '/checkout'); return; }
+          atc.classList.add('is-done');
+          atcLabel.textContent = '✓ Added to cart';
+          setTimeout(function () { atc.classList.remove('is-done'); atcLabel.textContent = labelText; }, 2200);
+          toast('Added to your cart.', 'success');
+          if (mode === 'page') window.location.href = '{{ routes.cart_url }}';
         })
         .catch(function (err) {
-          atc.disabled = false;
-          error.textContent = err.message || 'Something went wrong, please try again.';
-          error.hidden = false;
+          setLoading(false);
+          var offline = err && /fetch|network/i.test(err.message || '');
+          showError(offline ? "We couldn't reach the store. Check your connection and try again." : friendly(err && err.message));
         });
+    }
+
+    atc.addEventListener('click', function () { submit(false); });
+    if (express) express.addEventListener('click', function () { submit(true); });
+
+    function updateSticky() {
+      var tier = activeTier();
+      if (!tier) return;
+      root.querySelector('[data-sbb-sticky-title]').textContent = tier.querySelector('.sbb-tier-title').firstChild.textContent.trim();
+      root.querySelector('[data-sbb-sticky-price]').textContent = tier.dataset.total;
+    }
+    root.querySelector('[data-sbb-sticky-btn]').addEventListener('click', function () {
+      root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        var e = entries[0];
+        var show = !e.isIntersecting && e.boundingClientRect.top < 0;
+        sticky.classList.toggle('is-visible', show);
+        sticky.setAttribute('aria-hidden', show ? 'false' : 'true');
+        root.querySelector('[data-sbb-sticky-btn]').tabIndex = show ? 0 : -1;
+      }).observe(atc);
+    }
+
+    // Size finder: apply the recommended size to every brief in the chosen bundle.
+    document.addEventListener('sb:size-selected', function (event) {
+      var tier = activeTier();
+      if (!tier) return;
+      rowsOf(tier).forEach(function (row) {
+        row.querySelectorAll('select:not([data-sbb-color])').forEach(function (s) {
+          if (Array.prototype.some.call(s.options, function (o) { return o.value === event.detail.size; })) s.value = event.detail.size;
+        });
+        syncRow(row);
+      });
+      save();
+      toast('Size ' + event.detail.size + ' set for all ' + rowsOf(tier).length + ' briefs. Now pick your colors.', 'success');
     });
 
-    var active = root.querySelector('[data-sbb-tier].is-active') || tiers[0];
-    if (active) renderRows(+active.dataset.qty);
+    var state = load();
+    var start = tiers[state.tier] || activeTier() || tiers[0];
+    if (start) selectTier(start, state.tier === tiers.indexOf(start) ? state.rows : null);
   })();
 </script>
 
@@ -247,6 +478,8 @@
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "Try it risk-free — 90-day guarantee" },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Add to cart" },
+    { "type": "text", "id": "sticky_label", "label": "Mobile sticky button label", "default": "Choose colors" },
+    { "type": "checkbox", "id": "show_express", "label": "Show express checkout button", "default": true, "info": "Adds the bundle to the cart and goes straight to checkout, where Shop Pay, Apple Pay and Google Pay appear when they are turned on in Settings > Payments." },
     { "type": "textarea", "id": "swatch_colors", "label": "Color swatches", "info": "One per line: Color name: #hex. Used when the color has no swatch in Shopify.", "default": "Black: #111111\nBeige: #D8B99A\nNavy: #1F2A44\nLilac: #C7A6D9\nPurple: #5B2A86\nFuchsia pink: #D6247A" },
     { "type": "range", "id": "default_tier", "label": "Preselected offer", "min": 1, "max": 3, "step": 1, "default": 2 },
     { "type": "header", "content": "Offer 1" },

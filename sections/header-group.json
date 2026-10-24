@@ -14,14 +14,42 @@
     "header_announcements_9jGBFp": {
       "type": "header-announcements",
       "blocks": {
-        "announcement_BxgCk9": {
+        "announcement_1": {
           "type": "_announcement",
           "settings": {
-            "text": "<strong>90-day money-back guarantee</strong>",
+            "text": "<strong>BUY 2 GET 2 FREE</strong> · Our most popular deal",
             "link": "",
             "font": "var(--font-subheading--family)",
-            "font_size": "1rem",
-            "weight": "700",
+            "font_size": "0.875rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "none",
+            "text_color": "#ffffff"
+          },
+          "blocks": {}
+        },
+        "announcement_2": {
+          "type": "_announcement",
+          "settings": {
+            "text": "<strong>Free US shipping</strong> on every order",
+            "link": "",
+            "font": "var(--font-subheading--family)",
+            "font_size": "0.875rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "none",
+            "text_color": "#ffffff"
+          },
+          "blocks": {}
+        },
+        "announcement_3": {
+          "type": "_announcement",
+          "settings": {
+            "text": "<strong>90-day money-back guarantee</strong> · Free size exchange",
+            "link": "",
+            "font": "var(--font-subheading--family)",
+            "font_size": "0.875rem",
+            "weight": "",
             "letter_spacing": "normal",
             "case": "none",
             "text_color": "#ffffff"
@@ -30,17 +58,19 @@
         }
       },
       "block_order": [
-        "announcement_BxgCk9"
+        "announcement_1",
+        "announcement_2",
+        "announcement_3"
       ],
       "name": "t:names.announcement_bar",
       "settings": {
-        "speed": 5,
+        "speed": 4,
         "section_width": "page-width",
         "divider_width": 0,
         "padding-block-start": 12,
         "padding-block-end": 12,
         "divider_color": "{{ settings.color_palette.color3 }}",
-        "background_color": "#dd1d1d"
+        "background_color": "#2A1A23"
       }
     },
     "header_section": {

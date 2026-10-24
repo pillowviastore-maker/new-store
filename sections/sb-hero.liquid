@@ -1,55 +1,56 @@
 {%- liquid
   assign hero_product = section.settings.product | default: all_products['sculpt-brief']
-  assign hero_image = section.settings.image | default: hero_product.featured_image
+  assign rating = hero_product.metafields.reviews.rating.value
+  assign rating_count = hero_product.metafields.reviews.rating_count
 -%}
 
 <div class="sbh">
   <div class="sbh-inner">
-    <div class="sbh-media">
-      {%- if hero_image != blank -%}
-        {{ hero_image | image_url: width: 1200 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 900px) 50vw, 100vw', alt: hero_product.title }}
-      {%- endif -%}
-    </div>
     <div class="sbh-text">
-      {%- if section.settings.eyebrow != blank -%}
-        <p class="sbh-eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- if rating != blank -%}
+        <p class="sbh-rating"><span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span> Rated {{ rating.rating | round: 1 }}/5 · {{ rating_count }} reviews</p>
       {%- endif -%}
-      <h1 class="sbh-title">{{ section.settings.title }}</h1>
+      <h1 class="sbh-title">{{ section.settings.title }} <span>{{ section.settings.title_accent }}</span></h1>
       <div class="sbh-sub">{{ section.settings.text }}</div>
-      <a class="sbh-btn" href="{{ hero_product.url | default: routes.all_products_collection_url }}">{{ section.settings.button_label }}</a>
-      <ul class="sbh-trust">
-        <li>90-day money-back guarantee</li>
-        <li>Free size exchange</li>
-        <li>Secure checkout</li>
+      <ul class="sbh-points">
+        {%- for i in (1..3) -%}
+          {%- assign key = 'point_' | append: i -%}
+          {%- if section.settings[key] != blank -%}<li>{{ section.settings[key] }}</li>{%- endif -%}
+        {%- endfor -%}
       </ul>
+      <a class="sbh-btn" href="{{ hero_product.url | default: routes.all_products_collection_url }}">{{ section.settings.button_label }}</a>
+    </div>
+    <div class="sbh-media">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 900 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 900px) 420px, 100vw', alt: hero_product.title }}
+      {%- else -%}
+        <img src="{{ 'sb-ugc-6.jpg' | asset_url }}" width="480" height="854" alt="Woman holding the {{ hero_product.title | escape }} in navy" fetchpriority="high">
+      {%- endif -%}
     </div>
   </div>
 </div>
 
 <style>
-  .sbh { background: #FBF3F7; padding: 40px 16px; font-family: var(--font-body--family); }
-  .sbh-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 48px; }
-  .sbh-media { flex: 1 1 50%; min-width: 0; }
-  .sbh-media img { width: 100%; height: auto; display: block; border-radius: 20px; box-shadow: 0 10px 30px rgba(163,66,109,.14); background: #fff; }
-  .sbh-text { flex: 1 1 50%; min-width: 0; }
-  .sbh-eyebrow { color: #A3426D; font-size: 12.5px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; margin: 0 0 10px; }
-  .sbh-title { font-size: 42px; font-weight: 800; color: #1A1A1A; line-height: 1.1; margin: 0 0 14px; }
-  .sbh-sub { font-size: 17px; color: #555; line-height: 1.6; margin: 0 0 24px; }
+  .sbh { background: linear-gradient(120deg, #FBEFF5 0%, #F7E3EE 55%, #FBF3F7 100%); padding: 48px 16px; font-family: var(--font-body--family); }
+  .sbh-inner { max-width: 1040px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: center; gap: 56px; }
+  .sbh-rating { margin: 0 0 12px; font-size: 14px; letter-spacing: .03em; color: #4A3B42; }
+  .sbh-rating span { color: #A3426D; letter-spacing: 2px; margin-right: 4px; }
+  .sbh-title { margin: 0 0 16px; color: #1A1A1A; text-wrap: balance; }
+  .sbh-title span { color: #A3426D; }
+  .sbh-sub { font-size: 16.5px; color: #4A3B42; line-height: 1.65; margin: 0 0 18px; max-width: 54ch; }
   .sbh-sub p { margin: 0; }
-  .sbh-sub strong { color: #A3426D; }
-  .sbh-btn { display: inline-block; background: #A3426D; color: #fff; padding: 16px 34px; font-weight: 700; border-radius: 8px; font-size: 16px; text-decoration: none; transition: background .25s; }
+  .sbh-points { list-style: none; margin: 0 0 26px; padding: 0; display: grid; gap: 10px; }
+  .sbh-points li { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; color: #2A1A23; letter-spacing: .02em; }
+  .sbh-points li::before { content: "\2713"; flex: 0 0 22px; height: 22px; border-radius: 50%; background: #A3426D; color: #fff; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
+  .sbh-btn { display: inline-block; background: #A3426D; color: #fff; padding: 17px 36px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; border-radius: 10px; font-size: 15px; text-decoration: none; }
   .sbh-btn:hover { background: #8A3459; color: #fff; }
-  .sbh-trust { list-style: none; margin: 20px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13px; font-weight: 600; color: #555; }
-  .sbh-trust li { display: inline-flex; align-items: center; gap: 6px; }
-  .sbh-trust li::before { content: "\2713"; color: #A3426D; font-weight: 800; }
+  .sbh-media img { width: 100%; height: auto; max-height: 520px; object-fit: cover; display: block; border-radius: 20px; box-shadow: 0 18px 40px rgba(163, 66, 109, .18); }
   @media (max-width: 768px) {
-    .sbh { padding: 24px 16px 32px; }
-    .sbh-inner { flex-direction: column; gap: 22px; }
-    .sbh-text { text-align: center; }
-    .sbh-title { font-size: 30px; }
-    .sbh-sub { font-size: 15.5px; }
-    .sbh-btn { display: block; }
-    .sbh-trust { justify-content: center; }
+    .sbh { padding: 28px 16px 36px; }
+    .sbh-inner { grid-template-columns: 1fr; gap: 22px; }
+    .sbh-media { order: -1; }
+    .sbh-media img { max-height: 420px; }
+    .sbh-btn { display: block; text-align: center; }
   }
 </style>
 
@@ -60,10 +61,13 @@
   "class": "sb-section",
   "settings": [
     { "type": "product", "id": "product", "label": "Product" },
-    { "type": "image_picker", "id": "image", "label": "Image", "info": "Defaults to the product's main photo." },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Sculpt Brief™" },
-    { "type": "text", "id": "title", "label": "Heading", "default": "The belly that won't go, finally gone." },
-    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>High-waisted shaping with a <strong>360° crossed band</strong> that smooths your belly, waist and back. Seamless, breathable and invisible under clothes.</p>" },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Defaults to a customer photo holding the brief." },
+    { "type": "text", "id": "title", "label": "Heading", "default": "The Sculpt Brief —" },
+    { "type": "text", "id": "title_accent", "label": "Heading (pink part)", "default": "Smooth Support for the Belly That Stays" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>A high-waisted brief with a 360° crossed band that wraps your belly, waist and back in gentle, even compression. Invisible under anything, comfortable from morning to night.</p>" },
+    { "type": "text", "id": "point_1", "label": "Point 1", "default": "360° crossed-band support" },
+    { "type": "text", "id": "point_2", "label": "Point 2", "default": "Soft, seamless and breathable" },
+    { "type": "text", "id": "point_3", "label": "Point 3", "default": "Invisible under any outfit" },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop the Sculpt Brief" }
   ],
   "presets": [{ "name": "Sculpt: hero", "category": "Sculpt" }]

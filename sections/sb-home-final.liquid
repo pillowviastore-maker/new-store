@@ -1,0 +1,60 @@
+{%- assign final_product = section.settings.product | default: all_products['sculpt-brief'] -%}
+
+<div class="sbhf">
+  <div class="sbhf-inner">
+    <div class="sbhf-photo">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 500 | image_tag: loading: 'lazy', sizes: '200px' }}
+      {%- else -%}
+        <img src="{{ 'sb-ugc-5.jpg' | asset_url }}" width="480" height="854" loading="lazy" alt="Woman holding a stack of {{ final_product.title | escape }}">
+      {%- endif -%}
+    </div>
+    <h2 class="sbhf-title">{{ section.settings.title }} <em>{{ section.settings.title_accent }}</em></h2>
+    <p class="sbhf-text">{{ section.settings.text }}</p>
+    <a class="sbhf-btn" href="{{ final_product.url | default: routes.all_products_collection_url }}">{{ section.settings.button_label }}</a>
+    <p class="sbhf-guarantee">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <strong>90-Day Money-Back Guarantee</strong>, risk-free trial
+    </p>
+    <ul class="sbhf-badges">
+      <li>Free US shipping</li>
+      <li>Free size exchange</li>
+      <li>Easy returns</li>
+      <li>Secure checkout</li>
+    </ul>
+  </div>
+</div>
+
+<style>
+  .sbhf { padding: 64px 16px; font-family: var(--font-body--family); text-align: center; }
+  .sbhf-inner { max-width: 620px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+  .sbhf-photo { width: 190px; height: 190px; border-radius: 50%; overflow: hidden; border: 3px solid #A3426D; margin: 0 0 22px; }
+  .sbhf-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .sbhf-title { margin: 0 0 10px; color: #1A1A1A; }
+  .sbhf-title em { color: #A3426D; }
+  .sbhf-text { margin: 0 0 22px; font-size: 16px; color: #4A3B42; line-height: 1.6; }
+  .sbhf-btn { display: inline-block; background: #A3426D; color: #fff; padding: 17px 40px; border-radius: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: 15px; text-decoration: none; }
+  .sbhf-btn:hover { background: #8A3459; color: #fff; }
+  .sbhf-guarantee { display: inline-flex; align-items: center; gap: 8px; margin: 20px 0 10px; font-size: 14.5px; color: #4A3B42; }
+  .sbhf-guarantee svg { width: 20px; height: 20px; color: #A3426D; }
+  .sbhf-badges { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; font-size: 13px; color: #6F5F66; }
+  .sbhf-badges li::before { content: "\2713\00a0"; color: #A3426D; font-weight: 800; }
+  @media (max-width: 768px) { .sbhf { padding: 44px 16px; } .sbhf-btn { align-self: stretch; } }
+</style>
+
+{% schema %}
+{
+  "name": "Sculpt: home final CTA",
+  "tag": "section",
+  "class": "sb-section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product" },
+    { "type": "image_picker", "id": "image", "label": "Round photo" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "Ready to Feel Like" },
+    { "type": "text", "id": "title_accent", "label": "Heading (pink part)", "default": "Yourself Again?" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "360° support for your belly, waist and back. Invisible under anything and on in seconds. Try it for 90 days, risk-free." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop the Sculpt Brief" }
+  ],
+  "presets": [{ "name": "Sculpt: home final CTA", "category": "Sculpt" }]
+}
+{% endschema %}

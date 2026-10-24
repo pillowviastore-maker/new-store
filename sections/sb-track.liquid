@@ -1,0 +1,100 @@
+<div class="sbtr">
+  <div class="sbtr-inner">
+    <h2 class="sbtr-title">{{ section.settings.title }}</h2>
+    <p class="sbtr-sub">{{ section.settings.text }}</p>
+    <form class="sbtr-form" data-sbtr-form novalidate>
+      <label class="sbtr-label" for="sbtr-number">Tracking number</label>
+      <div class="sbtr-row">
+        <input id="sbtr-number" class="sbtr-input" name="number" type="text" inputmode="text" autocomplete="off" placeholder="e.g. LX123456789CN" maxlength="40">
+        <button type="submit" class="sbtr-btn">Track</button>
+      </div>
+      <p class="sbtr-error" data-sbtr-error role="alert" hidden></p>
+    </form>
+    <div id="sbtr-result" class="sbtr-result" data-sbtr-result hidden></div>
+    <p class="sbtr-help">No tracking number yet? <a href="{{ routes.account_url }}">Sign in to see your orders</a> or <a href="{{ pages.contact.url | default: '/pages/contact' }}">contact us</a> with your order number.</p>
+  </div>
+</div>
+
+<style>
+  .sbtr { padding: 8px 16px 52px; font-family: var(--font-body--family); }
+  .sbtr-inner { max-width: 720px; margin: 0 auto; display: grid; gap: 14px; }
+  .sbtr-title { margin: 0; font-size: 24px; color: #1A1A1A; }
+  .sbtr-sub { margin: 0; color: #4A3B42; font-size: 15px; }
+  .sbtr-form { display: grid; gap: 6px; padding: 18px; border: 1.5px solid #EEDCE6; border-radius: 14px; background: #fff; }
+  .sbtr-label { font-size: 13px; font-weight: 700; color: #1A1A1A; }
+  .sbtr-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sbtr-input { flex: 1 1 220px; min-width: 0; padding: 13px 14px; font: inherit; font-size: 16px; border: 1px solid #D9C6D0; border-radius: 10px; text-transform: uppercase; }
+  .sbtr-input:focus { outline: none; border-color: #A3426D; box-shadow: 0 0 0 3px rgba(163, 66, 109, .15); }
+  .sbtr-btn { flex: 0 0 auto; padding: 13px 26px; border: 0; border-radius: 10px; background: #FFC93C; color: #1A1A1A; font: inherit; font-weight: 800; cursor: pointer; transition: background .2s, transform .15s; }
+  .sbtr-btn:hover { background: #FFB800; transform: translateY(-1px); }
+  .sbtr-error { margin: 4px 0 0; color: #B42318; font-size: 13.5px; }
+  .sbtr-result { min-height: 560px; border-radius: 14px; overflow: hidden; border: 1px solid #EEDCE6; }
+  .sbtr-help { margin: 0; font-size: 14px; color: #6F5F66; }
+  .sbtr-help a { color: #A3426D; }
+</style>
+
+<script>
+  (function () {
+    var form = document.querySelector('[data-sbtr-form]');
+    if (!form) return;
+    var input = form.querySelector('input');
+    var error = form.querySelector('[data-sbtr-error]');
+    var result = document.querySelector('[data-sbtr-result]');
+    var loading = null;
+
+    function loadWidget() {
+      if (window.YQV5) return Promise.resolve();
+      if (loading) return loading;
+      loading = new Promise(function (resolve, reject) {
+        var s = document.createElement('script');
+        s.src = 'https://www.17track.net/externalcall.js';
+        s.onload = resolve;
+        s.onerror = function () { loading = null; reject(); };
+        document.head.appendChild(s);
+      });
+      return loading;
+    }
+
+    function track(number) {
+      error.hidden = true;
+      loadWidget().then(function () {
+        result.hidden = false;
+        result.innerHTML = '';
+        window.YQV5.trackSingle({ YQ_ContainerId: 'sbtr-result', YQ_Height: 560, YQ_Fc: '0', YQ_Lang: 'en', YQ_Num: number });
+        result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }).catch(function () {
+        error.textContent = "The tracking service didn't load. Check your connection or open 17track.net and enter " + number + ' there.';
+        error.hidden = false;
+      });
+    }
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      var number = input.value.replace(/\s+/g, '').toUpperCase();
+      if (!/^[A-Z0-9-]{6,40}$/.test(number)) {
+        error.textContent = 'Enter the tracking number from your shipping email (6–40 letters and numbers).';
+        error.hidden = false;
+        input.focus();
+        return;
+      }
+      try { history.replaceState(null, '', '?tracking=' + encodeURIComponent(number)); } catch (e) {}
+      track(number);
+    });
+
+    var fromUrl = new URLSearchParams(location.search).get('tracking');
+    if (fromUrl) { input.value = fromUrl; form.requestSubmit ? form.requestSubmit() : track(fromUrl); }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sculpt: order tracking",
+  "tag": "section",
+  "class": "sb-section",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Heading", "default": "Track your parcel" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Enter the tracking number from your shipping confirmation email to see where your order is." }
+  ],
+  "presets": [{ "name": "Sculpt: order tracking", "category": "Sculpt" }]
+}
+{% endschema %}

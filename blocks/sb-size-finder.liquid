@@ -107,6 +107,8 @@
   .sbz-result .us{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#A3426D;margin:4px 0 0}
   .sbz-result .note{font-size:13px;color:#7a6770;line-height:1.5;margin:10px 0 0}
   .sbz-result .guar{display:inline-flex;align-items:center;gap:6px;margin:12px 0 0;padding:8px 12px;background:#FAF1F5;border-radius:8px;font-size:12.5px;font-weight:600;color:#6E1E3C;line-height:1.4}
+  .sbz-apply{display:block;width:100%;margin-top:12px;background:#FFC93C;color:#1A1A1A;border:0;border-radius:10px;padding:12px;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;transition:background .2s,transform .15s}
+  .sbz-apply:hover{background:#FFB800;transform:translateY(-1px)}
   .sbz-alt{display:block;width:100%;background:none;border:0;margin-top:16px;color:#6f5f66;font-size:13.5px;cursor:pointer;font-family:inherit;text-decoration:underline;text-decoration-color:#A3426D}
   .sbz-alt:hover{color:#1A1A1A}
   .sbz-table-wrap{overflow-x:auto;border:1px solid #EEDCE6;border-radius:12px}
@@ -218,7 +220,8 @@
       note = "Based on your waist, this is your best fit. Prefer a softer feel? You can size up.";
     }
     var guar = '<p class="guar">&#10003; Backed by our 90-day fit guarantee. Wrong size? We\'ll send the right one, free.</p>';
-    res.innerHTML = '<p class="lbl">We recommend</p><div class="sz">'+r.size.label+'</div><p class="us">US '+r.size.us+'</p><p class="note">'+note+'</p>'+guar;
+    var apply = '<button type="button" class="sbz-apply" data-sbz-apply="'+r.size.label+'">Use size '+r.size.label+' for all my briefs &rsaquo;</button>';
+    res.innerHTML = '<p class="lbl">We recommend</p><div class="sz">'+r.size.label+'</div><p class="us">US '+r.size.us+'</p><p class="note">'+note+'</p>'+apply+guar;
     res.hidden=false;
   }
   $('[data-sbz-calc]').addEventListener('click', runCalc);
@@ -240,6 +243,14 @@
     if(target){ var top = target.getBoundingClientRect().top + window.pageYOffset - 120; window.scrollTo({top:top, behavior:'smooth'}); }
   }
   function goToBundle(){ close(); scrollToBundle(); }
+
+  // Hand the recommended size to the bundle picker, then return the shopper to it.
+  overlay.addEventListener('click', function(e){
+    var btn = e.target.closest('[data-sbz-apply]');
+    if (!btn) return;
+    document.dispatchEvent(new CustomEvent('sb:size-selected', { detail: { size: btn.getAttribute('data-sbz-apply') } }));
+    goToBundle();
+  });
 
   var bundleBtn = $('[data-sbz-bundle]');
   if(bundleBtn){ bundleBtn.addEventListener('click', goToBundle); }

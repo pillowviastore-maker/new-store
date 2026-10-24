@@ -1,0 +1,64 @@
+{%- doc -%}
+  Gentle exit-intent reminder: once per session, on desktop when the pointer leaves the top of the window,
+  on mobile after a quick scroll back up once the visitor has browsed for a while. Never on cart or checkout.
+{%- enddoc -%}
+{%- unless template.name == 'cart' -%}
+  <dialog class="sbx" data-sbx aria-labelledby="sbx-title">
+    <button type="button" class="sbx-close" data-sbx-close aria-label="Close">&times;</button>
+    <p class="sbx-eyebrow">Before you go</p>
+    <h2 class="sbx-title" id="sbx-title">Try the Sculpt Brief risk-free</h2>
+    <ul class="sbx-list">
+      <li>90 days to decide, or your money back</li>
+      <li>Free size exchange if the fit isn't right</li>
+      <li>Free US shipping on every order</li>
+    </ul>
+    <a class="sbx-btn" href="{{ all_products['sculpt-brief'].url | default: routes.all_products_collection_url }}#sb-bundle" data-sbx-go>See the bundle deals</a>
+    <button type="button" class="sbx-later" data-sbx-close>No thanks</button>
+  </dialog>
+
+  <style>
+    .sbx { width: min(92vw, 400px); padding: 28px 24px 20px; border: 0; border-radius: 18px; box-shadow: 0 24px 60px rgba(42, 26, 35, .3); font-family: var(--font-body--family); text-align: center; color: #1A1A1A; }
+    .sbx::backdrop { background: rgba(42, 26, 35, .45); }
+    .sbx[open] { animation: sbx-in .3s ease; }
+    @keyframes sbx-in { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
+    .sbx-close { position: absolute; top: 8px; right: 12px; border: 0; background: none; font-size: 28px; line-height: 1; color: #6F5F66; cursor: pointer; }
+    .sbx-eyebrow { margin: 0 0 6px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #A3426D; }
+    .sbx-title { margin: 0 0 14px; font-family: var(--font-heading--family); font-weight: var(--font-heading--weight); font-size: 30px; line-height: 1.1; }
+    .sbx-list { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 8px; text-align: left; font-size: 14.5px; color: #3A2C33; }
+    .sbx-list li::before { content: "\2713\00a0\00a0"; color: #A3426D; font-weight: 800; }
+    .sbx-btn { display: block; padding: 14px; border-radius: 10px; background: #FFC93C; color: #1A1A1A; font-weight: 800; text-decoration: none; transition: background .2s, transform .15s; }
+    .sbx-btn:hover { background: #FFB800; transform: translateY(-1px); }
+    .sbx-later { margin-top: 10px; border: 0; background: none; font: inherit; font-size: 13px; color: #6F5F66; text-decoration: underline; cursor: pointer; }
+    @media (prefers-reduced-motion: reduce) { .sbx[open] { animation: none; } }
+  </style>
+
+  <script>
+    (function () {
+      var dialog = document.querySelector('[data-sbx]');
+      if (!dialog || typeof dialog.showModal !== 'function') return;
+      var KEY = 'lithella-exit-shown';
+      function seen() { try { return sessionStorage.getItem(KEY) === '1'; } catch (e) { return true; } }
+      function mark() { try { sessionStorage.setItem(KEY, '1'); } catch (e) {} }
+      var armedAt = Date.now() + 15000;
+      function show() {
+        if (seen() || Date.now() < armedAt || document.querySelector('dialog[open]')) return;
+        mark();
+        dialog.showModal();
+      }
+      dialog.addEventListener('click', function (e) {
+        if (e.target === dialog || e.target.closest('[data-sbx-close]')) dialog.close();
+      });
+      dialog.querySelector('[data-sbx-go]').addEventListener('click', function () { dialog.close(); });
+      document.addEventListener('mouseout', function (e) {
+        if (!e.relatedTarget && e.clientY <= 0) show();
+      });
+      var lastY = window.scrollY, lastT = Date.now();
+      window.addEventListener('scroll', function () {
+        var now = Date.now(), y = window.scrollY;
+        var speed = (lastY - y) / Math.max(now - lastT, 1);
+        if (window.matchMedia('(max-width: 989px)').matches && y > 1200 && speed > 2.5) show();
+        lastY = y; lastT = now;
+      }, { passive: true });
+    })();
+  </script>
+{%- endunless -%}

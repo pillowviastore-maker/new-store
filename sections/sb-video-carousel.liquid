@@ -37,7 +37,9 @@
   .sb-rev-track { display: flex; transition: transform .35s cubic-bezier(.4,0,.2,1); }
   .sb-rev-slide { min-width: 100%; box-sizing: border-box; text-align: center; padding: 2px 2px; }
   .sb-rev-gifs { display: flex; gap: 8px; margin: 0 0 12px; }
-  .sb-rev-media { flex: 1 1 0; aspect-ratio: 9 / 16; border-radius: 12px; overflow: hidden; background: #f3eef1; }
+  .sb-rev-media { flex: 1 1 0; aspect-ratio: 9 / 16; border-radius: 12px; overflow: hidden; background: linear-gradient(100deg, #f3eef1 30%, #fbf6f8 50%, #f3eef1 70%) 0 0 / 300% 100%; animation: sb-skeleton 1.4s ease-in-out infinite; }
+  .sb-rev-media:has(video[src]) { animation: none; background: #f3eef1; }
+  @keyframes sb-skeleton { to { background-position: -100% 0; } }
   .sb-rev-gif { width: 100%; height: 100%; object-fit: cover; display: block; }
   .sb-rev-stars { color: #F5A623; font-size: 15px; letter-spacing: 2px; margin: 0 0 6px; }
   .sb-rev-star-off { color: #E2D7DD; }
@@ -148,6 +150,13 @@
       if (Math.abs(dx) > 40){ go(dx < 0 ? i + 1 : i - 1); }
       x0 = null;
     }, {passive: true});
+
+    // Advance on its own every few seconds while on screen; pause while the shopper interacts
+    var paused = false, reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    vp.addEventListener('mouseenter', function(){ paused = true; });
+    vp.addEventListener('mouseleave', function(){ paused = false; });
+    vp.addEventListener('touchstart', function(){ paused = true; setTimeout(function(){ paused = false; }, 8000); }, {passive: true});
+    if (!reduce) setInterval(function(){ if (inView && !paused && !document.hidden) go(i + 1); }, 6000);
 
     // Nothing loads until the carousel is close to the screen
     if ('IntersectionObserver' in window) {

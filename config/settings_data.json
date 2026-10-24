@@ -84,7 +84,7 @@
       "color3": "#EEDCE6"
     },
     "logo": "shopify://shop_images/lithella-logo-header.png",
-    "favicon": "shopify://shop_images/lithella-icon.png",
+    "favicon": "shopify://shop_images/lithella-icon-512.png",
     "palette_primary_button_background": "#A3426D",
     "palette_primary_button_border": "#A3426D",
     "palette_primary_button_text": "#ffffff",
@@ -93,7 +93,9 @@
     "palette_secondary_button_text": "#A3426D",
     "palette_selected_variant_background": "#A3426D",
     "palette_selected_variant_border": "#A3426D",
-    "palette_selected_variant_text": "#ffffff"
+    "palette_selected_variant_text": "#ffffff",
+    "auto_open_cart_drawer": true,
+    "logo_inverse": "shopify://shop_images/lithella-logo-white.png"
   },
   "presets": {
     "Default": {

@@ -45,7 +45,9 @@
   .sb-f3-row { display: flex; align-items: center; gap: 44px; margin-bottom: 40px; }
   .sb-f3-row--reverse { flex-direction: row-reverse; }
   .sb-f3-row:last-child { margin-bottom: 0; }
-  .sb-f3-media { flex: 1 1 50%; min-width: 0; }
+  .sb-f3-media { flex: 1 1 50%; min-width: 0; border-radius: 20px; background: linear-gradient(100deg, #f3eef1 30%, #fbf6f8 50%, #f3eef1 70%) 0 0 / 300% 100%; animation: sb-f3-skeleton 1.4s ease-in-out infinite; }
+  .sb-f3-media:has(video[src]) { animation: none; background: none; }
+  @keyframes sb-f3-skeleton { to { background-position: -100% 0; } }
   .sb-f3-media img, .sb-f3-media video { width: 100%; height: auto; display: block; border-radius: 20px; box-shadow: 0 10px 30px rgba(163,66,109,.14); background: #f3eef1; object-fit: cover; }
   .sb-f3-text { flex: 1 1 50%; min-width: 0; }
   .sb-f3-num { display: inline-block; font-size: 13px; font-weight: 800; color: #fff; background: #A3426D; width: 30px; height: 30px; line-height: 30px; text-align: center; border-radius: 50%; margin-bottom: 12px; }

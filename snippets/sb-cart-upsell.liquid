@@ -1,0 +1,87 @@
+{%- doc -%}
+  Suggests the next Sculpt Brief bundle in the cart and adds the missing items in one tap.
+  Tier sizes and percentages must match the automatic discounts in Shopify.
+{%- enddoc -%}
+{%- liquid
+  assign handle = 'sculpt-brief'
+  assign qty = 0
+  assign last_variant_id = blank
+  for item in cart.items
+    if item.product.handle == handle
+      assign qty = qty | plus: item.quantity
+      assign last_variant_id = item.variant.id
+      assign unit_price = item.variant.price
+    endif
+  endfor
+
+  assign next_qty = 0
+  if qty > 0 and qty < 2
+    assign next_qty = 2
+    assign next_percent = 50.02
+    assign next_title = 'BUY 1 GET 1 FREE'
+  elsif qty >= 2 and qty < 4
+    assign next_qty = 4
+    assign next_percent = 70.02
+    assign next_title = 'BUY 2 GET 2 FREE'
+  elsif qty >= 4 and qty < 6
+    assign next_qty = 6
+    assign next_percent = 75.42
+    assign next_title = 'BUY 3 GET 3 FREE'
+  endif
+-%}
+
+{%- if next_qty > 0 and last_variant_id != blank -%}
+  {%- liquid
+    assign missing = next_qty | minus: qty
+    assign unit_discount = unit_price | times: next_percent | divided_by: 100.0 | floor
+    assign next_total = unit_price | minus: unit_discount | times: next_qty
+    assign extra = next_total | minus: cart.total_price
+  -%}
+  <div class="sbcu" data-sbcu>
+    <p class="sbcu-title">Unlock <strong>{{ next_title }}</strong></p>
+    <p class="sbcu-text">
+      Add {{ missing }} more and get {{ next_qty }} briefs for <strong>{{ next_total | money }}</strong>
+      {%- if extra > 0 %} (just {{ extra | money }} more){% endif %}.
+    </p>
+    <button type="button" class="sbcu-btn" data-sbcu-add data-variant="{{ last_variant_id }}" data-qty="{{ missing }}">
+      Add {{ missing }} more
+    </button>
+    <p class="sbcu-note">Same color and size as your last item. You can change it in the cart.</p>
+  </div>
+{%- endif -%}
+
+<style>
+  .sbcu { margin: 0 0 14px; padding: 14px 16px; border: 1.5px dashed #A3426D; border-radius: 12px; background: #FBF3F7; display: grid; gap: 6px; font-family: var(--font-body--family); }
+  .sbcu-title { margin: 0; font-size: 14px; color: #1A1A1A; }
+  .sbcu-title strong { color: #A3426D; }
+  .sbcu-text { margin: 0; font-size: 13.5px; color: #444; }
+  .sbcu-btn { justify-self: start; padding: 10px 16px; border: 0; border-radius: 8px; background: #A3426D; color: #fff; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: transform .15s, background .2s; }
+  .sbcu-btn:hover { background: #8A3459; transform: translateY(-1px); }
+  .sbcu-btn[disabled] { opacity: .6; cursor: wait; }
+  .sbcu-note { margin: 0; font-size: 11.5px; color: #6F5F66; }
+</style>
+
+<script>
+  (function () {
+    if (window.sbcuReady) return;
+    window.sbcuReady = true;
+    document.addEventListener('click', function (event) {
+      var button = event.target.closest('[data-sbcu-add]');
+      if (!button) return;
+      button.disabled = true;
+      var line = { merchandiseId: String(button.dataset.variant), quantity: +button.dataset.qty };
+      var actions = window.Shopify && window.Shopify.actions;
+      var request = actions && actions.updateCart
+        ? actions.updateCart({ lines: [line] }, { event: { context: 'cart' } })
+        : fetch('{{ routes.cart_add_url }}.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items: [{ id: +button.dataset.variant, quantity: +button.dataset.qty }] })
+          }).then(function () { window.location.reload(); });
+      Promise.resolve(request).catch(function () {
+        button.disabled = false;
+        button.textContent = "Couldn't add, tap to try again";
+      });
+    });
+  })();
+</script>

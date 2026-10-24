@@ -6,54 +6,35 @@
         "product": "sculpt-brief"
       }
     },
+    "benefits": {
+      "type": "sb-home-benefits",
+      "settings": {}
+    },
+    "reviews": {
+      "type": "sb-reviews-carousel",
+      "settings": {}
+    },
     "videos": {
       "type": "sb-video-carousel",
       "settings": {
         "title": "See it in action"
       }
     },
-    "features": {
-      "type": "sb-features",
-      "settings": {}
-    },
-    "cta_1": {
-      "type": "sb-cta",
-      "settings": {
-        "label": "Shop the Sculpt Brief"
-      }
-    },
     "compare": {
       "type": "sb-compare",
       "settings": {}
     },
-    "guarantee": {
-      "type": "sb-guarantee",
-      "settings": {}
-    },
-    "faq": {
-      "type": "sb-faq",
-      "settings": {}
-    },
-    "cta_2": {
-      "type": "sb-cta",
-      "settings": {
-        "label": "Order Now"
-      }
-    },
-    "reviews": {
-      "type": "sb-reviews-carousel",
+    "final": {
+      "type": "sb-home-final",
       "settings": {}
     }
   },
   "order": [
     "hero",
-    "videos",
-    "features",
-    "cta_1",
-    "compare",
+    "benefits",
     "reviews",
-    "guarantee",
-    "faq",
-    "cta_2"
+    "videos",
+    "compare",
+    "final"
   ]
 }

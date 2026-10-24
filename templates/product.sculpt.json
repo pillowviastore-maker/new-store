@@ -79,16 +79,6 @@
               "type": "payment-icons",
               "settings": {},
               "blocks": {}
-            },
-            "wear": {
-              "type": "sb-wear",
-              "settings": {},
-              "blocks": {}
-            },
-            "faq": {
-              "type": "sb-mini-faq",
-              "settings": {},
-              "blocks": {}
             }
           },
           "block_order": [
@@ -100,9 +90,7 @@
             "bundle",
             "size_finder",
             "guarantee",
-            "payment",
-            "wear",
-            "faq"
+            "payment"
           ]
         }
       },
@@ -114,21 +102,9 @@
       "type": "sb-video-carousel",
       "settings": {}
     },
-    "cta_1": {
-      "type": "sb-cta",
-      "settings": {
-        "label": "Get My Sculpt Brief"
-      }
-    },
     "features": {
       "type": "sb-features",
       "settings": {}
-    },
-    "cta_2": {
-      "type": "sb-cta",
-      "settings": {
-        "label": "Yes, I Want a Flatter Tummy"
-      }
     },
     "compare": {
       "type": "sb-compare",
@@ -145,7 +121,7 @@
     "cta_3": {
       "type": "sb-cta",
       "settings": {
-        "label": "Order Now"
+        "label": "Get My Sculpt Brief"
       }
     },
     "reviews": {
@@ -156,11 +132,9 @@
   "order": [
     "main",
     "videos",
-    "cta_1",
-    "features",
-    "cta_2",
-    "compare",
     "reviews",
+    "features",
+    "compare",
     "guarantee",
     "faq",
     "cta_3"

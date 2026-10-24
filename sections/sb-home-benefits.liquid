@@ -1,0 +1,99 @@
+{%- liquid
+  assign benefits_product = section.settings.product | default: all_products['sculpt-brief']
+  assign data = benefits_product.metafields.judgeme.review_widget_data.value
+  assign quote = blank
+  for review in data.photo_gallery
+    assign text = review.body_html | strip_html | strip
+    if text.size > 80 and quote == blank
+      assign quote = review
+    endif
+  endfor
+-%}
+
+<div class="sbhb">
+  <div class="sbhb-inner">
+    <div class="sbhb-text">
+      <h2 class="sbhb-title">{{ section.settings.title }} <em>{{ section.settings.title_accent }}</em></h2>
+      <p class="sbhb-sub">{{ section.settings.subtitle }}</p>
+      <ul class="sbhb-list">
+        {%- for i in (1..4) -%}
+          {%- assign head_key = 'benefit_' | append: i | append: '_title' -%}
+          {%- assign body_key = 'benefit_' | append: i | append: '_text' -%}
+          {%- if section.settings[head_key] != blank -%}
+            <li class="sbhb-item">
+              <span class="sbhb-check" aria-hidden="true">&#10003;</span>
+              <div>
+                <h3>{{ section.settings[head_key] }}</h3>
+                <p>{{ section.settings[body_key] }}</p>
+              </div>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+    <figure class="sbhb-card">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', sizes: '(min-width: 900px) 380px, 100vw' }}
+      {%- else -%}
+        <img src="{{ 'sb-ugc-4.jpg' | asset_url }}" width="480" height="854" loading="lazy" alt="Woman holding the {{ benefits_product.title | escape }} in fuchsia pink">
+      {%- endif -%}
+      {%- if quote != blank -%}
+        <figcaption>
+          <p class="sbhb-card-title">{{ section.settings.quote_title }}</p>
+          <blockquote>{{ quote.body_html | strip_html | truncate: 260 }}</blockquote>
+          <p class="sbhb-card-meta"><span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span> {{ quote.reviewer_name }}{% unless quote.verified_buyer %} <span class="sbhb-source">Imported review</span>{% endunless %}</p>
+        </figcaption>
+      {%- endif -%}
+    </figure>
+  </div>
+</div>
+
+<style>
+  .sbhb { padding: 56px 16px; font-family: var(--font-body--family); }
+  .sbhb-inner { max-width: 1040px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+  .sbhb-title { margin: 0 0 10px; color: #1A1A1A; }
+  .sbhb-title em { display: block; color: #A3426D; }
+  .sbhb-sub { margin: 0 0 22px; font-size: 15.5px; color: #5A4A52; line-height: 1.6; max-width: 60ch; }
+  .sbhb-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .sbhb-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: #FBF1F6; border-radius: 14px; }
+  .sbhb-check { flex: 0 0 28px; height: 28px; border-radius: 50%; background: #A3426D; color: #fff; font-size: 13px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
+  .sbhb-item h3 { margin: 2px 0 4px; font-family: var(--font-body--family); font-size: 16px; font-weight: 800; color: #A3426D; }
+  .sbhb-item p { margin: 0; font-size: 14.5px; color: #4A3B42; line-height: 1.55; }
+  .sbhb-card { margin: 0; background: #F8F3F5; border-radius: 18px; overflow: hidden; }
+  .sbhb-card img { width: 100%; height: 300px; object-fit: cover; display: block; }
+  .sbhb-card figcaption { padding: 18px 20px 20px; }
+  .sbhb-card-title { margin: 0 0 8px; font-size: 19px; font-weight: 800; color: #1A1A1A; }
+  .sbhb-card blockquote { margin: 0 0 12px; font-size: 14.5px; color: #4A3B42; line-height: 1.6; }
+  .sbhb-card-meta { margin: 0; font-size: 13.5px; font-weight: 700; color: #1A1A1A; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .sbhb-card-meta > span:first-child { color: #F5A623; letter-spacing: 1px; }
+  .sbhb-source { font-size: 10.5px; font-weight: 600; color: #6f5f66; background: #F1E4EA; padding: 2px 7px; border-radius: 10px; }
+  @media (max-width: 768px) {
+    .sbhb { padding: 36px 16px; }
+    .sbhb-inner { grid-template-columns: 1fr; gap: 24px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Sculpt: home benefits",
+  "tag": "section",
+  "class": "sb-section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "A Smoother Belly. Your Waist Back." },
+    { "type": "text", "id": "title_accent", "label": "Heading (pink part)", "default": "Worn Every Day" },
+    { "type": "textarea", "id": "subtitle", "label": "Text", "default": "The Sculpt Brief is the everyday layer that holds your midsection gently in place, so your clothes fit the way you want them to." },
+    { "type": "text", "id": "benefit_1_title", "label": "Benefit 1 title", "default": "Support, Not Squeeze" },
+    { "type": "text", "id": "benefit_1_text", "label": "Benefit 1 text", "default": "The high-waist 360° design holds your belly all the way around without digging in, so you can wear it all day." },
+    { "type": "text", "id": "benefit_2_title", "label": "Benefit 2 title", "default": "Front, Sides and Back" },
+    { "type": "text", "id": "benefit_2_text", "label": "Benefit 2 text", "default": "The crossed band spreads the hold evenly, so it doesn't press on one spot or roll down like front-only shapers." },
+    { "type": "text", "id": "benefit_3_title", "label": "Benefit 3 title", "default": "Invisible Under Anything" },
+    { "type": "text", "id": "benefit_3_text", "label": "Benefit 3 text", "default": "Seamless, breathable fabric disappears under jeans, dresses and leggings. No lines, no bulk." },
+    { "type": "text", "id": "benefit_4_title", "label": "Benefit 4 title", "default": "A Fit Made for You" },
+    { "type": "text", "id": "benefit_4_text", "label": "Benefit 4 text", "default": "Sizes XS to 5XL, sized by your waist, with a free size exchange if the first one isn't right." },
+    { "type": "image_picker", "id": "image", "label": "Card image" },
+    { "type": "text", "id": "quote_title", "label": "Card heading", "default": "What customers tell us" }
+  ],
+  "presets": [{ "name": "Sculpt: home benefits", "category": "Sculpt" }]
+}
+{% endschema %}
