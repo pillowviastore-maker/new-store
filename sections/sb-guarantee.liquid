@@ -36,7 +36,8 @@
 </div>
 <script>
   function sbScrollToBundle() {
-    var target = document.querySelector('#sb-bundle, h1');
+    var target = document.querySelector('#sb-bundle');
+    if (!target) { window.location.href = '{{ routes.root_url | append: "products/sculpt-brief" | replace: "//", "/" }}'; return; }
     if (target) {
       var top = target.getBoundingClientRect().top + window.pageYOffset - 120;
       window.scrollTo({ top: top, behavior: 'smooth' });

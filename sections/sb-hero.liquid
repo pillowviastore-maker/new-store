@@ -1,0 +1,71 @@
+{%- liquid
+  assign hero_product = section.settings.product | default: all_products['sculpt-brief']
+  assign hero_image = section.settings.image | default: hero_product.featured_image
+-%}
+
+<div class="sbh">
+  <div class="sbh-inner">
+    <div class="sbh-media">
+      {%- if hero_image != blank -%}
+        {{ hero_image | image_url: width: 1200 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 900px) 50vw, 100vw', alt: hero_product.title }}
+      {%- endif -%}
+    </div>
+    <div class="sbh-text">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="sbh-eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      <h1 class="sbh-title">{{ section.settings.title }}</h1>
+      <div class="sbh-sub">{{ section.settings.text }}</div>
+      <a class="sbh-btn" href="{{ hero_product.url | default: routes.all_products_collection_url }}">{{ section.settings.button_label }}</a>
+      <ul class="sbh-trust">
+        <li>90-day money-back guarantee</li>
+        <li>Free size exchange</li>
+        <li>Secure checkout</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sbh { background: #FBF3F7; padding: 40px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  .sbh-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 48px; }
+  .sbh-media { flex: 1 1 50%; min-width: 0; }
+  .sbh-media img { width: 100%; height: auto; display: block; border-radius: 20px; box-shadow: 0 10px 30px rgba(181,85,127,.14); background: #fff; }
+  .sbh-text { flex: 1 1 50%; min-width: 0; }
+  .sbh-eyebrow { color: #B5557F; font-size: 12.5px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; margin: 0 0 10px; }
+  .sbh-title { font-size: 42px; font-weight: 800; color: #1A1A1A; line-height: 1.1; margin: 0 0 14px; }
+  .sbh-sub { font-size: 17px; color: #555; line-height: 1.6; margin: 0 0 24px; }
+  .sbh-sub p { margin: 0; }
+  .sbh-sub strong { color: #B5557F; }
+  .sbh-btn { display: inline-block; background: #B5557F; color: #fff; padding: 16px 34px; font-weight: 700; border-radius: 8px; font-size: 16px; text-decoration: none; transition: background .25s; }
+  .sbh-btn:hover { background: #98446A; color: #fff; }
+  .sbh-trust { list-style: none; margin: 20px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13px; font-weight: 600; color: #555; }
+  .sbh-trust li { display: inline-flex; align-items: center; gap: 6px; }
+  .sbh-trust li::before { content: "\2713"; color: #B5557F; font-weight: 800; }
+  @media (max-width: 768px) {
+    .sbh { padding: 24px 16px 32px; }
+    .sbh-inner { flex-direction: column; gap: 22px; }
+    .sbh-text { text-align: center; }
+    .sbh-title { font-size: 30px; }
+    .sbh-sub { font-size: 15.5px; }
+    .sbh-btn { display: block; }
+    .sbh-trust { justify-content: center; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Sculpt: hero",
+  "tag": "section",
+  "class": "sb-section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product" },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Defaults to the product's main photo." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Sculpt Brief™" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "The belly that won't go, finally gone." },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>High-waisted shaping with a <strong>360° crossed band</strong> that smooths your belly, waist and back. Seamless, breathable and invisible under clothes.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop the Sculpt Brief" }
+  ],
+  "presets": [{ "name": "Sculpt: hero", "category": "Sculpt" }]
+}
+{% endschema %}

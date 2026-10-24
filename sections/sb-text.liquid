@@ -1,0 +1,73 @@
+<div class="sbt{% if section.settings.tinted %} sbt--tinted{% endif %}">
+  <div class="sbt-inner">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="sbt-eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    {%- if section.settings.title != blank -%}
+      {%- if section.settings.is_page_title -%}
+        <h1 class="sbt-title">{{ section.settings.title }}</h1>
+      {%- else -%}
+        <h2 class="sbt-title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+    {%- endif -%}
+    {%- if section.settings.image != blank -%}
+      <div class="sbt-media">
+        {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 760px) 720px, 100vw' }}
+      </div>
+    {%- endif -%}
+    <div class="sbt-body">
+      {%- if section.settings.show_page_content and page.content != blank -%}
+        {{ page.content }}
+      {%- else -%}
+        {{ section.settings.text }}
+      {%- endif -%}
+    </div>
+    {%- if section.settings.button_label != blank -%}
+      <a class="sbt-btn" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label }}</a>
+    {%- endif -%}
+  </div>
+</div>
+
+<style>
+  .sbt { padding: 44px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  .sbt--tinted { background: #FBF3F7; }
+  .sbt-inner { max-width: 720px; margin: 0 auto; text-align: center; }
+  .sbt-eyebrow { color: #B5557F; font-size: 12.5px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; margin: 0 0 8px; }
+  .sbt-title { font-size: 32px; font-weight: 800; color: #1A1A1A; line-height: 1.15; margin: 0 0 18px; }
+  .sbt-media { margin: 0 0 22px; }
+  .sbt-media img { width: 100%; height: auto; display: block; border-radius: 18px; }
+  .sbt-body { font-size: 16px; color: #555; line-height: 1.7; text-align: left; }
+  .sbt-body p { margin: 0 0 14px; }
+  .sbt-body h2, .sbt-body h3 { font-size: 20px; font-weight: 800; color: #1A1A1A; margin: 26px 0 10px; }
+  .sbt-body strong { color: #1A1A1A; }
+  .sbt-body a { color: #B5557F; }
+  .sbt-body ul, .sbt-body ol { padding-left: 20px; margin: 0 0 14px; }
+  .sbt-btn { display: inline-block; margin-top: 18px; background: #B5557F; color: #fff; padding: 14px 30px; font-weight: 700; border-radius: 8px; font-size: 16px; text-decoration: none; transition: background .25s; }
+  .sbt-btn:hover { background: #98446A; color: #fff; }
+  @media (max-width: 768px) {
+    .sbt { padding: 32px 16px; }
+    .sbt-title { font-size: 26px; }
+    .sbt-body { font-size: 15px; }
+    .sbt-btn { display: block; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Sculpt: text",
+  "tag": "section",
+  "class": "sb-section",
+  "settings": [
+    { "type": "checkbox", "id": "is_page_title", "label": "Use as page title (H1)", "default": false },
+    { "type": "checkbox", "id": "tinted", "label": "Pink background", "default": false },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "Heading" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "checkbox", "id": "show_page_content", "label": "Show the page's own content", "default": false, "info": "Uses the text written for this page in Online Store > Pages." },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Tell your story here.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button label" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "presets": [{ "name": "Sculpt: text", "category": "Sculpt" }]
+}
+{% endschema %}

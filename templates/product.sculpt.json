@@ -143,7 +143,7 @@
     "cta_3": {
       "type": "sb-cta",
       "settings": {
-        "label": "Order Now — Ships in 24h"
+        "label": "Order Now"
       }
     }
   },

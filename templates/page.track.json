@@ -1,0 +1,20 @@
+{
+  "sections": {
+    "main": {
+      "type": "sb-text",
+      "settings": {
+        "is_page_title": true,
+        "tinted": true,
+        "eyebrow": "Orders",
+        "title": "Track Your Order",
+        "show_page_content": false,
+        "text": "<p>As soon as your order ships, we email you a confirmation with your <strong>tracking number</strong> and a link to follow your parcel.</p><h3>How to check your order</h3><ol><li>Open the shipping confirmation email from Lithella and click <strong>Track your order</strong>.</li><li>Or sign in to your account and open <strong>Orders</strong> to see the status of every order.</li><li>Can't find the email? Check your spam folder, or contact us with your order number and we'll send it again.</li></ol><h3>Shipping times</h3><p>Orders are prepared within 1–3 business days. You'll see the estimated delivery time at checkout.</p>",
+        "button_label": "Go to my orders",
+        "button_link": "/account"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

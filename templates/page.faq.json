@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "faq": {
+      "type": "sb-faq",
+      "settings": {}
+    },
+    "guarantee": {
+      "type": "sb-guarantee",
+      "settings": {}
+    }
+  },
+  "order": [
+    "faq",
+    "guarantee"
+  ]
+}

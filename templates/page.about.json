@@ -1,0 +1,30 @@
+{
+  "sections": {
+    "main": {
+      "type": "sb-text",
+      "settings": {
+        "is_page_title": true,
+        "tinted": true,
+        "eyebrow": "Our story",
+        "title": "About Lithella",
+        "show_page_content": false,
+        "text": "<p>Lithella started with one simple idea: shapewear should feel like your favourite underwear, not like a punishment.</p><p>Most shapers squeeze only the front, roll down by lunchtime and show through your clothes. We wanted something you could put on in the morning and forget about until night, so we designed the Sculpt Brief around a <strong>360° crossed band</strong> that supports your belly, waist and back evenly.</p><h3>What we care about</h3><ul><li><strong>Comfort first.</strong> Soft, breathable, four-way-stretch fabric with a cotton-lined gusset. No latex, no hard boning.</li><li><strong>A real fit.</strong> Sizes from XS to 5XL, sized by your waist measurement, with a free size exchange.</li><li><strong>No risk.</strong> Every order is covered by our 90-day money-back guarantee.</li></ul><p>Questions before or after your order? Write to us any time, a real person will answer.</p>",
+        "button_label": "Shop the Sculpt Brief",
+        "button_link": "shopify://products/sculpt-brief"
+      }
+    },
+    "features": {
+      "type": "sb-features",
+      "settings": {}
+    },
+    "guarantee": {
+      "type": "sb-guarantee",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "features",
+    "guarantee"
+  ]
+}

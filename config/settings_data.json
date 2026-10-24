@@ -9,8 +9,8 @@
  */
 {
   "current": {
-    "logo_height": 36,
-    "logo_height_mobile": 28,
+    "logo_height": 26,
+    "logo_height_mobile": 18,
     "type_body_font": "inter_n4",
     "type_subheading_font": "inter_n5",
     "type_heading_font": "inter_n7",
@@ -79,10 +79,21 @@
     "color_palette": {
       "background": "#ffffff",
       "foreground": "#000000",
-      "color1": "#333333",
-      "color2": "#EEF1EA",
-      "color3": "#DFDFDF"
-    }
+      "color1": "#2A1A23",
+      "color2": "#FBF3F7",
+      "color3": "#EEDCE6"
+    },
+    "logo": "shopify://shop_images/lithella-logo-header.png",
+    "favicon": "shopify://shop_images/lithella-icon.png",
+    "palette_primary_button_background": "#B5557F",
+    "palette_primary_button_border": "#B5557F",
+    "palette_primary_button_text": "#ffffff",
+    "palette_secondary_button_background": "#ffffff",
+    "palette_secondary_button_border": "#B5557F",
+    "palette_secondary_button_text": "#B5557F",
+    "palette_selected_variant_background": "#B5557F",
+    "palette_selected_variant_border": "#B5557F",
+    "palette_selected_variant_text": "#ffffff"
   },
   "presets": {
     "Default": {
