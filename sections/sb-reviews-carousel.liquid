@@ -19,13 +19,15 @@
       <div class="sbrc-track" data-sbrc-track>
         {%- assign shown = 0 -%}
         {%- for review in data.photo_gallery -%}
-          {%- if shown < section.settings.limit -%}
+          {%- assign review_text = review.body_html | strip_html | strip -%}
+          {%- if shown < section.settings.limit and review_text.size > 12 and review_text != 'Sculpt Brief' -%}
             {%- render 'sb-review-card', review: review, show_source: section.settings.show_source -%}
             {%- assign shown = shown | plus: 1 -%}
           {%- endif -%}
         {%- endfor -%}
         {%- for review in data.reviews -%}
-          {%- if shown < section.settings.limit and review.pictures_urls.size == 0 -%}
+          {%- assign review_text = review.body_html | strip_html | strip -%}
+          {%- if shown < section.settings.limit and review.pictures_urls.size == 0 and review_text.size > 12 -%}
             {%- render 'sb-review-card', review: review, show_source: section.settings.show_source -%}
             {%- assign shown = shown | plus: 1 -%}
           {%- endif -%}
@@ -42,10 +44,10 @@
     .sbrc-rating span { color: #333; font-size: 14px; font-weight: 600; letter-spacing: 0; margin-left: 6px; }
     .sbrc-title { font-size: 30px; font-weight: 800; color: #1A1A1A; margin: 0; line-height: 1.15; }
     .sbrc-viewport { position: relative; }
-    .sbrc-track { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 16px; padding: 4px 16px 8px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .sbrc-track { display: flex; align-items: flex-start; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 16px; padding: 4px 16px 8px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
     .sbrc-track::-webkit-scrollbar { display: none; }
     .sbrc-card { flex: 0 0 78%; scroll-snap-align: start; background: #fff; border: 1.5px solid #F0DCE6; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
-    .sbrc-img { aspect-ratio: 1 / 1; background: #f3eef1; }
+    .sbrc-img { aspect-ratio: 1 / 1; overflow: hidden; background: #f3eef1; }
     .sbrc-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .sbrc-body { padding: 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
     .sbrc-stars { color: #F5A623; font-size: 14px; letter-spacing: 1px; }
@@ -53,8 +55,8 @@
     .sbrc-text { font-size: 14px; color: #444; line-height: 1.5; margin: 0; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
     .sbrc-text p { margin: 0; }
     .sbrc-meta { margin-top: auto; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 13px; font-weight: 700; color: #1A1A1A; }
-    .sbrc-source { font-size: 10.5px; font-weight: 600; color: #8a7780; background: #F7EDF2; padding: 2px 7px; border-radius: 10px; }
-    .sbrc-arrow { display: none; position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid #B5557F; background: #fff; color: #B5557F; font-size: 22px; line-height: 1; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.08); }
+    .sbrc-source { font-size: 10.5px; font-weight: 600; color: #6f5f66; background: #F7EDF2; padding: 2px 7px; border-radius: 10px; }
+    .sbrc-arrow { display: none; position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid #A3426D; background: #fff; color: #A3426D; font-size: 22px; line-height: 1; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.08); }
     .sbrc-arrow--prev { left: 4px; }
     .sbrc-arrow--next { right: 4px; }
     @media (min-width: 560px) { .sbrc-card { flex-basis: 44%; } }

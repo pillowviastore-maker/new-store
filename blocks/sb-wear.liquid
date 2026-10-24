@@ -18,7 +18,7 @@
 </div>
 <style>
   .sb-wear { max-width: 560px; width: 100%; margin: 14px auto; padding: 0 16px; box-sizing: border-box; font-family: var(--font-body--family); }
-  .sb-wear-eyebrow { text-align: center; color: #B5557F; font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; margin: 0 0 12px; }
+  .sb-wear-eyebrow { text-align: center; color: #A3426D; font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; margin: 0 0 12px; }
   .sb-wear-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .sb-wear-item { text-align: center; }
   .sb-wear-gif { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 12px; display: block; background: #f3eef1; }
@@ -34,7 +34,7 @@
   (function(){
     if (window.sbVideoKit) return;
     var st = document.createElement('style');
-    st.textContent = '.sb-play{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.12);border:0;margin:0;padding:0;cursor:pointer;border-radius:inherit;z-index:2;-webkit-tap-highlight-color:transparent}.sb-play span{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.18)}.sb-play span:before{content:"";margin-left:4px;border-style:solid;border-width:9px 0 9px 15px;border-color:transparent transparent transparent #B5557F}';
+    st.textContent = '.sb-play{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.12);border:0;margin:0;padding:0;cursor:pointer;border-radius:inherit;z-index:2;-webkit-tap-highlight-color:transparent}.sb-play span{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.18)}.sb-play span:before{content:"";margin-left:4px;border-style:solid;border-width:9px 0 9px 15px;border-color:transparent transparent transparent #A3426D}';
     document.head.appendChild(st);
     var blocked = 0;
     function hideBtn(v){ if (v._sbBtn) { v._sbBtn.parentNode && v._sbBtn.parentNode.removeChild(v._sbBtn); v._sbBtn = null; blocked--; } }

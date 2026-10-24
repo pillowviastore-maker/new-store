@@ -385,10 +385,22 @@
           {% if block_settings.aspect_ratio != 'adapt' and block_settings.constrain_to_viewport %}
             <div
               class="product-media-constraint-wrapper">
-              {%- render 'product-media', media: media, sizes: media_sizes, is_main_product_media: forloop.first -%}
+              {%- liquid
+  assign media_loading = 'lazy'
+  if forloop.first
+    assign media_loading = nil
+  endif
+-%}
+{%- render 'product-media', media: media, sizes: media_sizes, is_main_product_media: forloop.first, loading: media_loading -%}
             </div>
           {% else %}
-            {%- render 'product-media', media: media, sizes: media_sizes, is_main_product_media: forloop.first -%}
+            {%- liquid
+  assign media_loading = 'lazy'
+  if forloop.first
+    assign media_loading = nil
+  endif
+-%}
+{%- render 'product-media', media: media, sizes: media_sizes, is_main_product_media: forloop.first, loading: media_loading -%}
           {% endif %}
         {% endcapture %}
         {% capture class %}
@@ -500,10 +512,22 @@
             -%}
             {% if block_settings.aspect_ratio != 'adapt' and block_settings.constrain_to_viewport %}
               <div class="product-media-constraint-wrapper">
-                {%- render 'product-media', media: media, sizes: media_sizes, is_main_product_media: forloop.first -%}
+                {%- liquid
+  assign media_loading = 'lazy'
+  if forloop.first
+    assign media_loading = nil
+  endif
+-%}
+{%- render 'product-media', media: media, sizes: media_sizes, is_main_product_media: forloop.first, loading: media_loading -%}
               </div>
             {% else %}
-              {%- render 'product-media', media: media, sizes: media_sizes, is_main_product_media: forloop.first -%}
+              {%- liquid
+  assign media_loading = 'lazy'
+  if forloop.first
+    assign media_loading = nil
+  endif
+-%}
+{%- render 'product-media', media: media, sizes: media_sizes, is_main_product_media: forloop.first, loading: media_loading -%}
             {% endif %}
           </li>
         {% endfor %}
