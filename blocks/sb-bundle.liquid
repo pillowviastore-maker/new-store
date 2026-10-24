@@ -121,7 +121,8 @@
   {%- if block.settings.show_express -%}
     <div class="sbb-express">
       <span class="sbb-express-label">Express checkout</span>
-      <button type="button" class="sbb-express-btn" data-sbb-express>Buy now with Shop Pay, Apple Pay or Google Pay</button>
+      <button type="button" class="sbb-express-btn" data-sbb-express>Buy it now</button>
+      <span class="sbb-express-note">Shop Pay, Apple Pay and Google Pay at checkout</span>
     </div>
   {%- endif -%}
 
@@ -202,6 +203,7 @@
   .sbb-express-label { font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #6B5E65; text-align: center; }
   .sbb-express-btn { width: 100%; padding: 13px 16px; border-radius: 10px; border: 0; background: #1A1A1A; color: #fff; font: inherit; font-size: 14.5px; font-weight: 700; cursor: pointer; transition: transform .15s, background .2s; }
   .sbb-express-btn:hover { background: #000; transform: translateY(-1px); }
+  .sbb-express-note { font-size: 11.5px; color: #6B5E65; text-align: center; }
   .sbb-sticky { position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 12px; padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); background: rgba(255, 255, 255, .97); box-shadow: 0 -6px 20px rgba(0, 0, 0, .1); transform: translateY(110%); transition: transform .3s ease; }
   .sbb-sticky.is-visible { transform: none; }
   .sbb-sticky-text { display: flex; flex-direction: column; flex: 1; min-width: 0; }
@@ -290,6 +292,8 @@
       }
       row.querySelectorAll('select:not([data-sbb-color])').forEach(function (s) { s.classList.toggle('is-empty', !s.value); });
       if (readRow(row).every(Boolean)) row.classList.remove('is-missing');
+      var tier = row.closest('[data-sbb-tier]');
+      if (tier && !tier.querySelector('.sbb-row.is-missing')) error.hidden = true;
     }
 
     function buildRows(tier, saved) {

@@ -40,8 +40,14 @@
       function seen() { try { return sessionStorage.getItem(KEY) === '1'; } catch (e) { return true; } }
       function mark() { try { sessionStorage.setItem(KEY, '1'); } catch (e) {} }
       var armedAt = Date.now() + 15000;
+      var lastInteraction = 0;
+      ['pointerdown', 'keydown', 'touchstart'].forEach(function (type) {
+        document.addEventListener(type, function () { lastInteraction = Date.now(); }, { passive: true, capture: true });
+      });
       function show() {
-        if (seen() || Date.now() < armedAt || document.querySelector('dialog[open]')) return;
+        // Never interrupt someone who is actively choosing or buying.
+        if (seen() || Date.now() < armedAt || Date.now() - lastInteraction < 4000 || document.querySelector('dialog[open]')) return;
+        if (document.querySelector('#cart-drawer[open]')) return;
         mark();
         dialog.showModal();
       }

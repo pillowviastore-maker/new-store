@@ -60,28 +60,3 @@
   .sbcu-btn[disabled] { opacity: .6; cursor: wait; }
   .sbcu-note { margin: 0; font-size: 11.5px; color: #6F5F66; }
 </style>
-
-<script>
-  (function () {
-    if (window.sbcuReady) return;
-    window.sbcuReady = true;
-    document.addEventListener('click', function (event) {
-      var button = event.target.closest('[data-sbcu-add]');
-      if (!button) return;
-      button.disabled = true;
-      var line = { merchandiseId: String(button.dataset.variant), quantity: +button.dataset.qty };
-      var actions = window.Shopify && window.Shopify.actions;
-      var request = actions && actions.updateCart
-        ? actions.updateCart({ lines: [line] }, { event: { context: 'cart' } })
-        : fetch('{{ routes.cart_add_url }}.js', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ items: [{ id: +button.dataset.variant, quantity: +button.dataset.qty }] })
-          }).then(function () { window.location.reload(); });
-      Promise.resolve(request).catch(function () {
-        button.disabled = false;
-        button.textContent = "Couldn't add, tap to try again";
-      });
-    });
-  })();
-</script>

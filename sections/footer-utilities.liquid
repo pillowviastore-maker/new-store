@@ -19,7 +19,8 @@
     {%- assign footer_logo = settings.logo_inverse | default: settings.logo -%}
     {%- if footer_logo != blank -%}
       <a class="sb-footer-logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
-        {{ footer_logo | image_url: width: 360 | image_tag: height: 20, loading: 'lazy', alt: shop.name }}
+        {%- assign footer_logo_width = footer_logo.aspect_ratio | times: 20 | round -%}
+        {{ footer_logo | image_url: width: 360 | image_tag: width: footer_logo_width, height: 20, loading: 'lazy', alt: shop.name }}
       </a>
     {%- endif -%}
     {% content_for 'blocks' %}
@@ -28,7 +29,7 @@
 
 {% stylesheet %}
   .sb-footer-logo { display: inline-flex; grid-column: 1 / -1; justify-self: center; }
-  .sb-footer-logo img { height: 20px; width: auto; display: block; }
+  .sb-footer-logo img { height: 20px; width: auto; max-width: none; display: block; }
   .utilities {
     width: 100%;
     display: flex;
