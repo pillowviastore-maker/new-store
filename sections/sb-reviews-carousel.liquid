@@ -46,6 +46,7 @@
     .sbrc-viewport { position: relative; }
     .sbrc-track { display: flex; align-items: flex-start; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 16px; padding: 4px 16px 8px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
     .sbrc-track::-webkit-scrollbar { display: none; }
+    .sbrc-track.is-live { scroll-snap-type: none; }
     .sbrc-card { flex: 0 0 78%; scroll-snap-align: start; background: #fff; border: 1.5px solid #F0DCE6; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
     .sbrc-img { aspect-ratio: 1 / 1; overflow: hidden; background: linear-gradient(100deg, #f3eef1 30%, #fbf6f8 50%, #f3eef1 70%) 0 0 / 300% 100%; animation: sbrc-skeleton 1.4s ease-in-out infinite; }
     @keyframes sbrc-skeleton { to { background-position: -100% 0; } }
@@ -76,18 +77,46 @@
       function step() { var card = track.firstElementChild; return card ? card.getBoundingClientRect().width + 14 : 300; }
       root.querySelector('[data-sbrc-prev]').addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
       root.querySelector('[data-sbrc-next]').addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
-      // Glide to the next card every few seconds; pause on hover or touch, loop back at the end
-      var paused = false, visible = false;
+      // Live carousel: the cards drift slowly and endlessly (a cloned set makes the loop seamless).
+      // Hover, touch or the arrows pause it for a moment; reduced-motion users get the static, swipeable row.
       if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      track.addEventListener('mouseenter', function () { paused = true; });
-      track.addEventListener('mouseleave', function () { paused = false; });
-      track.addEventListener('touchstart', function () { paused = true; setTimeout(function () { paused = false; }, 8000); }, { passive: true });
-      if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }).observe(track);
-      setInterval(function () {
-        if (paused || !visible || document.hidden) return;
-        var atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
-        track.scrollTo({ left: atEnd ? 0 : track.scrollLeft + step(), behavior: 'smooth' });
-      }, 4000);
+      var originals = Array.prototype.slice.call(track.children);
+      if (originals.length < 2) return;
+      originals.forEach(function (card) {
+        var clone = card.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        clone.querySelectorAll('a, button').forEach(function (el) { el.tabIndex = -1; });
+        track.appendChild(clone);
+      });
+      track.classList.add('is-live');
+      var SPEED = 32; // px per second
+      var pos = track.scrollLeft, last = 0, visible = false, hover = false, holdUntil = 0;
+      function loopWidth() { return track.children[originals.length].offsetLeft - track.children[0].offsetLeft; }
+      function hold(ms) { holdUntil = Date.now() + ms; }
+      track.addEventListener('mouseenter', function () { hover = true; });
+      track.addEventListener('mouseleave', function () { hover = false; pos = track.scrollLeft; });
+      ['touchstart', 'pointerdown', 'wheel'].forEach(function (type) {
+        track.addEventListener(type, function () { hold(3500); }, { passive: true });
+      });
+      track.addEventListener('scroll', function () { if (Date.now() < holdUntil) pos = track.scrollLeft; }, { passive: true });
+      root.querySelectorAll('[data-sbrc-prev], [data-sbrc-next]').forEach(function (b) { b.addEventListener('click', function () { hold(2500); }); });
+      if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }).observe(track); else visible = true;
+      function frame(t) {
+        var dt = last ? Math.min(t - last, 64) : 0;
+        last = t;
+        if (visible && !hover && !document.hidden && Date.now() >= holdUntil) {
+          var width = loopWidth();
+          pos += SPEED * dt / 1000;
+          if (width > 0 && pos >= width) pos -= width;
+          track.scrollLeft = pos;
+        } else if (Date.now() < holdUntil || hover) {
+          var w = loopWidth();
+          if (w > 0 && track.scrollLeft >= w) { track.scrollLeft -= w; }
+          pos = track.scrollLeft;
+        }
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
     })();
   </script>
 {%- endif -%}

@@ -1,0 +1,96 @@
+{%- doc -%}
+  Renders the cells of one cart row that stands for a whole Sculpt Brief bundle: every line that shares
+  the hidden `_bundle` property is listed inside it, and the other lines' rows are kept hidden so the
+  cart component's row indexes still match the cart lines.
+
+  @param {string} bundle_id - Value of the `_bundle` line property.
+  @param {object} first - First cart line of the bundle.
+{%- enddoc -%}
+{%- liquid
+  assign bundle_qty = 0
+  assign bundle_final = 0
+  assign bundle_original = 0
+  assign bundle_keys = ''
+  assign offer = ''
+  for line in cart.items
+    if line.properties['_bundle'] == bundle_id
+      assign bundle_qty = bundle_qty | plus: line.quantity
+      assign bundle_final = bundle_final | plus: line.final_line_price
+      assign line_compare = line.original_price
+      if line.variant.compare_at_price > line_compare
+        assign line_compare = line.variant.compare_at_price
+      endif
+      assign line_total = line_compare | times: line.quantity
+      assign bundle_original = bundle_original | plus: line_total
+      if bundle_keys != ''
+        assign bundle_keys = bundle_keys | append: ','
+      endif
+      assign bundle_keys = bundle_keys | append: line.key
+      if offer == '' and line.line_level_discount_allocations.size > 0
+        assign offer = line.line_level_discount_allocations.first.discount_application.title
+      endif
+    endif
+  endfor
+  assign bundle_save = bundle_original | minus: bundle_final
+-%}
+<td class="cart-items__media" role="cell" headers="productImage">
+  <a href="{{ first.url | split: '?' | first }}#sb-bundle" class="cart-items__media-container sbcb-media" style="--ratio:1;">
+    {{ first.image | image_url: width: 250 | image_tag: class: 'cart-items__media-image border-style' }}
+    <span class="sbcb-count">×{{ bundle_qty }}</span>
+  </a>
+</td>
+<td class="cart-items__details cart-primary-typography" role="cell" headers="productInformation">
+  <div class="cart-items__product-info">
+    <div class="cart-items__title-row">
+      <a href="{{ first.url | split: '?' | first }}#sb-bundle" class="cart-items__title">{{ first.product.title }} · {{ bundle_qty }}-pack</a>
+    </div>
+    {%- if offer != '' -%}
+      <p class="sbcb-offer">{{ offer | escape }}</p>
+    {%- endif -%}
+  </div>
+  <ul class="sbcb-lines">
+    {%- for line in cart.items -%}
+      {%- if line.properties['_bundle'] == bundle_id -%}
+        <li>
+          <span>{{ line.variant.title }}</span>
+          {%- if line.quantity > 1 %}<span class="sbcb-x"> × {{ line.quantity }}</span>{% endif -%}
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+  <div class="cart-items__unit-price-wrapper">
+    <div>
+      <span><bdi>{{ bundle_final | divided_by: bundle_qty | money }}</bdi> each</span>
+      {%- if bundle_save > 0 %} <span class="sbcb-save">You save {{ bundle_save | money }}</span>{% endif -%}
+    </div>
+  </div>
+</td>
+<td class="cart-items__quantity" role="cell" headers="quantity">
+  <div class="cart-items__quantity-controls sbcb-actions">
+    <a class="sbcb-edit" href="{{ first.url | split: '?' | first }}#sb-bundle">Edit</a>
+    <button type="button" class="button cart-items__remove" data-sbcb-remove="{{ bundle_keys }}" aria-label="Remove the {{ bundle_qty }}-pack">
+      {{- 'icon-delete.svg' | inline_asset_content -}}
+      <span class="visually-hidden">Remove</span>
+    </button>
+  </div>
+</td>
+<td class="cart-items__price cart-secondary-typography" role="cell" headers="productTotal">
+  <bdi>{{ bundle_final | money }}</bdi>
+  {%- if bundle_original > bundle_final -%}
+    <s class="compare-at-price sbcb-was"><bdi>{{ bundle_original | money }}</bdi></s>
+  {%- endif -%}
+</td>
+
+{% stylesheet %}
+  .cart-items__table-row[hidden] { display: none !important; }
+  .sbcb-media { position: relative; }
+  .sbcb-count { position: absolute; right: 4px; bottom: 4px; padding: 2px 7px; border-radius: 999px; background: #A3426D; color: #fff; font-size: 12px; font-weight: 800; line-height: 1.4; }
+  .sbcb-offer { display: inline-block; margin: 4px 0 0; padding: 3px 9px; border-radius: 999px; background: #FBE3EE; color: #A3426D; font-size: 12px; font-weight: 800; letter-spacing: .02em; }
+  .sbcb-lines { list-style: none; margin: 6px 0 4px; padding: 0; display: grid; gap: 2px; font-size: 13px; color: #4A3B42; }
+  .sbcb-lines li::before { content: "\2022\00a0"; color: #A3426D; }
+  .sbcb-x { font-weight: 700; }
+  .sbcb-save { display: inline-block; margin-left: 6px; color: #0B7F52; font-weight: 700; }
+  .sbcb-actions { align-items: center; gap: 14px; }
+  .sbcb-edit { font-size: 13px; font-weight: 700; color: #A3426D; text-decoration: underline; }
+  .sbcb-was { display: block; font-size: .85em; }
+{% endstylesheet %}

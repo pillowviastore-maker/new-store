@@ -3,7 +3,8 @@
     "hero": {
       "type": "sb-hero",
       "settings": {
-        "product": "sculpt-brief"
+        "product": "sculpt-brief",
+        "image": "shopify://shop_images/hf_20260901_132006_386d39af-1e77-4e65-97f6-16cc602a2872.png"
       }
     },
     "benefits": {

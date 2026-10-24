@@ -105,10 +105,22 @@
   </template>
 
   <button type="button" class="sbb-atc" data-sbb-atc>
-    <span class="sbb-atc-label" data-sbb-label>{{ block.settings.button_label }}</span>
+    <span class="sbb-atc-main">
+      <span class="sbb-atc-label" data-sbb-label>{{ block.settings.button_label }}</span>
+      <svg class="sbb-atc-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="20" r="1.4" fill="currentColor"/><circle cx="17" cy="20" r="1.4" fill="currentColor"/></svg>
+      <span class="sbb-spinner" aria-hidden="true"></span>
+    </span>
     <span class="sbb-atc-total" data-sbb-atc-total></span>
-    <span class="sbb-spinner" aria-hidden="true"></span>
   </button>
+  {%- if block.settings.show_express -%}
+    <button type="button" class="sbb-buy" data-sbb-express>
+      <span class="sbb-buy-label">{{ block.settings.buy_label }}</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  {%- endif -%}
+  {%- if block.settings.button_note != blank -%}
+    <p class="sbb-atc-note">{{ block.settings.button_note }}</p>
+  {%- endif -%}
   <p class="sbb-error" data-sbb-error role="alert" hidden></p>
 
   <ul class="sbb-trust">
@@ -118,13 +130,6 @@
     <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>Secure checkout</li>
   </ul>
 
-  {%- if block.settings.show_express -%}
-    <div class="sbb-express">
-      <span class="sbb-express-label">Express checkout</span>
-      <button type="button" class="sbb-express-btn" data-sbb-express>Buy it now</button>
-      <span class="sbb-express-note">Shop Pay, Apple Pay and Google Pay at checkout</span>
-    </div>
-  {%- endif -%}
 
   <div class="sbb-sticky" data-sbb-sticky aria-hidden="true">
     <div class="sbb-sticky-text">
@@ -182,28 +187,38 @@
   .sbb-color-name.is-set { color: #1A1A1A; font-weight: 700; }
   .sbb-select { flex: 0 1 110px; min-width: 92px; padding: 9px 10px; font-size: 14px; border: 1px solid var(--sbb-line); border-radius: 8px; background: #fff; color: #1A1A1A; font-family: inherit; }
   .sbb-select:invalid, .sbb-select.is-empty { color: #6B5E65; }
-  .sbb-atc { position: relative; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; margin: 16px 0 0; padding: 17px 20px; border: 0; border-radius: 10px; background: var(--sbb-cta); color: var(--sbb-cta-ink); font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; cursor: pointer; font-family: inherit; box-shadow: 0 6px 16px rgba(255, 184, 0, .35); transition: background .2s, transform .15s, box-shadow .2s; }
-  .sbb-atc:hover { background: var(--sbb-cta-hover); transform: translateY(-1px); box-shadow: 0 10px 22px rgba(255, 184, 0, .42); }
+  .sbb-atc { position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 100%; min-height: 68px; margin: 18px 0 0; padding: 14px 20px; border: 2px solid #E0A800; border-radius: 14px; background: linear-gradient(180deg, #FFD54F 0%, var(--sbb-cta) 55%, #FFB800 100%); color: var(--sbb-cta-ink); font-size: 19px; font-weight: 900; text-transform: uppercase; letter-spacing: .8px; cursor: pointer; font-family: inherit; box-shadow: 0 6px 16px rgba(255, 170, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .6); transition: transform .15s, box-shadow .2s, filter .2s; }
+  .sbb-atc:hover { filter: brightness(1.04); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(255, 170, 0, .5), inset 0 1px 0 rgba(255, 255, 255, .6); }
   .sbb-atc:active { transform: translateY(1px) scale(.99); }
   .sbb-atc:focus-visible { outline: 3px solid #1A1A1A; outline-offset: 3px; }
-  .sbb-atc-total { font-weight: 700; opacity: .85; }
+  .sbb-atc-main { display: inline-flex; align-items: center; gap: 10px; }
+  .sbb-atc-arrow { width: 22px; height: 22px; transition: transform .2s; }
+  .sbb-atc:hover .sbb-atc-arrow { transform: translateX(4px); }
+  .sbb-atc-total { font-size: 13.5px; font-weight: 700; letter-spacing: .3px; text-transform: none; opacity: .8; }
   .sbb-atc-total:empty { display: none; }
+  .sbb-atc.is-loading .sbb-atc-arrow, .sbb-atc.is-done .sbb-atc-arrow { display: none; }
+  .sbb-atc-note { margin: 8px 0 0; font-size: 12.5px; color: #6B5E65; text-align: center; }
   .sbb-spinner { display: none; width: 18px; height: 18px; border: 2.5px solid rgba(26, 26, 26, .25); border-top-color: #1A1A1A; border-radius: 50%; animation: sbb-spin .7s linear infinite; }
   .sbb-atc.is-loading { pointer-events: none; }
   .sbb-atc.is-loading .sbb-spinner { display: inline-block; }
   .sbb-atc.is-loading .sbb-atc-total { display: none; }
-  .sbb-atc.is-done { background: #0B7F52; color: #fff; box-shadow: none; }
+  .sbb-atc.is-done { background: #0B7F52; border-color: #0B7F52; color: #fff; box-shadow: none; }
   @keyframes sbb-spin { to { transform: rotate(360deg); } }
   .sbb-error { color: #B42318; font-size: 13.5px; margin: 10px 0 0; text-align: center; }
   .sbb-trust { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px; }
   .sbb-trust li { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: #4A3B42; }
   .sbb-trust svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--sbb-accent); }
   @media (min-width: 750px) { .sbb-trust { grid-template-columns: repeat(4, minmax(0, auto)); justify-content: space-between; } }
-  .sbb-express { display: flex; flex-direction: column; gap: 6px; margin: 10px 0 0; }
-  .sbb-express-label { font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #6B5E65; text-align: center; }
-  .sbb-express-btn { width: 100%; padding: 13px 16px; border-radius: 10px; border: 0; background: #1A1A1A; color: #fff; font: inherit; font-size: 14.5px; font-weight: 700; cursor: pointer; transition: transform .15s, background .2s; }
-  .sbb-express-btn:hover { background: #000; transform: translateY(-1px); }
-  .sbb-express-note { font-size: 11.5px; color: #6B5E65; text-align: center; }
+  .sbb-buy { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 64px; margin: 10px 0 0; padding: 14px 20px; border: 0; border-radius: 14px; background: linear-gradient(180deg, #F0433A 0%, #D7261E 60%, #B81C15 100%); color: #fff; font: inherit; font-size: 21px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; box-shadow: 0 8px 22px rgba(215, 38, 30, .4), inset 0 1px 0 rgba(255, 255, 255, .35); transition: transform .15s, filter .2s; animation: sbb-breathe 3.2s ease-in-out infinite; }
+  .sbb-buy::before { content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%; background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .45), transparent); transform: skewX(-20deg); animation: sbb-shine 3.2s ease-in-out infinite; pointer-events: none; }
+  .sbb-buy svg { width: 22px; height: 22px; transition: transform .2s; }
+  .sbb-buy:hover { filter: brightness(1.06); transform: translateY(-2px); animation-play-state: paused; }
+  .sbb-buy:hover svg { transform: translateX(4px); }
+  .sbb-buy:active { transform: translateY(1px) scale(.99); }
+  .sbb-buy:focus-visible { outline: 3px solid #1A1A1A; outline-offset: 3px; }
+  .sbb-buy[disabled] { opacity: .75; cursor: wait; animation: none; }
+  @keyframes sbb-shine { 0%, 55% { left: -60%; } 85%, 100% { left: 130%; } }
+  @keyframes sbb-breathe { 0%, 100% { box-shadow: 0 8px 22px rgba(215, 38, 30, .4), inset 0 1px 0 rgba(255, 255, 255, .35); } 50% { box-shadow: 0 8px 30px rgba(215, 38, 30, .6), 0 0 0 5px rgba(240, 67, 58, .18), inset 0 1px 0 rgba(255, 255, 255, .35); } }
   .sbb-sticky { position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 12px; padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); background: rgba(255, 255, 255, .97); box-shadow: 0 -6px 20px rgba(0, 0, 0, .1); transform: translateY(110%); transition: transform .3s ease; }
   .sbb-sticky.is-visible { transform: none; }
   .sbb-sticky-text { display: flex; flex-direction: column; flex: 1; min-width: 0; }
@@ -215,7 +230,7 @@
   .sbb-toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
   .sbb-toast.is-error { background: #B42318; }
   .sbb-toast.is-success { background: #0B7F52; }
-  @media (prefers-reduced-motion: reduce) { .sbb *, .sbb *::after { animation: none !important; transition: none !important; } }
+  @media (prefers-reduced-motion: reduce) { .sbb *, .sbb *::before, .sbb *::after { animation: none !important; transition: none !important; } }
 </style>
 
 <script>
@@ -332,7 +347,7 @@
         t.querySelector('.sbb-tier-head').setAttribute('aria-checked', on ? 'true' : 'false');
       });
       buildRows(tier, saved);
-      atcTotal.textContent = '· ' + tier.dataset.total;
+      atcTotal.textContent = tier.querySelector('.sbb-tier-title').firstChild.textContent.trim() + ' · ' + tier.dataset.total;
       updateSticky();
       save();
     }
@@ -388,11 +403,13 @@
       return message;
     }
 
+    // Every brief of one bundle shares a hidden `_bundle` property, so the cart can show the bundle as one item.
     function addLines(lines) {
+      var bundleId = 'B' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
       var actions = window.Shopify && window.Shopify.actions;
       if (actions && actions.updateCart) {
         return actions.updateCart(
-          { lines: lines.map(function (l) { return { merchandiseId: String(l.id), quantity: l.quantity }; }) },
+          { lines: lines.map(function (l) { return { merchandiseId: String(l.id), quantity: l.quantity, attributes: [{ key: '_bundle', value: bundleId }] }; }) },
           { event: { context: 'product' } }
         ).then(function (result) {
           if (result && result.userErrors && result.userErrors.length) throw new Error(result.userErrors[0].message);
@@ -402,7 +419,7 @@
       return fetch('{{ routes.cart_add_url }}.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ items: lines })
+        body: JSON.stringify({ items: lines.map(function (l) { return { id: l.id, quantity: l.quantity, properties: { _bundle: bundleId } }; }) })
       }).then(function (res) {
         return res.json().then(function (data) {
           if (!res.ok) throw new Error(data.description || data.message);
@@ -481,9 +498,11 @@
   "tag": null,
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "Try it risk-free — 90-day guarantee" },
-    { "type": "text", "id": "button_label", "label": "Button label", "default": "Add to cart" },
+    { "type": "text", "id": "button_label", "label": "Add to cart label", "default": "Add to cart" },
+    { "type": "text", "id": "buy_label", "label": "Buy it now label", "default": "Buy it now" },
+    { "type": "text", "id": "button_note", "label": "Text under the buttons", "default": "Fast, secure checkout with Shop Pay, Apple Pay or Google Pay." },
     { "type": "text", "id": "sticky_label", "label": "Mobile sticky button label", "default": "Choose colors" },
-    { "type": "checkbox", "id": "show_express", "label": "Show express checkout button", "default": true, "info": "Adds the bundle to the cart and goes straight to checkout, where Shop Pay, Apple Pay and Google Pay appear when they are turned on in Settings > Payments." },
+    { "type": "checkbox", "id": "show_express", "label": "Show Buy it now button", "default": true, "info": "Adds the bundle to the cart and goes straight to checkout, where Shop Pay, Apple Pay and Google Pay appear when they are turned on in Settings > Payments." },
     { "type": "textarea", "id": "swatch_colors", "label": "Color swatches", "info": "One per line: Color name: #hex. Used when the color has no swatch in Shopify.", "default": "Black: #111111\nBeige: #D8B99A\nNavy: #1F2A44\nLilac: #C7A6D9\nPurple: #5B2A86\nFuchsia pink: #D6247A" },
     { "type": "range", "id": "default_tier", "label": "Preselected offer", "min": 1, "max": 3, "step": 1, "default": 2 },
     { "type": "header", "content": "Offer 1" },

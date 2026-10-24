@@ -144,8 +144,36 @@
           </thead>
 
           <tbody role="rowgroup">
+            {% assign sb_seen_bundles = '|' %}
             {% for item in cart.items %}
+              {%- liquid
+                assign sb_bundle = item.properties['_bundle']
+                assign sb_bundle_first = false
+                assign sb_bundle_member = false
+                if sb_bundle != blank
+                  assign sb_bundle_tag = '|' | append: sb_bundle | append: '|'
+                  if sb_seen_bundles contains sb_bundle_tag
+                    assign sb_bundle_member = true
+                  else
+                    assign sb_bundle_first = true
+                    assign sb_seen_bundles = sb_seen_bundles | append: sb_bundle | append: '|'
+                  endif
+                endif
+              -%}
+              {%- if sb_bundle_first -%}
+                <tr
+                  id="CartItem-{{ item.key }}"
+                  role="row"
+                  class="cart-items__table-row sbcb-row{% if context == 'drawer' %} cart-items__table-row--full-width-variants{% endif %}"
+                  ref="cartItemRows[]"
+                  data-key="{{ item.key }}"
+                >
+                  {% render 'sb-cart-bundle', bundle_id: sb_bundle, first: item %}
+                </tr>
+                {%- continue -%}
+              {%- endif -%}
               <tr
+                {% if sb_bundle_member %}hidden{% endif %}
                 id="CartItem-{{ item.key }}"
                 role="row"
                 class="cart-items__table-row{% if item.parent_relationship.parent != null %} cart-items__nested-line{% endif %}{% if context == 'drawer' %}{% unless item.unit_price_measurement %} cart-items__table-row--full-width-variants{% endunless %}{% endif %}"

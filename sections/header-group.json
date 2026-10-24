@@ -18,7 +18,7 @@
           "type": "_announcement",
           "settings": {
             "text": "<strong>BUY 2 GET 2 FREE</strong> · Our most popular deal",
-            "link": "",
+            "link": "shopify://products/sculpt-brief",
             "font": "var(--font-subheading--family)",
             "font_size": "0.875rem",
             "weight": "",
@@ -32,7 +32,7 @@
           "type": "_announcement",
           "settings": {
             "text": "<strong>Free US shipping</strong> on every order",
-            "link": "",
+            "link": "shopify://products/sculpt-brief",
             "font": "var(--font-subheading--family)",
             "font_size": "0.875rem",
             "weight": "",
@@ -46,7 +46,7 @@
           "type": "_announcement",
           "settings": {
             "text": "<strong>90-day money-back guarantee</strong> · Free size exchange",
-            "link": "",
+            "link": "shopify://products/sculpt-brief",
             "font": "var(--font-subheading--family)",
             "font_size": "0.875rem",
             "weight": "",

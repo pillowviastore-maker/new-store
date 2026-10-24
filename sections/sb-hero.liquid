@@ -22,7 +22,7 @@
     </div>
     <div class="sbh-media">
       {%- if section.settings.image != blank -%}
-        {{ section.settings.image | image_url: width: 900 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 900px) 420px, 100vw', alt: hero_product.title }}
+        {{ section.settings.image | image_url: width: 900 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 900px) 420px, 100vw', alt: section.settings.image.alt | default: hero_product.title }}
       {%- else -%}
         <img src="{{ 'sb-ugc-6.jpg' | asset_url }}" width="480" height="854" alt="Woman holding the {{ hero_product.title | escape }} in navy" fetchpriority="high">
       {%- endif -%}
