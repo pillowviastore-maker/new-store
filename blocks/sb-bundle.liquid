@@ -18,8 +18,8 @@
         assign qty = block.settings[qty_key]
         assign compare = unit_price | times: qty
         assign percent = block.settings[percent_key] | times: 1.0
-        # Shopify rounds the discount on each unit, so price one unit and multiply.
-        assign unit_discount = unit_price | times: percent | divided_by: 100.0 | round
+        # Shopify drops fractions of a cent from the discount on each unit, so price one unit and multiply.
+        assign unit_discount = unit_price | times: percent | divided_by: 100.0 | floor
         assign each = unit_price | minus: unit_discount
         assign total = each | times: qty
         assign discount = compare | minus: total
@@ -252,7 +252,7 @@
     { "type": "header", "content": "Offer 1" },
     { "type": "text", "id": "tier_1_title", "label": "Title", "default": "BUY 1 GET 1 FREE" },
     { "type": "number", "id": "tier_1_qty", "label": "Items", "default": 2 },
-    { "type": "text", "id": "tier_1_percent", "label": "Discount %", "default": "50.01", "info": "Must match the automatic discount set up in Shopify." },
+    { "type": "text", "id": "tier_1_percent", "label": "Discount %", "default": "50.02", "info": "Must match the automatic discount set up in Shopify." },
     { "type": "text", "id": "tier_1_badge", "label": "Badge" },
     { "type": "header", "content": "Offer 2" },
     { "type": "text", "id": "tier_2_title", "label": "Title", "default": "BUY 2 GET 2 FREE" },
