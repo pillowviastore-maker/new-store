@@ -106,7 +106,9 @@
           ]
         }
       },
-      "settings": {}
+      "settings": {
+        "enable_sticky_add_to_cart": false
+      }
     },
     "videos": {
       "type": "sb-video-carousel",
