@@ -49,6 +49,9 @@ export class DragZoomWrapper extends Component {
   /** @type {boolean} */
   #hasManualZoom = false;
 
+  /** @type {Point} */
+  #swipe = { x: 0, y: 0 };
+
   get #image() {
     return this.refs.image;
   }
@@ -323,6 +326,13 @@ export class DragZoomWrapper extends Component {
     const dx = touch.clientX - this.#startPosition.x;
     const dy = touch.clientY - this.#startPosition.y;
 
+    // Lithella: at 1x a sideways drag is a swipe to the next or previous photo.
+    if (this.#scale <= MIN_ZOOM + 0.01) {
+      this.#swipe = { x: dx, y: dy };
+      if (Math.abs(dx) > Math.abs(dy)) this.style.transform = `translateX(${dx * 0.35}px)`;
+      return;
+    }
+
     // Calculate new translation directly
     this.#translate.x = this.#startTranslate.x + dx / this.#scale;
     this.#translate.y = this.#startTranslate.y + dy / this.#scale;
@@ -335,12 +345,33 @@ export class DragZoomWrapper extends Component {
    */
   #handleTouchEnd = (event) => {
     if (event.touches.length === 0) {
+      const swipe = this.#swipe;
+      this.#swipe = { x: 0, y: 0 };
+      this.style.transform = '';
+      if (this.#scale <= MIN_ZOOM + 0.01 && Math.abs(swipe.x) > 50 && Math.abs(swipe.x) > Math.abs(swipe.y) * 1.3) {
+        this.#goToSibling(swipe.x < 0 ? 1 : -1);
+      }
+
       this.#isDragging = false;
       this.#requestUpdateTransform();
 
       this.#hasDraggedBeyondThreshold = false;
     }
   };
+
+  /**
+   * Shows the next (1) or previous (-1) photo in the zoom dialog, like tapping its thumbnail.
+   * @param {number} step
+   */
+  #goToSibling(step) {
+    const dialog = /** @type {(HTMLElement & {handleThumbnailClick?: (i: number) => void}) | null} */ (this.closest('zoom-dialog'));
+    const item = this.closest('li');
+    const list = item?.parentElement;
+    if (!dialog || !item || !list || typeof dialog.handleThumbnailClick !== 'function') return;
+    const items = Array.from(list.children);
+    const next = items.indexOf(item) + step;
+    if (next >= 0 && next < items.length) dialog.handleThumbnailClick(next);
+  }
 
   /**
    * Constrain image translation to keep it within the viewport

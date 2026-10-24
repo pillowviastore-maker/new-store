@@ -3,25 +3,24 @@
   Accepts: review (Judge.me review object), show_source (boolean)
 {%- endcomment -%}
 {%- assign stars = review.rating | plus: 0 -%}
+{%- assign picture = review.pictures_urls | first -%}
 <article class="sbrc-card">
-  {%- assign picture = review.pictures_urls | first -%}
+  <span class="sbrc-avatar" aria-hidden="true">{{ review.reviewer_name | slice: 0 | upcase }}</span>
+  <div class="sbrc-card-top">
+    <span class="sbrc-name">{{ review.reviewer_name }}</span>
+    <span class="sbrc-stars" aria-label="{{ stars }} out of 5 stars">
+      {%- for i in (1..5) -%}{% if i <= stars %}&#9733;{% else %}<span class="sbrc-star-off">&#9733;</span>{% endif %}{%- endfor -%}
+    </span>
+  </div>
+  {%- if review.verified_buyer -%}
+    <span class="sbrc-source">Verified buyer</span>
+  {%- elsif show_source -%}
+    <span class="sbrc-source">Imported review</span>
+  {%- endif -%}
+  <div class="sbrc-text">{{ review.body_html }}</div>
   {%- if picture -%}
     <button type="button" class="sbrc-thumb" data-sbrc-thumb aria-label="Enlarge photo from {{ review.reviewer_name | escape }}">
       <img src="{{ picture.compact | default: picture.original }}" data-full="{{ picture.original | default: picture.compact }}" alt="Review photo from {{ review.reviewer_name | escape }}" loading="lazy" width="400" height="400">
     </button>
   {%- endif -%}
-  <div class="sbrc-body">
-    <div class="sbrc-stars" aria-label="{{ stars }} out of 5 stars">
-      {%- for i in (1..5) -%}{% if i <= stars %}&#9733;{% else %}<span class="sbrc-star-off">&#9733;</span>{% endif %}{%- endfor -%}
-    </div>
-    <div class="sbrc-text">{{ review.body_html }}</div>
-    <div class="sbrc-meta">
-      <span>{{ review.reviewer_name }}</span>
-      {%- if review.verified_buyer -%}
-        <span class="sbrc-source">Verified buyer</span>
-      {%- elsif show_source -%}
-        <span class="sbrc-source">Imported review</span>
-      {%- endif -%}
-    </div>
-  </div>
 </article>

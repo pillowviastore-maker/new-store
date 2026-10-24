@@ -14,8 +14,22 @@
         if (result && result.userErrors && result.userErrors.length) throw new Error(result.userErrors[0].message);
       });
     }
-    return fallback().then(function () { window.location.reload(); });
+    return fallback().then(function () {
+      try { sessionStorage.setItem('lithella-open-cart', '1'); } catch (e) {}
+      window.location.reload();
+    });
   }
+
+  // After a fallback reload, slide the cart open on the same page instead of sending shoppers to /cart.
+  try {
+    if (sessionStorage.getItem('lithella-open-cart') === '1') {
+      sessionStorage.removeItem('lithella-open-cart');
+      customElements.whenDefined('theme-drawer').then(function () {
+        var drawer = document.querySelector('theme-drawer#cart-drawer');
+        if (drawer && typeof drawer.open === 'function') drawer.open();
+      });
+    }
+  } catch (e) {}
 
   document.addEventListener('click', function (event) {
     var add = event.target.closest('[data-sbcu-add]');

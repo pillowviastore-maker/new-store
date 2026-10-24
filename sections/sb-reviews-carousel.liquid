@@ -3,31 +3,54 @@
   assign data = reviews_product.metafields.judgeme.review_widget_data.value
   assign rating = reviews_product.metafields.reviews.rating.value
   assign rating_count = reviews_product.metafields.reviews.rating_count
-  assign photo_count = 0
-  for review in data.photo_gallery
-    assign photo_count = photo_count | plus: 1
-  endfor
+  assign score = rating.rating | round: 1 | default: 5.0
 -%}
 
 {%- if data != blank -%}
   <div class="sbrc">
-    <button type="button" class="sbrc-summary" data-sbrc-open aria-haspopup="dialog">
-      <span class="sbrc-summary-score">{{ rating.rating | round: 1 | default: '5.0' }}</span>
-      <span class="sbrc-summary-main">
-        <span class="sbrc-summary-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-        <span class="sbrc-summary-title">{{ section.settings.title }}</span>
-        <span class="sbrc-summary-sub">Based on {{ rating_count }} reviews{% if photo_count > 0 %} · {{ photo_count }} with photos{% endif %}</span>
-      </span>
-      <span class="sbrc-summary-cta">Read reviews <span aria-hidden="true">&rsaquo;</span></span>
-    </button>
+    <div class="sbrc-summary">
+      <div class="sbrc-score">
+        <span class="sbrc-score-num">{{ score }}</span>
+        <span class="sbrc-score-stars" aria-label="{{ score }} out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span class="sbrc-score-count">{{ rating_count }} reviews</span>
+      </div>
+      <div class="sbrc-summary-main">
+        <p class="sbrc-summary-title">{{ section.settings.title }}</p>
+        <div class="sbrc-quotes" data-sbrc-quotes aria-live="polite">
+          {%- assign quotes = 0 -%}
+          {%- for review in data.reviews -%}
+            {%- assign q = review.body_html | strip_html | strip -%}
+            {%- if quotes < 5 and q.size > 30 and q.size < 170 -%}
+              <p class="sbrc-quote{% if quotes == 0 %} is-on{% endif %}">&ldquo;{{ q | escape }}&rdquo; <span>&mdash; {{ review.reviewer_name | split: ' ' | first | escape }}</span></p>
+              {%- assign quotes = quotes | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+      <button type="button" class="sbrc-open" data-sbrc-open aria-haspopup="dialog">
+        Read all reviews
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
 
     <dialog class="sbrc-dialog" data-sbrc-dialog aria-labelledby="sbrc-dialog-title-{{ section.id }}">
       <div class="sbrc-dialog-head">
-        <div>
-          <p class="sbrc-dialog-title" id="sbrc-dialog-title-{{ section.id }}">{{ section.settings.title }}</p>
-          <p class="sbrc-dialog-sub"><span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span> {{ rating.rating | round: 1 }}/5 · {{ rating_count }} reviews</p>
+        <span class="sbrc-grabber" aria-hidden="true"></span>
+        <div class="sbrc-dialog-top">
+          <div class="sbrc-dialog-score">
+            <span class="sbrc-dialog-num">{{ score }}</span>
+            <span>
+              <span class="sbrc-dialog-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+              <span class="sbrc-dialog-sub">Based on {{ rating_count }} reviews</span>
+            </span>
+          </div>
+          <button type="button" class="sbrc-dialog-close" data-sbrc-close aria-label="Close reviews">&times;</button>
         </div>
-        <button type="button" class="sbrc-dialog-close" data-sbrc-close aria-label="Close reviews">&times;</button>
+        <p class="sbrc-dialog-title" id="sbrc-dialog-title-{{ section.id }}">{{ section.settings.title }}</p>
+        <div class="sbrc-chips" role="group" aria-label="Filter reviews">
+          <button type="button" class="sbrc-chip is-on" data-sbrc-filter="all" aria-pressed="true">All</button>
+          <button type="button" class="sbrc-chip" data-sbrc-filter="photos" aria-pressed="false">With photos</button>
+        </div>
       </div>
       <div class="sbrc-list" data-sbrc-list></div>
       <template data-sbrc-template>
@@ -51,46 +74,65 @@
   </div>
 
   <style>
-    .sbrc { max-width: 720px; margin: 0 auto; padding: 28px 16px; font-family: var(--font-body--family); }
-    .sbrc-summary { display: flex; align-items: center; gap: 14px; width: 100%; padding: 16px 18px; border: 1.5px solid #F0DCE6; border-radius: 16px; background: #FBF3F7; color: #1A1A1A; font: inherit; text-align: left; cursor: pointer; transition: border-color .2s, box-shadow .2s, transform .15s; }
-    .sbrc-summary:hover { border-color: #A3426D; box-shadow: 0 10px 24px rgba(163, 66, 109, .12); transform: translateY(-1px); }
-    .sbrc-summary:focus-visible { outline: 3px solid #A3426D; outline-offset: 3px; }
-    .sbrc-summary-score { flex: 0 0 auto; font-family: var(--font-heading--family); font-size: 40px; font-weight: 700; line-height: 1; color: #A3426D; }
-    .sbrc-summary-main { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
-    .sbrc-summary-stars { color: #F5A623; font-size: 15px; letter-spacing: 2px; }
-    .sbrc-summary-title { font-size: 16px; font-weight: 800; }
-    .sbrc-summary-sub { font-size: 12.5px; color: #6F5F66; }
-    .sbrc-summary-cta { flex: 0 0 auto; padding: 10px 14px; border-radius: 10px; background: #A3426D; color: #fff; font-size: 13.5px; font-weight: 800; white-space: nowrap; }
-    .sbrc-dialog { width: min(100vw, 640px); max-width: 100vw; max-height: 88vh; margin: auto auto 0; padding: 0; border: 0; border-radius: 20px 20px 0 0; background: #fff; color: #1A1A1A; font-family: var(--font-body--family); box-shadow: 0 -12px 40px rgba(42, 26, 35, .25); overflow: hidden; }
-    .sbrc-dialog[open] { display: flex; flex-direction: column; animation: sbrc-up .3s cubic-bezier(.2, 1, .3, 1); }
-    .sbrc-dialog::backdrop { background: rgba(42, 26, 35, .5); }
-    @keyframes sbrc-up { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
-    @media (min-width: 750px) { .sbrc-dialog { margin: auto; border-radius: 20px; max-height: 84vh; } }
-    .sbrc-dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 18px 12px; border-bottom: 1px solid #F0DCE6; }
-    .sbrc-dialog-title { margin: 0; font-family: var(--font-heading--family); font-size: 24px; font-weight: 700; line-height: 1.1; }
-    .sbrc-dialog-sub { margin: 4px 0 0; font-size: 13px; color: #4A3B42; }
-    .sbrc-dialog-sub span { color: #F5A623; letter-spacing: 1px; }
-    .sbrc-dialog-close { flex: 0 0 auto; width: 38px; height: 38px; border: 0; border-radius: 50%; background: #FBF3F7; font-size: 24px; line-height: 1; color: #4A3B42; cursor: pointer; }
-    .sbrc-list { overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 6px 18px 22px; overscroll-behavior: contain; }
-    .sbrc-card { display: flex; gap: 12px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #F3E7ED; }
-    .sbrc-card:last-child { border-bottom: 0; }
-    .sbrc-thumb { flex: 0 0 64px; width: 64px; height: 64px; padding: 0; border: 0; border-radius: 10px; overflow: hidden; background: #f3eef1; cursor: zoom-in; transition: width .25s, height .25s, flex-basis .25s; }
-    .sbrc-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .sbrc-card.is-open { flex-direction: column; }
-    .sbrc-card.is-open .sbrc-thumb { flex-basis: auto; width: 100%; height: auto; cursor: zoom-out; }
-    .sbrc-card.is-open .sbrc-thumb img { height: auto; max-height: 60vh; object-fit: contain; }
-    .sbrc-body { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
-    .sbrc-stars { color: #F5A623; font-size: 13px; letter-spacing: 1px; }
+    .sbrc { max-width: 760px; margin: 0 auto; padding: 32px 16px; font-family: var(--font-body--family); }
+    .sbrc-summary { position: relative; overflow: hidden; display: grid; grid-template-columns: auto 1fr; gap: 16px 18px; align-items: center; padding: 20px; border-radius: 20px; background: linear-gradient(135deg, #FFF4D6 0%, #FBE3EE 50%, #F3D2E2 100%); box-shadow: 0 14px 34px rgba(163, 66, 109, .14); }
+    .sbrc-summary::after { content: ""; position: absolute; right: -40px; top: -50px; width: 170px; height: 170px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 255, 255, .7), transparent 70%); pointer-events: none; }
+    .sbrc-score { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 16px; border-radius: 16px; background: #fff; box-shadow: 0 6px 16px rgba(163, 66, 109, .12); }
+    .sbrc-score-num { font-family: var(--font-heading--family); font-size: 44px; font-weight: 700; line-height: .9; color: #A3426D; }
+    .sbrc-score-stars { color: #F5A623; font-size: 14px; letter-spacing: 1px; }
+    .sbrc-score-count { font-size: 11.5px; font-weight: 700; color: #6F5F66; white-space: nowrap; }
+    .sbrc-summary-main { min-width: 0; position: relative; z-index: 1; }
+    .sbrc-summary-title { margin: 0 0 6px; font-family: var(--font-heading--family); font-size: 22px; font-weight: 700; line-height: 1.1; color: #1A1A1A; }
+    .sbrc-quotes { position: relative; min-height: 64px; }
+    .sbrc-quote { position: absolute; inset: 0 auto auto 0; margin: 0; font-size: 13.5px; font-style: italic; line-height: 1.45; color: #3A2C33; opacity: 0; transform: translateY(6px); transition: opacity .5s, transform .5s; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .sbrc-quote span { font-style: normal; font-weight: 700; color: #A3426D; }
+    .sbrc-quote.is-on { opacity: 1; transform: none; }
+    .sbrc-open { grid-column: 1 / -1; position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 15px; border: 0; border-radius: 12px; background: #A3426D; color: #fff; font: inherit; font-size: 15.5px; font-weight: 800; letter-spacing: .02em; cursor: pointer; box-shadow: 0 8px 18px rgba(163, 66, 109, .3); transition: background .2s, transform .15s; }
+    .sbrc-open svg { width: 18px; height: 18px; transition: transform .2s; }
+    .sbrc-open:hover { background: #8A3459; transform: translateY(-1px); }
+    .sbrc-open:hover svg { transform: translateX(4px); }
+    .sbrc-open:focus-visible { outline: 3px solid #1A1A1A; outline-offset: 3px; }
+
+    .sbrc-dialog { width: min(100vw, 640px); max-width: 100vw; max-height: 90vh; margin: auto auto 0; padding: 0; border: 0; border-radius: 22px 22px 0 0; background: #FFFBFD; color: #1A1A1A; font-family: var(--font-body--family); box-shadow: 0 -12px 40px rgba(42, 26, 35, .25); overflow: hidden; }
+    .sbrc-dialog[open] { display: flex; flex-direction: column; animation: sbrc-up .35s cubic-bezier(.2, 1, .3, 1); }
+    .sbrc-dialog::backdrop { background: rgba(42, 26, 35, .5); backdrop-filter: blur(2px); }
+    @keyframes sbrc-up { from { transform: translateY(60px); opacity: 0; } to { transform: none; opacity: 1; } }
+    @media (min-width: 750px) { .sbrc-dialog { margin: auto; border-radius: 22px; max-height: 86vh; } .sbrc-grabber { display: none !important; } }
+    .sbrc-dialog-head { padding: 10px 18px 12px; background: linear-gradient(180deg, #FBE3EE, #FFFBFD); border-bottom: 1px solid #F0DCE6; }
+    .sbrc-grabber { display: block; width: 42px; height: 5px; margin: 0 auto 10px; border-radius: 3px; background: #E3C8D5; }
+    .sbrc-dialog-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .sbrc-dialog-score { display: flex; align-items: center; gap: 10px; }
+    .sbrc-dialog-num { font-family: var(--font-heading--family); font-size: 38px; font-weight: 700; line-height: 1; color: #A3426D; }
+    .sbrc-dialog-stars { display: block; color: #F5A623; font-size: 15px; letter-spacing: 1px; }
+    .sbrc-dialog-sub { display: block; font-size: 12.5px; color: #6F5F66; font-weight: 600; }
+    .sbrc-dialog-close { flex: 0 0 auto; width: 38px; height: 38px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, .08); font-size: 24px; line-height: 1; color: #4A3B42; cursor: pointer; }
+    .sbrc-dialog-title { margin: 10px 0 10px; font-family: var(--font-heading--family); font-size: 22px; font-weight: 700; }
+    .sbrc-chips { display: flex; gap: 8px; }
+    .sbrc-chip { padding: 7px 14px; border: 1.5px solid #E3C8D5; border-radius: 999px; background: #fff; font: inherit; font-size: 13px; font-weight: 700; color: #4A3B42; cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
+    .sbrc-chip.is-on { background: #A3426D; border-color: #A3426D; color: #fff; }
+    .sbrc-list { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 12px 14px 24px; display: grid; gap: 10px; }
+    .sbrc-card { display: grid; grid-template-columns: 40px 1fr; gap: 4px 12px; padding: 14px; border-radius: 16px; background: #fff; border: 1px solid #F3E7ED; box-shadow: 0 4px 14px rgba(163, 66, 109, .06); animation: sbrc-card .4s ease both; }
+    .sbrc-card[hidden] { display: none; }
+    @keyframes sbrc-card { from { opacity: 0; transform: translateY(8px); } }
+    .sbrc-avatar { grid-row: 1 / span 2; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #C2557F, #A3426D); color: #fff; font-weight: 800; font-size: 16px; }
+    .sbrc-card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
+    .sbrc-name { font-size: 14px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sbrc-stars { color: #F5A623; font-size: 13px; letter-spacing: 1px; white-space: nowrap; }
     .sbrc-star-off { color: #E2D7DD; }
-    .sbrc-text { font-size: 14px; color: #444; line-height: 1.5; margin: 0; }
+    .sbrc-source { justify-self: start; font-size: 10.5px; font-weight: 700; color: #6f5f66; background: #F7EDF2; padding: 2px 8px; border-radius: 10px; }
+    .sbrc-text { grid-column: 2; font-size: 14px; color: #3A2C33; line-height: 1.55; margin: 4px 0 0; }
     .sbrc-text p { margin: 0; }
-    .sbrc-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 12.5px; font-weight: 700; color: #1A1A1A; }
-    .sbrc-source { font-size: 10.5px; font-weight: 600; color: #6f5f66; background: #F7EDF2; padding: 2px 7px; border-radius: 10px; }
+    .sbrc-thumb { grid-column: 2; justify-self: start; width: 84px; height: 84px; margin-top: 8px; padding: 0; border: 0; border-radius: 12px; overflow: hidden; background: #f3eef1; cursor: zoom-in; transition: width .3s, height .3s; }
+    .sbrc-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .sbrc-card.is-open .sbrc-thumb { width: 100%; height: auto; cursor: zoom-out; }
+    .sbrc-card.is-open .sbrc-thumb img { height: auto; max-height: 60vh; object-fit: contain; }
     @media (max-width: 480px) {
-      .sbrc-summary { flex-wrap: wrap; }
-      .sbrc-summary-cta { flex-basis: 100%; text-align: center; }
+      .sbrc-summary { padding: 16px; gap: 14px; }
+      .sbrc-score { padding: 12px; }
+      .sbrc-score-num { font-size: 38px; }
+      .sbrc-summary-title { font-size: 19px; }
     }
-    @media (prefers-reduced-motion: reduce) { .sbrc-dialog[open] { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { .sbrc-dialog[open], .sbrc-card { animation: none; } .sbrc-quote { transition: none; } }
   </style>
 
   <script>
@@ -100,6 +142,20 @@
       if (!dialog || typeof dialog.showModal !== 'function') return;
       var list = dialog.querySelector('[data-sbrc-list]');
       var template = dialog.querySelector('[data-sbrc-template]');
+
+      // Rotate the short quotes on the summary card.
+      var quotes = root.querySelectorAll('.sbrc-quote');
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (quotes.length > 1 && !reduce) {
+        var q = 0;
+        setInterval(function () {
+          if (document.hidden) return;
+          quotes[q].classList.remove('is-on');
+          q = (q + 1) % quotes.length;
+          quotes[q].classList.add('is-on');
+        }, 4500);
+      }
+
       // Reviews and their photos load only when the widget is opened.
       root.querySelector('[data-sbrc-open]').addEventListener('click', function () {
         if (!list.children.length) list.appendChild(template.content.cloneNode(true));
@@ -108,12 +164,19 @@
       });
       dialog.addEventListener('click', function (e) {
         if (e.target === dialog || e.target.closest('[data-sbrc-close]')) { dialog.close(); return; }
+        var chip = e.target.closest('[data-sbrc-filter]');
+        if (chip) {
+          var photos = chip.dataset.sbrcFilter === 'photos';
+          dialog.querySelectorAll('[data-sbrc-filter]').forEach(function (c) { var on = c === chip; c.classList.toggle('is-on', on); c.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+          list.querySelectorAll('.sbrc-card').forEach(function (card) { card.hidden = photos && !card.querySelector('[data-sbrc-thumb]'); });
+          list.scrollTop = 0;
+          return;
+        }
         var thumb = e.target.closest('[data-sbrc-thumb]');
         if (!thumb) return;
-        var card = thumb.closest('.sbrc-card');
         var img = thumb.querySelector('img');
         if (img.dataset.full && img.src !== img.dataset.full) img.src = img.dataset.full;
-        card.classList.toggle('is-open');
+        thumb.closest('.sbrc-card').classList.toggle('is-open');
       });
     })();
   </script>

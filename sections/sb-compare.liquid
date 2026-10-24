@@ -43,13 +43,13 @@
   </div>
 </div>
 <style>
-  .sb-cmp { max-width: 880px; width: 100%; margin: 28px auto; padding: 0 16px; box-sizing: border-box; font-family: var(--font-body--family); }
+  .sb-cmp { max-width: 760px; width: 100%; margin: 28px auto; padding: 0 16px; box-sizing: border-box; font-family: var(--font-body--family); }
   .sb-cmp-title { text-align: center; font-size: 27px; font-weight: 800; color: #1A1A1A; line-height: 1.15; margin: 0 0 26px; }
   .sb-cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
   .sb-cmp-card { background: #fff; border: 1.5px solid #ECECEC; border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; }
   .sb-cmp-card--win { border: 2px solid #A3426D; box-shadow: 0 12px 32px rgba(163,66,109,.14); }
   .sb-cmp-card--lose { opacity: .96; }
-  .sb-cmp-img { width: 100%; height: auto; display: block; }
+  .sb-cmp-img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: center top; display: block; background: #F3EEF1; }
   .sb-cmp-body { padding: 18px 18px 20px; }
   .sb-cmp-head { display: flex; align-items: center; gap: 9px; font-size: 16.5px; font-weight: 800; color: #1A1A1A; margin: 0 0 12px; }
   .sb-cmp-hic { width: 22px; height: 22px; flex-shrink: 0; display: inline-flex; }
@@ -67,8 +67,17 @@
   .sb-cmp-note-txt { font-size: 14px; color: #555; line-height: 1.55; margin: 0; }
   .sb-cmp-note-txt strong { color: #1A1A1A; }
   @media (max-width: 600px) {
-    .sb-cmp-grid { grid-template-columns: 1fr; gap: 14px; }
-    .sb-cmp-title { font-size: 22px; margin-bottom: 20px; }
+    .sb-cmp-title { font-size: 22px; margin-bottom: 18px; }
+    .sb-cmp-grid { grid-template-columns: 1fr 1fr; gap: 10px; align-items: stretch; }
+    .sb-cmp-card { border-radius: 14px; }
+    .sb-cmp-card--win { box-shadow: 0 8px 20px rgba(163,66,109,.14); }
+    .sb-cmp-body { padding: 10px 10px 12px; }
+    .sb-cmp-head { font-size: 13.5px; gap: 6px; margin-bottom: 6px; }
+    .sb-cmp-hic, .sb-cmp-hic svg { width: 16px; height: 16px; }
+    .sb-cmp-item { font-size: 12px; line-height: 1.35; gap: 6px; padding: 6px 0; }
+    .sb-cmp-m, .sb-cmp-m svg { width: 12px; height: 12px; margin-top: 2px; }
+    .sb-cmp-note { padding: 12px 14px; }
+    .sb-cmp-note-txt { font-size: 13px; }
   }
 </style>
 
