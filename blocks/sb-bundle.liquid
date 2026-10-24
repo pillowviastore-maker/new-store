@@ -226,6 +226,10 @@
   .sbb-sticky-price { font-size: 15px; font-weight: 800; color: var(--sbb-accent); }
   .sbb-sticky-btn { flex: 0 0 auto; padding: 13px 18px; border: 0; border-radius: 10px; background: var(--sbb-cta); color: var(--sbb-cta-ink); font: inherit; font-size: 15px; font-weight: 800; cursor: pointer; }
   @media (min-width: 990px) { .sbb-sticky { display: none; } }
+  .sbb-pending { position: absolute; inset: 0; z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; background: rgba(255, 255, 255, .92); font-family: var(--font-body--family); font-size: 15px; font-weight: 700; color: #1A1A1A; animation: sbb-fade .2s ease; transition: opacity .25s; }
+  .sbb-pending.is-gone { opacity: 0; }
+  .sbb-pending-spin { width: 34px; height: 34px; border: 3px solid #F0DCE6; border-top-color: #A3426D; border-radius: 50%; animation: sbb-spin .7s linear infinite; }
+  @keyframes sbb-fade { from { opacity: 0; } }
   .sbb-toast { position: fixed; z-index: 60; left: 50%; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); max-width: min(92vw, 420px); padding: 12px 16px; border-radius: 12px; background: #1A1A1A; color: #fff; font-size: 14px; font-weight: 600; box-shadow: 0 10px 30px rgba(0, 0, 0, .25); opacity: 0; transform: translate(-50%, 12px); pointer-events: none; transition: opacity .25s, transform .25s; }
   .sbb-toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
   .sbb-toast.is-error { background: #B42318; }
@@ -431,14 +435,33 @@
       });
     }
 
+    function openPendingDrawer() {
+      var drawer = document.querySelector('theme-drawer#cart-drawer');
+      var dialog = drawer && drawer.querySelector('dialog');
+      if (!dialog || typeof drawer.open !== 'function') return null;
+      var veil = document.createElement('div');
+      veil.className = 'sbb-pending';
+      veil.setAttribute('role', 'status');
+      veil.innerHTML = '<span class="sbb-pending-spin" aria-hidden="true"></span><span>Adding your briefs…</span>';
+      dialog.appendChild(veil);
+      if (!dialog.open) drawer.open();
+      var removed = false;
+      function remove() { if (removed) return; removed = true; veil.classList.add('is-gone'); setTimeout(function () { veil.remove(); }, 250); }
+      setTimeout(remove, 8000);
+      return remove;
+    }
+
     function submit(goToCheckout) {
       error.hidden = true;
       var lines = collect();
       if (!lines) return;
       setLoading(true);
+      // Open the cart straight away with a loading state; Shopify takes a second or two to confirm the add.
+      var pending = goToCheckout ? null : openPendingDrawer();
       addLines(lines)
         .then(function (mode) {
           setLoading(false);
+          if (pending) setTimeout(pending, 300);
           if (goToCheckout) { window.location.href = '{{ routes.root_url }}checkout'.replace('//checkout', '/checkout'); return; }
           atc.classList.add('is-done');
           atcLabel.textContent = '✓ Added to cart';
@@ -448,6 +471,11 @@
         })
         .catch(function (err) {
           setLoading(false);
+          if (pending) {
+            pending();
+            var drawer = document.querySelector('theme-drawer#cart-drawer');
+            if (drawer && typeof drawer.close === 'function') drawer.close();
+          }
           var offline = err && /fetch|network/i.test(err.message || '');
           showError(offline ? "We couldn't reach the store. Check your connection and try again." : friendly(err && err.message));
         });
@@ -462,9 +490,7 @@
       root.querySelector('[data-sbb-sticky-title]').textContent = tier.querySelector('.sbb-tier-title').firstChild.textContent.trim();
       root.querySelector('[data-sbb-sticky-price]').textContent = tier.dataset.total;
     }
-    root.querySelector('[data-sbb-sticky-btn]').addEventListener('click', function () {
-      root.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
+    root.querySelector('[data-sbb-sticky-btn]').addEventListener('click', function () { submit(false); });
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (entries) {
         var e = entries[0];
@@ -504,7 +530,7 @@
     { "type": "text", "id": "button_label", "label": "Add to cart label", "default": "Add to cart" },
     { "type": "text", "id": "buy_label", "label": "Buy it now label", "default": "Buy it now" },
     { "type": "text", "id": "button_note", "label": "Text under the buttons", "default": "Fast, secure checkout with Shop Pay, Apple Pay or Google Pay." },
-    { "type": "text", "id": "sticky_label", "label": "Mobile sticky button label", "default": "Choose colors" },
+    { "type": "text", "id": "sticky_label", "label": "Mobile sticky button label", "default": "Add to cart" },
     { "type": "checkbox", "id": "show_express", "label": "Show Buy it now button", "default": true, "info": "Adds the bundle to the cart and goes straight to checkout, where Shop Pay, Apple Pay and Google Pay appear when they are turned on in Settings > Payments." },
     { "type": "textarea", "id": "swatch_colors", "label": "Color swatches", "info": "One per line: Color name: #hex. Used when the color has no swatch in Shopify.", "default": "Black: #111111\nBeige: #D8B99A\nNavy: #1F2A44\nLilac: #C7A6D9\nPurple: #5B2A86\nFuchsia pink: #D6247A" },
     { "type": "text", "id": "default_color", "label": "Preselected color", "default": "Black", "info": "Leave empty to make shoppers pick a color." },

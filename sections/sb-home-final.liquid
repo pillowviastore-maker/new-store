@@ -2,13 +2,11 @@
 
 <div class="sbhf">
   <div class="sbhf-inner">
-    <div class="sbhf-photo">
-      {%- if section.settings.image != blank -%}
+    {%- if section.settings.image != blank -%}
+      <div class="sbhf-photo">
         {{ section.settings.image | image_url: width: 500 | image_tag: loading: 'lazy', sizes: '200px' }}
-      {%- else -%}
-        <img src="{{ 'sb-ugc-5.jpg' | asset_url }}" width="480" height="854" loading="lazy" alt="Woman holding a stack of {{ final_product.title | escape }}">
-      {%- endif -%}
-    </div>
+      </div>
+    {%- endif -%}
     <h2 class="sbhf-title">{{ section.settings.title }} <em>{{ section.settings.title_accent }}</em></h2>
     <p class="sbhf-text">{{ section.settings.text }}</p>
     <a class="sbhf-btn" href="{{ final_product.url | default: routes.all_products_collection_url }}">{{ section.settings.button_label }}</a>

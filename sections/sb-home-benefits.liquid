@@ -34,8 +34,6 @@
     <figure class="sbhb-card">
       {%- if section.settings.image != blank -%}
         {{ section.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', sizes: '(min-width: 900px) 380px, 100vw' }}
-      {%- else -%}
-        <img src="{{ 'sb-ugc-4.jpg' | asset_url }}" width="480" height="854" loading="lazy" alt="Woman holding the {{ benefits_product.title | escape }} in fuchsia pink">
       {%- endif -%}
       {%- if quote != blank -%}
         <figcaption>

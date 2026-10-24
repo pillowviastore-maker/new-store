@@ -5,6 +5,8 @@ import { Component } from '@theme/component';
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 5;
 const DEFAULT_ZOOM = 1.5;
+// Lithella: open full-screen photos at 1x so the whole image fits the phone; double-tap still zooms to DEFAULT_ZOOM.
+const START_ZOOM = MIN_ZOOM;
 const DOUBLE_TAP_DELAY = 300;
 const DOUBLE_TAP_DISTANCE = 50;
 const DRAG_THRESHOLD = 10;
@@ -19,11 +21,11 @@ export class DragZoomWrapper extends Component {
   requiredRefs = ['image'];
   #controller = new AbortController();
   /** @type {number} */
-  #scale = DEFAULT_ZOOM;
+  #scale = START_ZOOM;
   /** @type {number} */
   #initialDistance = 0;
   /** @type {number} */
-  #startScale = DEFAULT_ZOOM;
+  #startScale = START_ZOOM;
   /** @type {Point} */
   #translate = { x: 0, y: 0 };
   /** @type {Point} */
@@ -446,13 +448,13 @@ export class DragZoomWrapper extends Component {
   };
 
   /**
-   * Reset zoom to default state (1.5x scale, centered position)
+   * Reset zoom to the starting state (1x scale, centered position)
    * Called when zoom is exited/closed
    */
   #resetZoom = () => {
     // Reset scale and translation to defaults
-    this.#scale = DEFAULT_ZOOM;
-    this.#startScale = DEFAULT_ZOOM;
+    this.#scale = START_ZOOM;
+    this.#startScale = START_ZOOM;
     this.#translate.x = 0;
     this.#translate.y = 0;
 
@@ -465,7 +467,7 @@ export class DragZoomWrapper extends Component {
     this.#hasDraggedBeyondThreshold = false;
 
     // Update CSS properties to reflect reset state
-    this.style.setProperty('--drag-zoom-scale', DEFAULT_ZOOM.toString());
+    this.style.setProperty('--drag-zoom-scale', START_ZOOM.toString());
     this.style.setProperty('--drag-zoom-translate-x', '0px');
     this.style.setProperty('--drag-zoom-translate-y', '0px');
   };

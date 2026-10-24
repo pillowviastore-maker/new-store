@@ -4,7 +4,7 @@
 
   <div class="sb-f3-row">
     <div class="sb-f3-media">
-      <video data-sb-lazy data-src="{{ 'sb-feature-1.mp4' | file_url }}" data-poster="{{ 'sb-feature-1.jpg' | asset_url }}" muted loop playsinline autoplay preload="none" width="540" height="540" style="aspect-ratio: 1 / 1;" aria-label="Instant flat stomach"></video>
+      <video data-sb-lazy data-src="{{ 'sb-feature-1.mp4' | file_url }}" data-poster="{{ 'sb-feature-1.jpg' | asset_url }}" muted loop playsinline autoplay preload="none" width="540" height="540" aria-label="Instant flat stomach"></video>
     </div>
     <div class="sb-f3-text">
       <span class="sb-f3-num">01</span>
@@ -16,7 +16,7 @@
 
   <div class="sb-f3-row sb-f3-row--reverse">
     <div class="sb-f3-media">
-      <video data-sb-lazy data-src="{{ 'sb-feature-2.mp4' | file_url }}" data-poster="{{ 'sb-feature-2.jpg' | asset_url }}" muted loop playsinline autoplay preload="none" width="480" height="854" style="aspect-ratio: 9 / 16;" aria-label="Invisible under clothes"></video>
+      <video data-sb-lazy data-src="{{ 'sb-feature-2.mp4' | file_url }}" data-poster="{{ 'sb-feature-2.jpg' | asset_url }}" muted loop playsinline autoplay preload="none" width="480" height="854" aria-label="Invisible under clothes"></video>
     </div>
     <div class="sb-f3-text">
       <span class="sb-f3-num">02</span>
@@ -28,7 +28,7 @@
 
   <div class="sb-f3-row">
     <div class="sb-f3-media">
-      <video data-sb-lazy data-src="{{ 'sb-clip-2.mp4' | file_url }}" data-poster="{{ 'sb-clip-2.jpg' | asset_url }}" muted loop playsinline autoplay preload="none" width="640" height="480" style="aspect-ratio: 4 / 3;" aria-label="Stays put all day"></video>
+      <video data-sb-lazy data-src="{{ 'sb-clip-2.mp4' | file_url }}" data-poster="{{ 'sb-clip-2.jpg' | asset_url }}" muted loop playsinline autoplay preload="none" width="640" height="480" aria-label="Stays put all day"></video>
     </div>
     <div class="sb-f3-text">
       <span class="sb-f3-num">03</span>
@@ -39,30 +39,36 @@
   </div>
 </div>
 <style>
-  .sb-f3 { max-width: 1000px; width: 100%; margin: 28px auto; padding: 0 16px; box-sizing: border-box; font-family: var(--font-body--family); }
+  .sb-f3 { max-width: 1040px; width: 100%; margin: 28px auto; padding: 0 16px; box-sizing: border-box; font-family: var(--font-body--family); }
   .sb-f3-eyebrow { text-align: center; color: #A3426D; font-size: 12.5px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; margin: 0 0 8px; }
-  .sb-f3-title { text-align: center; font-size: 28px; font-weight: 800; color: #1A1A1A; line-height: 1.15; margin: 0 0 36px; }
-  .sb-f3-row { display: flex; align-items: center; gap: 44px; margin-bottom: 40px; }
-  .sb-f3-row--reverse { flex-direction: row-reverse; }
-  .sb-f3-row:last-child { margin-bottom: 0; }
-  .sb-f3-media { flex: 1 1 50%; min-width: 0; border-radius: 20px; background: linear-gradient(100deg, #f3eef1 30%, #fbf6f8 50%, #f3eef1 70%) 0 0 / 300% 100%; animation: sb-f3-skeleton 1.4s ease-in-out infinite; }
-  .sb-f3-media:has(video[src]) { animation: none; background: none; }
+  .sb-f3-title { text-align: center; font-size: 28px; font-weight: 800; color: #1A1A1A; line-height: 1.15; margin: 0 0 28px; }
+  .sb-f3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  .sb-f3-eyebrow, .sb-f3-title { grid-column: 1 / -1; }
+  .sb-f3-title { margin-bottom: 8px; }
+  .sb-f3-row { display: flex; flex-direction: column; gap: 0; background: #FBF3F7; border: 1px solid #F0DCE6; border-radius: 18px; overflow: hidden; transition: transform .25s, box-shadow .25s; }
+  .sb-f3-row:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(163, 66, 109, .12); }
+  .sb-f3-media { position: relative; aspect-ratio: 4 / 5; min-width: 0; overflow: hidden; background: linear-gradient(100deg, #f3eef1 30%, #fbf6f8 50%, #f3eef1 70%) 0 0 / 300% 100%; animation: sb-f3-skeleton 1.4s ease-in-out infinite; }
+  .sb-f3-media:has(video[src]) { animation: none; background: #f3eef1; }
   @keyframes sb-f3-skeleton { to { background-position: -100% 0; } }
-  .sb-f3-media img, .sb-f3-media video { width: 100%; height: auto; display: block; border-radius: 20px; box-shadow: 0 10px 30px rgba(163,66,109,.14); background: #f3eef1; object-fit: cover; }
-  .sb-f3-text { flex: 1 1 50%; min-width: 0; }
-  .sb-f3-num { display: inline-block; font-size: 13px; font-weight: 800; color: #fff; background: #A3426D; width: 30px; height: 30px; line-height: 30px; text-align: center; border-radius: 50%; margin-bottom: 12px; }
-  .sb-f3-kicker { color: #A3426D; font-size: 12.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 6px; }
-  .sb-f3-head { font-size: 26px; font-weight: 800; color: #1A1A1A; line-height: 1.15; margin: 0 0 12px; }
-  .sb-f3-body { font-size: 16px; color: #555; line-height: 1.6; margin: 0; }
-  @media (min-width: 769px) {
-    .sb-f3-media video { max-height: 560px; }
-  }
+  .sb-f3-media img, .sb-f3-media video { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; }
+  .sb-f3-text { padding: 16px 18px 20px; min-width: 0; }
+  .sb-f3-num { display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; background: #A3426D; width: 26px; height: 26px; border-radius: 50%; margin-bottom: 10px; }
+  .sb-f3-kicker { color: #A3426D; font-size: 11.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 4px; }
+  .sb-f3-head { font-size: 21px; font-weight: 800; color: #1A1A1A; line-height: 1.15; margin: 0 0 8px; }
+  .sb-f3-body { font-size: 14.5px; color: #555; line-height: 1.55; margin: 0; }
   @media (max-width: 768px) {
-    .sb-f3-title { font-size: 23px; margin-bottom: 26px; }
-    .sb-f3-row, .sb-f3-row--reverse { flex-direction: column; gap: 16px; margin-bottom: 36px; text-align: left; }
-    .sb-f3-head { font-size: 22px; }
-    .sb-f3-body { font-size: 15px; }
+    .sb-f3 { grid-template-columns: 1fr; gap: 14px; }
+    .sb-f3-title { font-size: 23px; margin-bottom: 6px; }
+    .sb-f3-row { flex-direction: row; align-items: stretch; }
+    .sb-f3-row--reverse { flex-direction: row-reverse; }
+    .sb-f3-media { flex: 0 0 40%; aspect-ratio: auto; min-height: 210px; }
+    .sb-f3-text { flex: 1 1 auto; padding: 14px 14px 16px; }
+    .sb-f3-num { width: 22px; height: 22px; font-size: 11px; margin-bottom: 6px; }
+    .sb-f3-kicker { font-size: 10.5px; }
+    .sb-f3-head { font-size: 18px; margin-bottom: 6px; }
+    .sb-f3-body { font-size: 13.5px; line-height: 1.5; }
   }
+  @media (prefers-reduced-motion: reduce) { .sb-f3-row { transition: none; } }
 </style>
 <script>
   /* Lithella video kit (shared, loads once): autoplay when allowed; if blocked (iPhone low power mode), show a play button and let one tap anywhere start every visible video */

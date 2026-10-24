@@ -3,20 +3,34 @@
   assign data = reviews_product.metafields.judgeme.review_widget_data.value
   assign rating = reviews_product.metafields.reviews.rating.value
   assign rating_count = reviews_product.metafields.reviews.rating_count
+  assign photo_count = 0
+  for review in data.photo_gallery
+    assign photo_count = photo_count | plus: 1
+  endfor
 -%}
 
 {%- if data != blank -%}
   <div class="sbrc">
-    <div class="sbrc-head">
-      {%- if rating != blank -%}
-        <div class="sbrc-rating">&#9733;&#9733;&#9733;&#9733;&#9733; <span>{{ rating.rating | round: 1 }}/5 · {{ rating_count }} reviews</span></div>
-      {%- endif -%}
-      <h2 class="sbrc-title">{{ section.settings.title }}</h2>
-    </div>
+    <button type="button" class="sbrc-summary" data-sbrc-open aria-haspopup="dialog">
+      <span class="sbrc-summary-score">{{ rating.rating | round: 1 | default: '5.0' }}</span>
+      <span class="sbrc-summary-main">
+        <span class="sbrc-summary-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span class="sbrc-summary-title">{{ section.settings.title }}</span>
+        <span class="sbrc-summary-sub">Based on {{ rating_count }} reviews{% if photo_count > 0 %} · {{ photo_count }} with photos{% endif %}</span>
+      </span>
+      <span class="sbrc-summary-cta">Read reviews <span aria-hidden="true">&rsaquo;</span></span>
+    </button>
 
-    <div class="sbrc-viewport">
-      <button type="button" class="sbrc-arrow sbrc-arrow--prev" data-sbrc-prev aria-label="Previous reviews">&#8249;</button>
-      <div class="sbrc-track" data-sbrc-track>
+    <dialog class="sbrc-dialog" data-sbrc-dialog aria-labelledby="sbrc-dialog-title-{{ section.id }}">
+      <div class="sbrc-dialog-head">
+        <div>
+          <p class="sbrc-dialog-title" id="sbrc-dialog-title-{{ section.id }}">{{ section.settings.title }}</p>
+          <p class="sbrc-dialog-sub"><span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span> {{ rating.rating | round: 1 }}/5 · {{ rating_count }} reviews</p>
+        </div>
+        <button type="button" class="sbrc-dialog-close" data-sbrc-close aria-label="Close reviews">&times;</button>
+      </div>
+      <div class="sbrc-list" data-sbrc-list></div>
+      <template data-sbrc-template>
         {%- assign shown = 0 -%}
         {%- for review in data.photo_gallery -%}
           {%- assign review_text = review.body_html | strip_html | strip -%}
@@ -32,106 +46,90 @@
             {%- assign shown = shown | plus: 1 -%}
           {%- endif -%}
         {%- endfor -%}
-      </div>
-      <button type="button" class="sbrc-arrow sbrc-arrow--next" data-sbrc-next aria-label="Next reviews">&#8250;</button>
-    </div>
+      </template>
+    </dialog>
   </div>
 
   <style>
-    .sbrc { padding: 40px 0 44px; max-width: 1160px; margin: 0 auto; font-family: var(--font-body--family); }
-    .sbrc-head { padding: 0 16px; text-align: center; margin: 0 0 22px; }
-    .sbrc-rating { color: #F5A623; font-size: 17px; letter-spacing: 2px; margin: 0 0 6px; }
-    .sbrc-rating span { color: #333; font-size: 14px; font-weight: 600; letter-spacing: 0; margin-left: 6px; }
-    .sbrc-title { font-size: 30px; font-weight: 800; color: #1A1A1A; margin: 0; line-height: 1.15; }
-    .sbrc-viewport { position: relative; }
-    .sbrc-track { display: flex; align-items: flex-start; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 16px; padding: 4px 16px 8px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-    .sbrc-track::-webkit-scrollbar { display: none; }
-    .sbrc-track.is-live { scroll-snap-type: none; }
-    .sbrc-card { flex: 0 0 78%; scroll-snap-align: start; background: #fff; border: 1.5px solid #F0DCE6; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
-    .sbrc-img { aspect-ratio: 1 / 1; overflow: hidden; background: linear-gradient(100deg, #f3eef1 30%, #fbf6f8 50%, #f3eef1 70%) 0 0 / 300% 100%; animation: sbrc-skeleton 1.4s ease-in-out infinite; }
-    @keyframes sbrc-skeleton { to { background-position: -100% 0; } }
-    .sbrc-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .sbrc-body { padding: 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
-    .sbrc-stars { color: #F5A623; font-size: 14px; letter-spacing: 1px; }
+    .sbrc { max-width: 720px; margin: 0 auto; padding: 28px 16px; font-family: var(--font-body--family); }
+    .sbrc-summary { display: flex; align-items: center; gap: 14px; width: 100%; padding: 16px 18px; border: 1.5px solid #F0DCE6; border-radius: 16px; background: #FBF3F7; color: #1A1A1A; font: inherit; text-align: left; cursor: pointer; transition: border-color .2s, box-shadow .2s, transform .15s; }
+    .sbrc-summary:hover { border-color: #A3426D; box-shadow: 0 10px 24px rgba(163, 66, 109, .12); transform: translateY(-1px); }
+    .sbrc-summary:focus-visible { outline: 3px solid #A3426D; outline-offset: 3px; }
+    .sbrc-summary-score { flex: 0 0 auto; font-family: var(--font-heading--family); font-size: 40px; font-weight: 700; line-height: 1; color: #A3426D; }
+    .sbrc-summary-main { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+    .sbrc-summary-stars { color: #F5A623; font-size: 15px; letter-spacing: 2px; }
+    .sbrc-summary-title { font-size: 16px; font-weight: 800; }
+    .sbrc-summary-sub { font-size: 12.5px; color: #6F5F66; }
+    .sbrc-summary-cta { flex: 0 0 auto; padding: 10px 14px; border-radius: 10px; background: #A3426D; color: #fff; font-size: 13.5px; font-weight: 800; white-space: nowrap; }
+    .sbrc-dialog { width: min(100vw, 640px); max-width: 100vw; max-height: 88vh; margin: auto auto 0; padding: 0; border: 0; border-radius: 20px 20px 0 0; background: #fff; color: #1A1A1A; font-family: var(--font-body--family); box-shadow: 0 -12px 40px rgba(42, 26, 35, .25); overflow: hidden; }
+    .sbrc-dialog[open] { display: flex; flex-direction: column; animation: sbrc-up .3s cubic-bezier(.2, 1, .3, 1); }
+    .sbrc-dialog::backdrop { background: rgba(42, 26, 35, .5); }
+    @keyframes sbrc-up { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+    @media (min-width: 750px) { .sbrc-dialog { margin: auto; border-radius: 20px; max-height: 84vh; } }
+    .sbrc-dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 18px 12px; border-bottom: 1px solid #F0DCE6; }
+    .sbrc-dialog-title { margin: 0; font-family: var(--font-heading--family); font-size: 24px; font-weight: 700; line-height: 1.1; }
+    .sbrc-dialog-sub { margin: 4px 0 0; font-size: 13px; color: #4A3B42; }
+    .sbrc-dialog-sub span { color: #F5A623; letter-spacing: 1px; }
+    .sbrc-dialog-close { flex: 0 0 auto; width: 38px; height: 38px; border: 0; border-radius: 50%; background: #FBF3F7; font-size: 24px; line-height: 1; color: #4A3B42; cursor: pointer; }
+    .sbrc-list { overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 6px 18px 22px; overscroll-behavior: contain; }
+    .sbrc-card { display: flex; gap: 12px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #F3E7ED; }
+    .sbrc-card:last-child { border-bottom: 0; }
+    .sbrc-thumb { flex: 0 0 64px; width: 64px; height: 64px; padding: 0; border: 0; border-radius: 10px; overflow: hidden; background: #f3eef1; cursor: zoom-in; transition: width .25s, height .25s, flex-basis .25s; }
+    .sbrc-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .sbrc-card.is-open { flex-direction: column; }
+    .sbrc-card.is-open .sbrc-thumb { flex-basis: auto; width: 100%; height: auto; cursor: zoom-out; }
+    .sbrc-card.is-open .sbrc-thumb img { height: auto; max-height: 60vh; object-fit: contain; }
+    .sbrc-body { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+    .sbrc-stars { color: #F5A623; font-size: 13px; letter-spacing: 1px; }
     .sbrc-star-off { color: #E2D7DD; }
-    .sbrc-text { font-size: 14px; color: #444; line-height: 1.5; margin: 0; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+    .sbrc-text { font-size: 14px; color: #444; line-height: 1.5; margin: 0; }
     .sbrc-text p { margin: 0; }
-    .sbrc-meta { margin-top: auto; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 13px; font-weight: 700; color: #1A1A1A; }
+    .sbrc-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 12.5px; font-weight: 700; color: #1A1A1A; }
     .sbrc-source { font-size: 10.5px; font-weight: 600; color: #6f5f66; background: #F7EDF2; padding: 2px 7px; border-radius: 10px; }
-    .sbrc-arrow { display: none; position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid #A3426D; background: #fff; color: #A3426D; font-size: 22px; line-height: 1; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.08); }
-    .sbrc-arrow--prev { left: 4px; }
-    .sbrc-arrow--next { right: 4px; }
-    @media (min-width: 560px) { .sbrc-card { flex-basis: 44%; } }
-    @media (min-width: 980px) {
-      .sbrc-card { flex-basis: calc((100% - 3 * 14px) / 4); }
-      .sbrc-track { padding: 4px 56px 8px; scroll-padding: 0 56px; }
-      .sbrc-arrow { display: block; }
+    @media (max-width: 480px) {
+      .sbrc-summary { flex-wrap: wrap; }
+      .sbrc-summary-cta { flex-basis: 100%; text-align: center; }
     }
+    @media (prefers-reduced-motion: reduce) { .sbrc-dialog[open] { animation: none; } }
   </style>
 
   <script>
     (function () {
       var root = document.currentScript.previousElementSibling.previousElementSibling;
-      var track = root && root.querySelector('[data-sbrc-track]');
-      if (!track) return;
-      function step() { var card = track.firstElementChild; return card ? card.getBoundingClientRect().width + 14 : 300; }
-      root.querySelector('[data-sbrc-prev]').addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
-      root.querySelector('[data-sbrc-next]').addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
-      // Live carousel: the cards drift slowly and endlessly (a cloned set makes the loop seamless).
-      // Hover, touch or the arrows pause it for a moment; reduced-motion users get the static, swipeable row.
-      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      var originals = Array.prototype.slice.call(track.children);
-      if (originals.length < 2) return;
-      originals.forEach(function (card) {
-        var clone = card.cloneNode(true);
-        clone.setAttribute('aria-hidden', 'true');
-        clone.querySelectorAll('a, button').forEach(function (el) { el.tabIndex = -1; });
-        track.appendChild(clone);
+      var dialog = root && root.querySelector('[data-sbrc-dialog]');
+      if (!dialog || typeof dialog.showModal !== 'function') return;
+      var list = dialog.querySelector('[data-sbrc-list]');
+      var template = dialog.querySelector('[data-sbrc-template]');
+      // Reviews and their photos load only when the widget is opened.
+      root.querySelector('[data-sbrc-open]').addEventListener('click', function () {
+        if (!list.children.length) list.appendChild(template.content.cloneNode(true));
+        dialog.showModal();
+        list.scrollTop = 0;
       });
-      track.classList.add('is-live');
-      var SPEED = 32; // px per second
-      var pos = track.scrollLeft, last = 0, visible = false, hover = false, holdUntil = 0;
-      function loopWidth() { return track.children[originals.length].offsetLeft - track.children[0].offsetLeft; }
-      function hold(ms) { holdUntil = Date.now() + ms; }
-      track.addEventListener('mouseenter', function () { hover = true; });
-      track.addEventListener('mouseleave', function () { hover = false; pos = track.scrollLeft; });
-      ['touchstart', 'pointerdown', 'wheel'].forEach(function (type) {
-        track.addEventListener(type, function () { hold(3500); }, { passive: true });
+      dialog.addEventListener('click', function (e) {
+        if (e.target === dialog || e.target.closest('[data-sbrc-close]')) { dialog.close(); return; }
+        var thumb = e.target.closest('[data-sbrc-thumb]');
+        if (!thumb) return;
+        var card = thumb.closest('.sbrc-card');
+        var img = thumb.querySelector('img');
+        if (img.dataset.full && img.src !== img.dataset.full) img.src = img.dataset.full;
+        card.classList.toggle('is-open');
       });
-      track.addEventListener('scroll', function () { if (Date.now() < holdUntil) pos = track.scrollLeft; }, { passive: true });
-      root.querySelectorAll('[data-sbrc-prev], [data-sbrc-next]').forEach(function (b) { b.addEventListener('click', function () { hold(2500); }); });
-      if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }).observe(track); else visible = true;
-      function frame(t) {
-        var dt = last ? Math.min(t - last, 64) : 0;
-        last = t;
-        if (visible && !hover && !document.hidden && Date.now() >= holdUntil) {
-          var width = loopWidth();
-          pos += SPEED * dt / 1000;
-          if (width > 0 && pos >= width) pos -= width;
-          track.scrollLeft = pos;
-        } else if (Date.now() < holdUntil || hover) {
-          var w = loopWidth();
-          if (w > 0 && track.scrollLeft >= w) { track.scrollLeft -= w; }
-          pos = track.scrollLeft;
-        }
-        requestAnimationFrame(frame);
-      }
-      requestAnimationFrame(frame);
     })();
   </script>
 {%- endif -%}
 
 {% schema %}
 {
-  "name": "Sculpt: reviews carousel",
+  "name": "Sculpt: reviews widget",
   "tag": "section",
   "class": "sb-section",
   "settings": [
     { "type": "product", "id": "product", "label": "Product", "info": "Defaults to the current product." },
     { "type": "text", "id": "title", "label": "Heading", "default": "What customers are saying" },
-    { "type": "range", "id": "limit", "label": "Reviews to show", "min": 4, "max": 15, "step": 1, "default": 12 },
+    { "type": "range", "id": "limit", "label": "Reviews to show", "min": 4, "max": 60, "step": 1, "default": 30 },
     { "type": "checkbox", "id": "show_source", "label": "Label imported reviews", "default": true, "info": "Shows a small label on reviews Judge.me marks as collected from another provider." }
   ],
-  "presets": [{ "name": "Sculpt: reviews carousel", "category": "Sculpt" }]
+  "presets": [{ "name": "Sculpt: reviews widget", "category": "Sculpt" }]
 }
 {% endschema %}
