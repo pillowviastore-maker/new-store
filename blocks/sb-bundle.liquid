@@ -18,9 +18,11 @@
         assign qty = block.settings[qty_key]
         assign compare = unit_price | times: qty
         assign percent = block.settings[percent_key] | times: 1.0
-        assign discount = compare | times: percent | divided_by: 100.0 | round
-        assign total = compare | minus: discount
-        assign each = total | divided_by: qty
+        # Shopify rounds the discount on each unit, so price one unit and multiply.
+        assign unit_discount = unit_price | times: percent | divided_by: 100.0 | round
+        assign each = unit_price | minus: unit_discount
+        assign total = each | times: qty
+        assign discount = compare | minus: total
         assign save = discount | times: 100.0 | divided_by: compare | round
         assign selected = false
         if block.settings.default_tier == i
@@ -250,12 +252,12 @@
     { "type": "header", "content": "Offer 1" },
     { "type": "text", "id": "tier_1_title", "label": "Title", "default": "BUY 1 GET 1 FREE" },
     { "type": "number", "id": "tier_1_qty", "label": "Items", "default": 2 },
-    { "type": "text", "id": "tier_1_percent", "label": "Discount %", "default": "50", "info": "Must match the automatic discount set up in Shopify." },
+    { "type": "text", "id": "tier_1_percent", "label": "Discount %", "default": "50.01", "info": "Must match the automatic discount set up in Shopify." },
     { "type": "text", "id": "tier_1_badge", "label": "Badge" },
     { "type": "header", "content": "Offer 2" },
     { "type": "text", "id": "tier_2_title", "label": "Title", "default": "BUY 2 GET 2 FREE" },
     { "type": "number", "id": "tier_2_qty", "label": "Items", "default": 4 },
-    { "type": "text", "id": "tier_2_percent", "label": "Discount %", "default": "70" },
+    { "type": "text", "id": "tier_2_percent", "label": "Discount %", "default": "70.02" },
     { "type": "text", "id": "tier_2_badge", "label": "Badge", "default": "MOST POPULAR ❤️" },
     { "type": "header", "content": "Offer 3" },
     { "type": "text", "id": "tier_3_title", "label": "Title", "default": "BUY 3 GET 3 FREE" },
