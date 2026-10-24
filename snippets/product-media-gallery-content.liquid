@@ -27,6 +27,10 @@
 {%- liquid
   assign selected_product = closest.product
   assign selected_variant_media = selected_product.selected_or_first_available_variant.featured_media
+  # Lead with the product's own first photo until a shopper actually picks a variant (?variant= in the URL).
+  if selected_product.selected_variant == blank and selected_product.featured_media != blank
+    assign selected_variant_media = selected_product.featured_media
+  endif
 
   if block_settings.hide_variants and selected_variant_media == blank
     assign selected_variant_media = selected_product.featured_media

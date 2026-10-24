@@ -1,0 +1,77 @@
+{%- doc -%}
+  Welcome popup shown once to first-time visitors, with the three-women photo and a newsletter sign-up.
+  It reopens after a sign-up so the visitor sees the confirmation. Never on cart or checkout.
+{%- enddoc -%}
+{%- unless template.name == 'cart' -%}
+  {%- form 'customer', id: 'sb-welcome-form', class: 'sbw-form' -%}
+    {%- assign sbw_posted = form.posted_successfully? -%}
+    <dialog class="sbw" data-sbw{% if sbw_posted %} data-sbw-posted{% endif %} aria-labelledby="sbw-title">
+      <button type="button" class="sbw-close" data-sbw-close aria-label="Close">&times;</button>
+      <img class="sbw-img" src="{{ 'sb-welcome.jpg' | asset_url }}" width="900" height="653" alt="Three women wearing the Sculpt Brief in beige, fuchsia pink and black" loading="lazy">
+      <div class="sbw-body">
+        {%- if sbw_posted -%}
+          <h2 class="sbw-title" id="sbw-title">You're on the list!</h2>
+          <p class="sbw-text">Thanks for joining. We'll email you new colors and member-only offers first.</p>
+          <a class="sbw-btn" href="{{ all_products['sculpt-brief'].url | default: routes.all_products_collection_url }}#sb-bundle" data-sbw-go>See the bundle deals</a>
+        {%- else -%}
+          <p class="sbw-eyebrow">Welcome to Lithella</p>
+          <h2 class="sbw-title" id="sbw-title">Smooth support for the belly that stays</h2>
+          <p class="sbw-text">Join our list for early access to new colors and member-only offers.</p>
+          <input type="hidden" name="contact[tags]" value="newsletter, welcome-popup">
+          <label class="visually-hidden" for="sbw-email">Email</label>
+          <input class="sbw-input" id="sbw-email" type="email" name="contact[email]" placeholder="Enter your email" autocomplete="email" required>
+          {%- if form.errors -%}<p class="sbw-error" role="alert">{{ form.errors.messages['email'] | default: 'Please check your email address.' }}</p>{%- endif -%}
+          <button type="submit" class="sbw-btn">Join and shop</button>
+          <a class="sbw-later" href="{{ all_products['sculpt-brief'].url | default: routes.all_products_collection_url }}#sb-bundle" data-sbw-go>No thanks, take me to the deals</a>
+          <p class="sbw-fine">Unsubscribe anytime. See our <a href="{{ shop.privacy_policy.url }}">privacy policy</a>.</p>
+        {%- endif -%}
+      </div>
+    </dialog>
+  {%- endform -%}
+
+  <style>
+    .sbw { width: min(92vw, 420px); max-height: 92vh; padding: 0; border: 0; border-radius: 20px; overflow: auto; box-shadow: 0 24px 60px rgba(42, 26, 35, .35); font-family: var(--font-body--family); color: #1A1A1A; text-align: center; background: #fff; }
+    .sbw::backdrop { background: rgba(42, 26, 35, .55); }
+    .sbw[open] { animation: sbw-in .35s cubic-bezier(.2, 1.1, .4, 1); }
+    @keyframes sbw-in { from { opacity: 0; transform: translateY(16px) scale(.97); } to { opacity: 1; transform: none; } }
+    .sbw-close { position: absolute; top: 8px; right: 10px; z-index: 1; width: 34px; height: 34px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .9); font-size: 24px; line-height: 1; color: #4A3B42; cursor: pointer; }
+    .sbw-img { display: block; width: 100%; height: auto; aspect-ratio: 900 / 653; object-fit: cover; background: #FFF0E9; }
+    .sbw-body { display: grid; gap: 10px; padding: 18px 22px 20px; }
+    .sbw-eyebrow { margin: 0; font-size: 11.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #A3426D; }
+    .sbw-title { margin: 0; font-family: var(--font-heading--family); font-weight: var(--font-heading--weight); font-size: 27px; line-height: 1.1; }
+    .sbw-text { margin: 0; font-size: 14.5px; color: #4A3B42; line-height: 1.5; }
+    .sbw-input { width: 100%; padding: 13px 14px; border: 1.5px solid #E3CFD9; border-radius: 10px; font: inherit; font-size: 16px; }
+    .sbw-input:focus { outline: none; border-color: #A3426D; box-shadow: 0 0 0 3px rgba(163, 66, 109, .15); }
+    .sbw-btn { display: block; width: 100%; padding: 14px; border: 0; border-radius: 10px; background: #A3426D; color: #fff; font: inherit; font-size: 15.5px; font-weight: 800; letter-spacing: .03em; text-decoration: none; cursor: pointer; transition: background .2s, transform .15s; }
+    .sbw-btn:hover { background: #8A3459; color: #fff; transform: translateY(-1px); }
+    .sbw-later { font-size: 13px; color: #6F5F66; text-decoration: underline; }
+    .sbw-error { margin: 0; color: #B42318; font-size: 13px; }
+    .sbw-fine { margin: 0; font-size: 11px; color: #8A7A82; }
+    .sbw-fine a { color: inherit; }
+    @media (prefers-reduced-motion: reduce) { .sbw[open] { animation: none; } }
+  </style>
+
+  <script>
+    (function () {
+      var dialog = document.querySelector('[data-sbw]');
+      if (!dialog || typeof dialog.showModal !== 'function') return;
+      var KEY = 'lithella-welcome-seen';
+      function seen() { try { return localStorage.getItem(KEY) === '1'; } catch (e) { return true; } }
+      function mark() {
+        try { localStorage.setItem(KEY, '1'); sessionStorage.setItem('lithella-exit-shown', '1'); } catch (e) {}
+      }
+      function open() {
+        if (document.querySelector('dialog[open]') || document.querySelector('#cart-drawer[open]')) return;
+        mark();
+        dialog.querySelector('.sbw-img').loading = 'eager';
+        dialog.showModal();
+      }
+      dialog.addEventListener('click', function (e) {
+        if (e.target === dialog || e.target.closest('[data-sbw-close]') || e.target.closest('[data-sbw-go]')) dialog.close();
+      });
+      var errored = !!dialog.querySelector('.sbw-error');
+      if (dialog.hasAttribute('data-sbw-posted') || errored) { open(); return; }
+      if (!seen()) setTimeout(open, 1200);
+    })();
+  </script>
+{%- endunless -%}

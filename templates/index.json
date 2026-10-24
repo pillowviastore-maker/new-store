@@ -3,26 +3,11 @@
     "hero": {
       "type": "sb-hero",
       "settings": {
-        "product": "sculpt-brief",
-        "image": "shopify://shop_images/hf_20260901_132006_386d39af-1e77-4e65-97f6-16cc602a2872.png"
+        "product": "sculpt-brief"
       }
     },
     "benefits": {
       "type": "sb-home-benefits",
-      "settings": {}
-    },
-    "reviews": {
-      "type": "sb-reviews-carousel",
-      "settings": {}
-    },
-    "videos": {
-      "type": "sb-video-carousel",
-      "settings": {
-        "title": "See it in action"
-      }
-    },
-    "compare": {
-      "type": "sb-compare",
       "settings": {}
     },
     "final": {
@@ -33,9 +18,6 @@
   "order": [
     "hero",
     "benefits",
-    "reviews",
-    "videos",
-    "compare",
     "final"
   ]
 }

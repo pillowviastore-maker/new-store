@@ -10,7 +10,7 @@
   endfor
 -%}
 
-<div class="sbb" id="sb-bundle" data-sbb data-color-index="{{ color_option_index }}">
+<div class="sbb" id="sb-bundle" data-sbb data-color-index="{{ color_option_index }}" data-default-color="{{ block.settings.default_color | escape }}" data-default-size="{{ block.settings.default_size | escape }}">
   {%- if block.settings.heading != blank -%}
     <div class="sbb-head"><span>{{ block.settings.heading }}</span></div>
   {%- endif -%}
@@ -251,6 +251,7 @@
     var sticky = root.querySelector('[data-sbb-sticky]');
     var express = root.querySelector('[data-sbb-express]');
     var colorIndex = parseInt(root.dataset.colorIndex, 10);
+    var defaults = { color: root.dataset.defaultColor || '', size: root.dataset.defaultSize || '' };
     var labelText = atcLabel.textContent;
     var toastTimer;
 
@@ -320,7 +321,9 @@
         row.querySelector('.sbb-row-num').textContent = '#' + (n + 1);
         var values = saved && saved[n];
         row.querySelectorAll('[data-sbb-option]').forEach(function (select) {
-          if (values && values[+select.dataset.sbbOption]) select.value = values[+select.dataset.sbbOption];
+          var value = values && values[+select.dataset.sbbOption];
+          if (!value) value = select.hasAttribute('data-sbb-color') ? defaults.color : defaults.size;
+          if (value && Array.prototype.some.call(select.options, function (o) { return o.value === value; })) select.value = value;
         });
         (function (row) {
           row.querySelectorAll('[data-sbb-swatch]').forEach(function (s) {
@@ -504,6 +507,8 @@
     { "type": "text", "id": "sticky_label", "label": "Mobile sticky button label", "default": "Choose colors" },
     { "type": "checkbox", "id": "show_express", "label": "Show Buy it now button", "default": true, "info": "Adds the bundle to the cart and goes straight to checkout, where Shop Pay, Apple Pay and Google Pay appear when they are turned on in Settings > Payments." },
     { "type": "textarea", "id": "swatch_colors", "label": "Color swatches", "info": "One per line: Color name: #hex. Used when the color has no swatch in Shopify.", "default": "Black: #111111\nBeige: #D8B99A\nNavy: #1F2A44\nLilac: #C7A6D9\nPurple: #5B2A86\nFuchsia pink: #D6247A" },
+    { "type": "text", "id": "default_color", "label": "Preselected color", "default": "Black", "info": "Leave empty to make shoppers pick a color." },
+    { "type": "text", "id": "default_size", "label": "Preselected size", "default": "M", "info": "Leave empty to make shoppers pick a size." },
     { "type": "range", "id": "default_tier", "label": "Preselected offer", "min": 1, "max": 3, "step": 1, "default": 2 },
     { "type": "header", "content": "Offer 1" },
     { "type": "text", "id": "tier_1_title", "label": "Title", "default": "BUY 1 GET 1 FREE" },
