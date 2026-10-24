@@ -39,6 +39,10 @@
       "settings": {
         "label": "Order Now"
       }
+    },
+    "reviews": {
+      "type": "sb-reviews-carousel",
+      "settings": {}
     }
   },
   "order": [
@@ -47,6 +51,7 @@
     "features",
     "cta_1",
     "compare",
+    "reviews",
     "guarantee",
     "faq",
     "cta_2"

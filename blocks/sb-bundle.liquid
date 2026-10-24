@@ -21,6 +21,7 @@
         assign discount = compare | times: percent | divided_by: 100.0 | round
         assign total = compare | minus: discount
         assign each = total | divided_by: qty
+        assign save = discount | times: 100.0 | divided_by: compare | round
         assign selected = false
         if block.settings.default_tier == i
           assign selected = true
@@ -34,7 +35,7 @@
           <input type="radio" name="sbb-tier-{{ block.id }}" value="{{ qty }}" {% if selected %}checked{% endif %}>
           <span class="sbb-radio" aria-hidden="true"></span>
           <span class="sbb-tier-text">
-            <span class="sbb-tier-title">{{ block.settings[title_key] }}</span>
+            <span class="sbb-tier-title">{{ block.settings[title_key] }}{% if save > 0 %} <span class="sbb-save">Save {{ save }}%</span>{% endif %}</span>
             <span class="sbb-tier-sub">Only {{ each | money }} each</span>
           </span>
           <span class="sbb-tier-price">
@@ -54,11 +55,40 @@
     <div class="sbb-row">
       <span class="sbb-row-num"></span>
       {%- for option in product.options_with_values -%}
-        <select class="sbb-select" data-sbb-option="{{ forloop.index0 }}" aria-label="{{ option.name }}">
-          {%- for value in option.values -%}
-            <option value="{{ value | escape }}">{{ value }}</option>
-          {%- endfor -%}
-        </select>
+        {%- assign option_name = option.name | downcase -%}
+        {%- if option_name == 'color' or option_name == 'colour' -%}
+          <div class="sbb-swatches" role="radiogroup" aria-label="{{ option.name }}">
+            {%- for value in option.values -%}
+              {%- liquid
+                assign swatch = value.swatch.color
+                if value.swatch.color == blank
+                  assign key = value | downcase | append: ':'
+                  assign pairs = block.settings.swatch_colors | newline_to_br | split: '<br />'
+                  assign swatch = '#cccccc'
+                  for pair in pairs
+                    assign pair_clean = pair | strip
+                    assign pair_key = pair_clean | downcase | split: ':' | first | strip | append: ':'
+                    if pair_key == key
+                      assign swatch = pair_clean | split: ':' | last | strip
+                    endif
+                  endfor
+                endif
+              -%}
+              <button type="button" class="sbb-swatch" data-sbb-swatch="{{ value | escape }}" style="--swatch: {{ swatch }};" title="{{ value | escape }}" aria-label="{{ value | escape }}"></button>
+            {%- endfor -%}
+          </div>
+          <select class="sbb-select" data-sbb-option="{{ forloop.index0 }}" data-sbb-color hidden aria-hidden="true" tabindex="-1">
+            {%- for value in option.values -%}
+              <option value="{{ value | escape }}">{{ value }}</option>
+            {%- endfor -%}
+          </select>
+        {%- else -%}
+          <select class="sbb-select" data-sbb-option="{{ forloop.index0 }}" aria-label="{{ option.name }}">
+            {%- for value in option.values -%}
+              <option value="{{ value | escape }}">{{ value }}</option>
+            {%- endfor -%}
+          </select>
+        {%- endif -%}
       {%- endfor -%}
     </div>
   </template>
@@ -74,7 +104,7 @@
 </div>
 
 <style>
-  .sbb { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; width: 100%; }
+  .sbb { font-family: var(--font-body--family); width: 100%; }
   .sbb-head { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: 14px; font-weight: 700; color: #1A1A1A; text-align: center; }
   .sbb-head::before, .sbb-head::after { content: ""; flex: 1; height: 1px; background: #E5DCE1; }
   .sbb-tiers { display: flex; flex-direction: column; gap: 12px; }
@@ -86,6 +116,7 @@
   .sbb-tier.is-active .sbb-radio::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: #B5557F; }
   .sbb-tier-text { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
   .sbb-tier-title { font-size: 15px; font-weight: 800; color: #1A1A1A; letter-spacing: .2px; }
+  .sbb-save { display: inline-block; vertical-align: middle; margin-left: 6px; padding: 2px 7px; border-radius: 6px; background: #FBE3EE; color: #B5557F; font-size: 11px; font-weight: 800; letter-spacing: .3px; }
   .sbb-tier-sub { font-size: 12.5px; color: #6B5E65; }
   .sbb-tier-price { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
   .sbb-now { font-size: 17px; font-weight: 800; color: #1A1A1A; }
@@ -95,6 +126,10 @@
   .sbb-items:empty { display: none; }
   .sbb-row { display: flex; align-items: center; gap: 8px; }
   .sbb-row-num { font-size: 12.5px; font-weight: 700; color: #6B5E65; width: 22px; flex-shrink: 0; }
+  .sbb-swatches { display: flex; flex-wrap: wrap; gap: 6px; flex: 0 1 auto; }
+  .sbb-swatch { width: 24px; height: 24px; padding: 0; border-radius: 50%; border: 1px solid rgba(0,0,0,.18); background: var(--swatch); cursor: pointer; box-shadow: 0 0 0 2px #fff; transition: box-shadow .15s, transform .15s; }
+  .sbb-swatch:hover { transform: scale(1.08); }
+  .sbb-swatch.is-active { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #B5557F; }
   .sbb-select { flex: 1; min-width: 0; padding: 9px 10px; font-size: 14px; border: 1px solid #E5DCE1; border-radius: 8px; background: #fff; color: #1A1A1A; font-family: inherit; }
   .sbb-atc { display: block; width: 100%; margin: 16px 0 0; padding: 17px 20px; border: 0; border-radius: 8px; background: rgb(3, 211, 137); color: #fff; font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; cursor: pointer; font-family: inherit; transition: filter .15s; }
   .sbb-atc:hover { filter: brightness(.95); }
@@ -126,8 +161,27 @@
         row.querySelectorAll('[data-sbb-option]').forEach(function (select) {
           select.value = opts[+select.dataset.sbbOption];
         });
+        bindSwatches(row);
         items.appendChild(row);
       }
+    }
+
+    function bindSwatches(row) {
+      var select = row.querySelector('[data-sbb-color]');
+      if (!select) return;
+      var swatches = row.querySelectorAll('[data-sbb-swatch]');
+      function sync() {
+        swatches.forEach(function (s) {
+          var on = s.dataset.sbbSwatch === select.value;
+          s.classList.toggle('is-active', on);
+          s.setAttribute('aria-checked', on ? 'true' : 'false');
+        });
+      }
+      swatches.forEach(function (s) {
+        s.setAttribute('role', 'radio');
+        s.addEventListener('click', function () { select.value = s.dataset.sbbSwatch; sync(); });
+      });
+      sync();
     }
 
     function readRow(row) {
@@ -191,6 +245,7 @@
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "Try it risk-free — 90-day guarantee" },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Add to cart" },
+    { "type": "textarea", "id": "swatch_colors", "label": "Color swatches", "info": "One per line: Color name: #hex. Used when the color has no swatch in Shopify.", "default": "Black: #111111\nBeige: #D8B99A\nNavy: #1F2A44\nLilac: #C7A6D9\nPurple: #5B2A86\nFuchsia pink: #D6247A" },
     { "type": "range", "id": "default_tier", "label": "Preselected offer", "min": 1, "max": 3, "step": 1, "default": 2 },
     { "type": "header", "content": "Offer 1" },
     { "type": "text", "id": "tier_1_title", "label": "Title", "default": "BUY 1 GET 1 FREE" },
@@ -200,12 +255,12 @@
     { "type": "header", "content": "Offer 2" },
     { "type": "text", "id": "tier_2_title", "label": "Title", "default": "BUY 2 GET 2 FREE" },
     { "type": "number", "id": "tier_2_qty", "label": "Items", "default": 4 },
-    { "type": "text", "id": "tier_2_percent", "label": "Discount %", "default": "68.73" },
+    { "type": "text", "id": "tier_2_percent", "label": "Discount %", "default": "70" },
     { "type": "text", "id": "tier_2_badge", "label": "Badge", "default": "MOST POPULAR ❤️" },
     { "type": "header", "content": "Offer 3" },
     { "type": "text", "id": "tier_3_title", "label": "Title", "default": "BUY 3 GET 3 FREE" },
     { "type": "number", "id": "tier_3_qty", "label": "Items", "default": 6 },
-    { "type": "text", "id": "tier_3_percent", "label": "Discount %", "default": "72.89" },
+    { "type": "text", "id": "tier_3_percent", "label": "Discount %", "default": "75.42" },
     { "type": "text", "id": "tier_3_badge", "label": "Badge", "default": "BEST VALUE 🔥" }
   ],
   "presets": [{ "name": "Sculpt: bundle offers", "category": "Sculpt" }]

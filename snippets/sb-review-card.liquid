@@ -1,0 +1,27 @@
+{%- comment -%}
+  One review card for the sb-reviews-carousel section.
+  Accepts: review (Judge.me review object), show_source (boolean)
+{%- endcomment -%}
+{%- assign stars = review.rating | plus: 0 -%}
+<article class="sbrc-card">
+  {%- assign picture = review.pictures_urls | first -%}
+  {%- if picture -%}
+    <div class="sbrc-img">
+      <img src="{{ picture.compact | default: picture.original }}" alt="Review photo from {{ review.reviewer_name | escape }}" loading="lazy" width="400" height="400">
+    </div>
+  {%- endif -%}
+  <div class="sbrc-body">
+    <div class="sbrc-stars" aria-label="{{ stars }} out of 5 stars">
+      {%- for i in (1..5) -%}{% if i <= stars %}&#9733;{% else %}<span class="sbrc-star-off">&#9733;</span>{% endif %}{%- endfor -%}
+    </div>
+    <div class="sbrc-text">{{ review.body_html }}</div>
+    <div class="sbrc-meta">
+      <span>{{ review.reviewer_name }}</span>
+      {%- if review.verified_buyer -%}
+        <span class="sbrc-source">Verified buyer</span>
+      {%- elsif show_source -%}
+        <span class="sbrc-source">Imported review</span>
+      {%- endif -%}
+    </div>
+  </div>
+</article>

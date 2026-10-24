@@ -1,0 +1,11 @@
+/* Lithella brand typography for the custom sb-* sections. */
+html body :is(.sbh-title, .sbt-title, .sb-f3-title, .sb-f3-head, .sb-cmp-title, .sbG-inner h2, .sbcs-title, .sbFaq2-title, .sb-rev-title, .sbz-title, .sbrc-title) {
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
+  font-style: var(--font-heading--style);
+  letter-spacing: 0;
+}
+html body :is(.sbh-title, .sbt-title) { font-size: clamp(34px, 5vw, 52px); line-height: 1.05; }
+html body :is(.sb-f3-title, .sb-cmp-title, .sbG-inner h2, .sbcs-title, .sbFaq2-title, .sb-rev-title, .sbrc-title) { font-size: clamp(28px, 3.4vw, 38px); line-height: 1.1; }
+html body .sb-f3-head { font-size: clamp(26px, 2.8vw, 32px); line-height: 1.1; }
+html body .sbz-title { font-size: 26px; }

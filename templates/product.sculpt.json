@@ -145,6 +145,10 @@
       "settings": {
         "label": "Order Now"
       }
+    },
+    "reviews": {
+      "type": "sb-reviews-carousel",
+      "settings": {}
     }
   },
   "order": [
@@ -154,6 +158,7 @@
     "features",
     "cta_2",
     "compare",
+    "reviews",
     "guarantee",
     "faq",
     "cta_3"
