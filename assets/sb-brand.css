@@ -26,3 +26,34 @@ html body :is(.sb-cta-scroll-bundle, .sbh-btn, .sbt-btn):active { transform: tra
   .dialog-zoomed-gallery .product-media__drag-zoom-wrapper .product-media__image,
   .dialog-zoomed-gallery .product-media-container--image img { width: 100%; height: auto; max-height: 100%; object-fit: contain; }
 }
+
+/* Swipe between full-screen photos: slides follow the finger, then glide into place (assets/drag-zoom-wrapper.js). */
+@media screen and (max-width: 749px) {
+  .dialog-zoomed-gallery > li { transform: translate3d(var(--swipe-dx, 0px), 0, 0); will-change: transform; }
+  .dialog-zoomed-gallery.is-settling > li { transition: transform .3s cubic-bezier(.22, .8, .3, 1); }
+}
+@media (prefers-reduced-motion: reduce) { .dialog-zoomed-gallery.is-settling > li { transition: none; } }
+
+/* Cart upgrade success card (assets/sb-cart-upsell.js). */
+.sbcu-win { position: fixed; inset: 84px 16px auto 16px; margin: 0; border: 0; z-index: 2147483000; display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-radius: 16px; background: linear-gradient(135deg, #0B7F52, #13A06A); color: #fff; font-family: var(--font-body--family); box-shadow: 0 16px 36px rgba(11, 127, 82, .35); animation: sbcu-win-in .45s cubic-bezier(.2, 1.3, .4, 1) both; }
+.sbcu-win.is-leaving { animation: sbcu-win-out .45s ease forwards; }
+.sbcu-win-check { flex: 0 0 46px; width: 46px; height: 46px; }
+.sbcu-win-check circle { stroke: rgba(255, 255, 255, .9); stroke-width: 3; stroke-dasharray: 151; stroke-dashoffset: 151; animation: sbcu-draw .5s .1s ease forwards; }
+.sbcu-win-check path { stroke: #fff; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 40; stroke-dashoffset: 40; animation: sbcu-draw .35s .5s ease forwards; }
+.sbcu-win-title { margin: 0; font-size: 17px; font-weight: 900; letter-spacing: .02em; }
+.sbcu-win-text { margin: 2px 0 0; font-size: 13.5px; opacity: .95; }
+.sbcu-btn.is-loading { opacity: .8; cursor: wait; animation: none; }
+@media (min-width: 750px) { .sbcu-win { left: auto; right: 24px; width: 380px; } }
+@keyframes sbcu-win-in { from { opacity: 0; transform: translateY(-14px) scale(.94); } to { opacity: 1; transform: none; } }
+@keyframes sbcu-win-out { to { opacity: 0; transform: translateY(-10px) scale(.97); } }
+@keyframes sbcu-draw { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .sbcu-win, .sbcu-win.is-leaving, .sbcu-win-check circle, .sbcu-win-check path { animation: none; stroke-dashoffset: 0; } }
+
+/* Cart drawer look: a side panel that leaves the page visible behind it on phones. */
+@media screen and (max-width: 749px) {
+  #cart-drawer .theme-drawer__dialog { --theme-drawer-width: min(88vw, 420px); width: min(88vw, 420px); box-shadow: -12px 0 40px rgba(26, 10, 18, .25); }
+}
+#cart-drawer .theme-drawer__dialog::backdrop { background: rgba(26, 10, 18, .45); }
+#cart-drawer .sbcb-offer { background: #FFF0F0; color: #E0322B; }
+#cart-drawer .sbcb-offer::before { content: "\25C6\00a0"; font-size: .8em; }
+#cart-drawer .sbcb-count { background: #E0322B; }

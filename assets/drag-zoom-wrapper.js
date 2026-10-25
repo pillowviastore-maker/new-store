@@ -52,6 +52,9 @@ export class DragZoomWrapper extends Component {
   /** @type {Point} */
   #swipe = { x: 0, y: 0 };
 
+  /** @type {number} */
+  #swipeStartTime = 0;
+
   get #image() {
     return this.refs.image;
   }
@@ -179,6 +182,7 @@ export class DragZoomWrapper extends Component {
     this.#startTranslate = { x: this.#translate.x, y: this.#translate.y };
     this.#isDragging = true;
     this.#hasDraggedBeyondThreshold = false;
+    this.#swipeStartTime = performance.now();
   }
 
   /**
@@ -329,7 +333,7 @@ export class DragZoomWrapper extends Component {
     // Lithella: at 1x a sideways drag is a swipe to the next or previous photo.
     if (this.#scale <= MIN_ZOOM + 0.01) {
       this.#swipe = { x: dx, y: dy };
-      if (Math.abs(dx) > Math.abs(dy)) this.style.transform = `translateX(${dx * 0.35}px)`;
+      if (Math.abs(dx) > Math.abs(dy)) this.#dragSlides(dx);
       return;
     }
 
@@ -347,9 +351,11 @@ export class DragZoomWrapper extends Component {
     if (event.touches.length === 0) {
       const swipe = this.#swipe;
       this.#swipe = { x: 0, y: 0 };
-      this.style.transform = '';
-      if (this.#scale <= MIN_ZOOM + 0.01 && Math.abs(swipe.x) > 50 && Math.abs(swipe.x) > Math.abs(swipe.y) * 1.3) {
-        this.#goToSibling(swipe.x < 0 ? 1 : -1);
+      if (this.#scale <= MIN_ZOOM + 0.01 && (swipe.x || swipe.y)) {
+        const speed = Math.abs(swipe.x) / Math.max(performance.now() - this.#swipeStartTime, 1);
+        const sideways = Math.abs(swipe.x) > Math.abs(swipe.y);
+        const far = Math.abs(swipe.x) > this.clientWidth * 0.22;
+        this.#settleSlides(sideways && (far || (speed > 0.35 && Math.abs(swipe.x) > 24)) ? (swipe.x < 0 ? 1 : -1) : 0);
       }
 
       this.#isDragging = false;
@@ -359,18 +365,45 @@ export class DragZoomWrapper extends Component {
     }
   };
 
-  /**
-   * Shows the next (1) or previous (-1) photo in the zoom dialog, like tapping its thumbnail.
-   * @param {number} step
-   */
-  #goToSibling(step) {
-    const dialog = /** @type {(HTMLElement & {handleThumbnailClick?: (i: number) => void}) | null} */ (this.closest('zoom-dialog'));
+  /** @returns {{dialog: HTMLElement & {selectThumbnail?: Function}, list: HTMLElement, index: number, count: number} | null} */
+  #slideContext() {
+    const dialog = /** @type {(HTMLElement & {selectThumbnail?: Function}) | null} */ (this.closest('zoom-dialog'));
     const item = this.closest('li');
     const list = item?.parentElement;
-    if (!dialog || !item || !list || typeof dialog.handleThumbnailClick !== 'function') return;
+    if (!dialog || !item || !list) return null;
     const items = Array.from(list.children);
-    const next = items.indexOf(item) + step;
-    if (next >= 0 && next < items.length) dialog.handleThumbnailClick(next);
+    return { dialog, list, index: items.indexOf(item), count: items.length };
+  }
+
+  /**
+   * Lithella: moves the photos with the finger (the neighbour slides in), with resistance at either end.
+   * @param {number} dx
+   */
+  #dragSlides(dx) {
+    const ctx = this.#slideContext();
+    if (!ctx) return;
+    const atEdge = (dx > 0 && ctx.index === 0) || (dx < 0 && ctx.index === ctx.count - 1);
+    ctx.list.classList.remove('is-settling');
+    ctx.list.style.setProperty('--swipe-dx', `${atEdge ? dx * 0.3 : dx}px`);
+  }
+
+  /**
+   * Glides to the next (1) or previous (-1) photo, or back into place (0).
+   * @param {number} step
+   */
+  #settleSlides(step) {
+    const ctx = this.#slideContext();
+    if (!ctx) return;
+    const next = ctx.index + step;
+    const valid = step !== 0 && next >= 0 && next < ctx.count && typeof ctx.dialog.selectThumbnail === 'function';
+    const { list } = ctx;
+    list.classList.add('is-settling');
+    list.style.setProperty('--swipe-dx', valid ? `${-step * this.clientWidth}px` : '0px');
+    window.setTimeout(() => {
+      list.classList.remove('is-settling');
+      list.style.setProperty('--swipe-dx', '0px');
+      if (valid) ctx.dialog.selectThumbnail?.(next, { behavior: 'instant' });
+    }, 300);
   }
 
   /**

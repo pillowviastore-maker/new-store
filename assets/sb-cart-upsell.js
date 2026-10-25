@@ -31,6 +31,28 @@
     }
   } catch (e) {}
 
+  // Green "deal unlocked" card shown in the cart after every upgrade (styles in sb-brand.css).
+  function celebrate(unlock) {
+    if (!unlock || !unlock.title) return;
+    var old = document.querySelector('.sbcu-win');
+    if (old) old.remove();
+    var card = document.createElement('div');
+    card.className = 'sbcu-win';
+    // A popover sits in the top layer, above the open cart drawer, and the cart re-render can't remove it.
+    var canPop = typeof card.showPopover === 'function';
+    if (canPop) card.setAttribute('popover', 'manual');
+    card.setAttribute('role', 'status');
+    card.innerHTML =
+      '<svg class="sbcu-win-check" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="none"/><path d="M15 27l7 7 15-16" fill="none"/></svg>' +
+      '<div><p class="sbcu-win-title"></p><p class="sbcu-win-text"></p></div>';
+    card.querySelector('.sbcu-win-title').textContent = unlock.title + ' unlocked!';
+    card.querySelector('.sbcu-win-text').textContent = unlock.count + ' briefs, just ' + unlock.each + ' each. Your discount is applied.';
+    document.body.appendChild(card);
+    if (canPop) card.showPopover();
+    setTimeout(function () { card.classList.add('is-leaving'); }, 3200);
+    setTimeout(function () { card.remove(); }, 3700);
+  }
+
   document.addEventListener('click', function (event) {
     var add = event.target.closest('[data-sbcu-add]');
     var remove = event.target.closest('[data-sbcb-remove]');
@@ -40,6 +62,8 @@
     var request;
 
     if (add) {
+      add.classList.add('is-loading');
+      add.textContent = 'Adding…';
       var bundle = add.dataset.bundle;
       var line = { merchandiseId: String(add.dataset.variant), quantity: +add.dataset.qty };
       if (bundle) line.attributes = [{ key: '_bundle', value: bundle }];
@@ -65,6 +89,11 @@
           body: JSON.stringify({ updates: updates })
         });
       });
+    }
+
+    if (add) {
+      var unlock = { title: add.dataset.unlock, each: add.dataset.each, count: add.dataset.count };
+      Promise.resolve(request).then(function () { setTimeout(function () { celebrate(unlock); }, 350); }, function () {});
     }
 
     Promise.resolve(request).catch(function () {

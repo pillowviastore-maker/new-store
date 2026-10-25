@@ -486,8 +486,8 @@
     }
 
     atc.addEventListener('click', function () { submit(false); });
-    // Both buttons keep the shopper on this page and slide the cart in from the side.
-    if (express) express.addEventListener('click', function () { submit(false); });
+    // Add to cart slides the cart in on this page; Buy it now goes straight to checkout.
+    if (express) express.addEventListener('click', function () { submit(true); });
 
     function updateSticky() {
       var tier = activeTier();
@@ -534,9 +534,9 @@
     { "type": "text", "id": "heading", "label": "Heading", "default": "Try it risk-free — 90-day guarantee" },
     { "type": "text", "id": "button_label", "label": "Add to cart label", "default": "Add to cart" },
     { "type": "text", "id": "buy_label", "label": "Buy it now label", "default": "Buy it now" },
-    { "type": "text", "id": "button_note", "label": "Text under the buttons", "default": "Your cart opens right here. Fast, secure checkout with Shop Pay, Apple Pay or Google Pay." },
+    { "type": "text", "id": "button_note", "label": "Text under the buttons", "default": "Fast, secure checkout with Shop Pay, Apple Pay or Google Pay." },
     { "type": "text", "id": "sticky_label", "label": "Mobile sticky button label", "default": "Add to cart" },
-    { "type": "checkbox", "id": "show_express", "label": "Show Buy it now button", "default": true, "info": "Adds the bundle and opens the side cart, like Add to cart." },
+    { "type": "checkbox", "id": "show_express", "label": "Show Buy it now button", "default": true, "info": "Adds the bundle to the cart and goes straight to checkout." },
     { "type": "textarea", "id": "swatch_colors", "label": "Color swatches", "info": "One per line: Color name: #hex. Used when the color has no swatch in Shopify.", "default": "Black: #111111\nBeige: #D8B99A\nNavy: #1F2A44\nLilac: #C7A6D9\nPurple: #5B2A86\nFuchsia pink: #D6247A" },
     { "type": "text", "id": "default_color", "label": "Preselected color", "default": "Black", "info": "Leave empty to make shoppers pick a color." },
     { "type": "text", "id": "default_size", "label": "Preselected size", "default": "M", "info": "Leave empty to make shoppers pick a size." },
