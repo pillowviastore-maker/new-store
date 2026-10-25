@@ -24,7 +24,7 @@
       {%- if section.settings.image != blank -%}
         {{ section.settings.image | image_url: width: 900 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 900px) 420px, 100vw', alt: section.settings.image.alt | default: hero_product.title }}
       {%- else -%}
-        <img src="{{ 'sb-welcome.jpg' | asset_url }}" width="900" height="653" alt="Three women wearing the {{ hero_product.title | escape }} in beige, fuchsia pink and black" fetchpriority="high">
+        <img src="{{ 'sb-home-hero.jpg' | asset_url }}" width="1600" height="1200" alt="The {{ hero_product.title | escape }} in black, beige, navy, lilac, purple and fuchsia pink" fetchpriority="high">
       {%- endif -%}
     </div>
   </div>
@@ -61,7 +61,7 @@
   "class": "sb-section",
   "settings": [
     { "type": "product", "id": "product", "label": "Product" },
-    { "type": "image_picker", "id": "image", "label": "Image", "info": "Defaults to the studio photo of three women wearing the brief." },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Defaults to the six-colour Sculpt Brief line-up." },
     { "type": "text", "id": "title", "label": "Heading", "default": "The Sculpt Brief —" },
     { "type": "text", "id": "title_accent", "label": "Heading (pink part)", "default": "Smooth Support for the Belly That Stays" },
     { "type": "richtext", "id": "text", "label": "Text", "default": "<p>A high-waisted brief with a 360° crossed band that wraps your belly, waist and back in gentle, even compression. Invisible under anything, comfortable from morning to night.</p>" },
