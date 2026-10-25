@@ -47,12 +47,19 @@
           <button type="button" class="sbrc-dialog-close" data-sbrc-close aria-label="Close reviews">&times;</button>
         </div>
         <p class="sbrc-dialog-title" id="sbrc-dialog-title-{{ section.id }}">{{ section.settings.title }}</p>
+        {%- if data.histogram.size > 0 -%}
+          <ul class="sbrc-hist" aria-label="Rating breakdown">
+            {%- for row in data.histogram -%}
+              <li><span>{{ row.rating }}&#9733;</span><span class="sbrc-hist-bar"><span style="width: {{ row.percentage }}%"></span></span><span>{{ row.frequency }}</span></li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
         <div class="sbrc-chips" role="group" aria-label="Filter reviews">
           <button type="button" class="sbrc-chip is-on" data-sbrc-filter="all" aria-pressed="true">All</button>
           <button type="button" class="sbrc-chip" data-sbrc-filter="photos" aria-pressed="false">With photos</button>
         </div>
       </div>
-      <div class="sbrc-list" data-sbrc-list></div>
+      <div class="sbrc-list" data-sbrc-list data-shop="{{ shop.permanent_domain }}" data-product="{{ reviews_product.id }}" data-total="{{ rating_count }}"></div>
       <template data-sbrc-template>
         {%- assign shown = 0 -%}
         {%- for review in data.photo_gallery -%}
@@ -108,6 +115,13 @@
     .sbrc-dialog-close { flex: 0 0 auto; width: 38px; height: 38px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, .08); font-size: 24px; line-height: 1; color: #4A3B42; cursor: pointer; }
     .sbrc-dialog-title { margin: 10px 0 10px; font-family: var(--font-heading--family); font-size: 22px; font-weight: 700; }
     .sbrc-chips { display: flex; gap: 8px; }
+    .sbrc-hist { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 3px; max-width: 320px; }
+    .sbrc-hist li { display: grid; grid-template-columns: 26px 1fr 30px; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: #4A3B42; }
+    .sbrc-hist-bar { height: 7px; border-radius: 999px; background: #F0DCE6; overflow: hidden; }
+    .sbrc-hist-bar span { display: block; height: 100%; background: #F5A623; border-radius: inherit; }
+    .sbrc-more { justify-self: center; margin: 6px 0 4px; padding: 11px 22px; border: 1.5px solid #A3426D; border-radius: 999px; background: #fff; color: #A3426D; font: inherit; font-size: 14px; font-weight: 800; cursor: pointer; }
+    .sbrc-more[disabled] { opacity: .6; cursor: wait; }
+    .sbrc-count { justify-self: center; margin: 0; font-size: 12px; color: #8A7A82; }
     .sbrc-chip { padding: 7px 14px; border: 1.5px solid #E3C8D5; border-radius: 999px; background: #fff; font: inherit; font-size: 13px; font-weight: 700; color: #4A3B42; cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
     .sbrc-chip.is-on { background: #A3426D; border-color: #A3426D; color: #fff; }
     .sbrc-list { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 12px 14px 24px; display: grid; gap: 10px; }
@@ -156,9 +170,73 @@
         }, 4500);
       }
 
+      // The theme only has Judge.me's first page; the rest load from Judge.me's public widget endpoint.
+      var shownIds = {}, nextPage = 1, loading = false, done = false, moreBtn, countEl;
+      var total = +list.dataset.total || 0;
+      function esc(t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; }
+      // Judge.me sends the review as HTML; DOMParser reads its text without running anything in it.
+      function plain(r) { return r.body || (r.body_html ? new DOMParser().parseFromString(r.body_html, 'text/html').body.textContent : '') || ''; }
+      function cardHtml(r) {
+        var stars = '', n = +r.rating || 5;
+        for (var i = 1; i <= 5; i++) stars += i <= n ? '&#9733;' : '<span class="sbrc-star-off">&#9733;</span>';
+        var pic = r.pictures_urls && r.pictures_urls[0];
+        var imported = (r.transparency_badges || []).indexOf('review_collected_from_another_provider') > -1 || !r.verified_buyer;
+        return '<article class="sbrc-card">' +
+          '<span class="sbrc-avatar" aria-hidden="true">' + esc((r.reviewer_name || '?').charAt(0).toUpperCase()) + '</span>' +
+          '<div class="sbrc-card-top"><span class="sbrc-name">' + esc(r.reviewer_name) + '</span><span class="sbrc-stars" aria-label="' + n + ' out of 5 stars">' + stars + '</span></div>' +
+          '<span class="sbrc-source">' + (r.verified_buyer ? 'Verified buyer' : (imported ? 'Imported review' : '')) + '</span>' +
+          '<div class="sbrc-text">' + esc(plain(r).trim()) + '</div>' +
+          (pic ? '<button type="button" class="sbrc-thumb" data-sbrc-thumb aria-label="Enlarge photo from ' + esc(r.reviewer_name) + '"><img src="' + esc(pic.compact || pic.original) + '" data-full="' + esc(pic.original || pic.compact) + '" alt="Review photo from ' + esc(r.reviewer_name) + '" loading="lazy" width="400" height="400"></button>' : '') +
+          '</article>';
+      }
+      function updateCount() { if (countEl) countEl.textContent = 'Showing ' + list.querySelectorAll('.sbrc-card').length + ' of ' + total + ' reviews'; }
+      function loadMore() {
+        if (loading || done) return;
+        loading = true; moreBtn.disabled = true; moreBtn.textContent = 'Loading…';
+        var url = 'https://judge.me/reviews/reviews_for_widget?url=' + encodeURIComponent(list.dataset.shop) + '&shop_domain=' + encodeURIComponent(list.dataset.shop) + '&platform=shopify&per_page=20&page=' + nextPage + '&product_id=' + list.dataset.product;
+        fetch(url).then(function (res) { return res.json(); }).then(function (data) {
+          var html = '';
+          (data.reviews || []).forEach(function (r) {
+            var text = plain(r).trim();
+            var key = (r.reviewer_name || '') + '|' + text;
+            if (shownIds[r.uuid] || shownIds[key] || text.length < 4) return;
+            shownIds[r.uuid] = shownIds[key] = true;
+            html += cardHtml(r);
+          });
+          moreBtn.insertAdjacentHTML('beforebegin', html);
+          var pages = data.pagination && data.pagination.total_pages;
+          nextPage++;
+          if (!data.reviews || !data.reviews.length || (pages && nextPage > pages)) { done = true; moreBtn.hidden = true; }
+          var photosOnly = dialog.querySelector('[data-sbrc-filter="photos"].is-on');
+          if (photosOnly) list.querySelectorAll('.sbrc-card').forEach(function (card) { card.hidden = !card.querySelector('[data-sbrc-thumb]'); });
+        }).catch(function () {
+          moreBtn.textContent = "Couldn't load, tap to try again";
+        }).then(function () {
+          loading = false; moreBtn.disabled = false;
+          if (!done && moreBtn.textContent === 'Loading…') moreBtn.textContent = 'Show more reviews';
+          updateCount();
+        });
+      }
+      function setupMore() {
+        list.querySelectorAll('.sbrc-card').forEach(function (card) {
+          var name = card.querySelector('.sbrc-name'), text = card.querySelector('.sbrc-text');
+          shownIds[(name ? name.textContent : '') + '|' + (text ? text.textContent.trim() : '')] = true;
+        });
+        // First-page reviews are already in the theme; they are keyed by name and text above so they don't repeat.
+        moreBtn = document.createElement('button');
+        moreBtn.type = 'button'; moreBtn.className = 'sbrc-more'; moreBtn.textContent = 'Show more reviews';
+        moreBtn.addEventListener('click', loadMore);
+        countEl = document.createElement('p'); countEl.className = 'sbrc-count';
+        list.appendChild(moreBtn); list.appendChild(countEl);
+        updateCount();
+        list.addEventListener('scroll', function () {
+          if (list.scrollTop + list.clientHeight > list.scrollHeight - 400) loadMore();
+        }, { passive: true });
+      }
+
       // Reviews and their photos load only when the widget is opened.
       root.querySelector('[data-sbrc-open]').addEventListener('click', function () {
-        if (!list.children.length) list.appendChild(template.content.cloneNode(true));
+        if (!list.children.length) { list.appendChild(template.content.cloneNode(true)); setupMore(); }
         dialog.showModal();
         list.scrollTop = 0;
       });

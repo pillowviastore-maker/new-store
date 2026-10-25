@@ -107,7 +107,8 @@
         }
       },
       "settings": {
-        "enable_sticky_add_to_cart": false
+        "enable_sticky_add_to_cart": false,
+        "equal_columns": true
       }
     },
     "videos": {
