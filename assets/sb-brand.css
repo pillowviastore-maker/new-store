@@ -29,8 +29,9 @@ html body :is(.sb-cta-scroll-bundle, .sbh-btn, .sbt-btn):active { transform: tra
 
 /* Swipe between full-screen photos: slides follow the finger, then glide into place (assets/drag-zoom-wrapper.js). */
 @media screen and (max-width: 749px) {
-  .dialog-zoomed-gallery > li { transform: translate3d(var(--swipe-dx, 0px), 0, 0); will-change: transform; }
-  .dialog-zoomed-gallery.is-settling > li { transition: transform .3s cubic-bezier(.22, .8, .3, 1); }
+  .dialog-zoomed-gallery > li { transform: translate3d(var(--swipe-dx, 0px), 0, 0); }
+  .dialog-zoomed-gallery.is-swiping > li, .dialog-zoomed-gallery.is-settling > li { will-change: transform; }
+  .dialog-zoomed-gallery.is-settling > li { transition: transform .34s cubic-bezier(.2, .85, .25, 1); }
 }
 @media (prefers-reduced-motion: reduce) { .dialog-zoomed-gallery.is-settling > li { transition: none; } }
 
@@ -57,3 +58,25 @@ html body :is(.sb-cta-scroll-bundle, .sbh-btn, .sbt-btn):active { transform: tra
 #cart-drawer .sbcb-offer { background: #FFF0F0; color: #E0322B; }
 #cart-drawer .sbcb-offer::before { content: "\25C6\00a0"; font-size: .8em; }
 #cart-drawer .sbcb-count { background: #E0322B; }
+
+/* Compact cart drawer: everything important fits without scrolling on a phone. */
+#cart-drawer .cart-items__table-row.sbcb-row { padding-block: 4px; }
+#cart-drawer .sbcb-row .cart-items__title { font-size: 15px; line-height: 1.25; }
+#cart-drawer .sbcb-offer { margin-top: 3px; padding: 2px 8px; font-size: 11px; }
+#cart-drawer .sbcb-lines { margin: 4px 0 2px; font-size: 12.5px; }
+#cart-drawer .sbcb-row .cart-items__unit-price-wrapper { font-size: 12.5px; }
+#cart-drawer .sbcb-actions { gap: 12px; }
+#cart-drawer details:has(> .cart-discount__summary) { display: none; }
+#cart-drawer .cart-totals__container { padding-block: 6px; }
+#cart-drawer .sbcu { gap: 6px; padding: 10px 12px; margin-bottom: 10px; }
+#cart-drawer .sbcu-kicker, #cart-drawer .sbcu-note, #cart-drawer .sbcu-each { display: none; }
+#cart-drawer .sbcu-gift { font-size: 22px; }
+#cart-drawer .sbcu-title { font-size: 14.5px; }
+#cart-drawer .sbcu-text { font-size: 13px; line-height: 1.4; }
+#cart-drawer .sbcu-applied { padding: 2px 8px; font-size: 11px; }
+#cart-drawer .sbcu-btn { padding: 11px 14px; font-size: 14.5px; }
+#cart-drawer .cart__checkout-button { min-height: 50px; font-size: 16px; }
+#cart-drawer .sb-cart-trust { margin-top: 8px; font-size: 11px; gap: 4px 10px; }
+#cart-drawer .sb-cart-trust svg { width: 13px; height: 13px; }
+#cart-drawer .sb-cart-pay { margin-top: 8px; gap: 4px; }
+#cart-drawer .sb-cart-pay svg { width: 32px; height: 20px; }

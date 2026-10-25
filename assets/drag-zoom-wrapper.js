@@ -183,6 +183,10 @@ export class DragZoomWrapper extends Component {
     this.#isDragging = true;
     this.#hasDraggedBeyondThreshold = false;
     this.#swipeStartTime = performance.now();
+    if (this.#scale <= MIN_ZOOM + 0.01) {
+      const ctx = this.#slideContext();
+      if (ctx) this.#primeNeighbours(ctx);
+    }
   }
 
   /**
@@ -367,7 +371,7 @@ export class DragZoomWrapper extends Component {
 
   /** @returns {{dialog: HTMLElement & {selectThumbnail?: Function}, list: HTMLElement, index: number, count: number} | null} */
   #slideContext() {
-    const dialog = /** @type {(HTMLElement & {selectThumbnail?: Function}) | null} */ (this.closest('zoom-dialog'));
+    const dialog = /** @type {(HTMLElement & {selectThumbnail?: Function, loadHighResolutionImage?: Function}) | null} */ (this.closest('zoom-dialog'));
     const item = this.closest('li');
     const list = item?.parentElement;
     if (!dialog || !item || !list) return null;
@@ -383,8 +387,26 @@ export class DragZoomWrapper extends Component {
     const ctx = this.#slideContext();
     if (!ctx) return;
     const atEdge = (dx > 0 && ctx.index === 0) || (dx < 0 && ctx.index === ctx.count - 1);
+    if (!ctx.list.classList.contains('is-swiping')) {
+      ctx.list.classList.add('is-swiping');
+      this.#primeNeighbours(ctx);
+    }
     ctx.list.classList.remove('is-settling');
     ctx.list.style.setProperty('--swipe-dx', `${atEdge ? dx * 0.3 : dx}px`);
+  }
+
+  /**
+   * Loads the photos on either side so they are already there while they slide in.
+   * @param {{dialog: HTMLElement & {loadHighResolutionImage?: Function}, list: HTMLElement, index: number}} ctx
+   */
+  #primeNeighbours(ctx) {
+    [ctx.index - 1, ctx.index + 1].forEach((i) => {
+      const item = ctx.list.children[i];
+      if (!(item instanceof HTMLElement)) return;
+      const image = item.querySelector('img');
+      if (image && image.loading === 'lazy') image.loading = 'eager';
+      ctx.dialog.loadHighResolutionImage?.(item);
+    });
   }
 
   /**
@@ -397,13 +419,14 @@ export class DragZoomWrapper extends Component {
     const next = ctx.index + step;
     const valid = step !== 0 && next >= 0 && next < ctx.count && typeof ctx.dialog.selectThumbnail === 'function';
     const { list } = ctx;
+    list.classList.remove('is-swiping');
     list.classList.add('is-settling');
     list.style.setProperty('--swipe-dx', valid ? `${-step * this.clientWidth}px` : '0px');
     window.setTimeout(() => {
       list.classList.remove('is-settling');
       list.style.setProperty('--swipe-dx', '0px');
       if (valid) ctx.dialog.selectThumbnail?.(next, { behavior: 'instant' });
-    }, 300);
+    }, 340);
   }
 
   /**
