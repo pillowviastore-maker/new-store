@@ -209,16 +209,15 @@
   .sbb-trust li { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: #4A3B42; }
   .sbb-trust svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--sbb-accent); }
   @media (min-width: 750px) { .sbb-trust { grid-template-columns: repeat(4, minmax(0, auto)); justify-content: space-between; } }
-  .sbb-buy { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 64px; margin: 10px 0 0; padding: 14px 20px; border: 0; border-radius: 14px; background: linear-gradient(180deg, #2BC06E 0%, #179A52 60%, #12844A 100%); color: #fff; font: inherit; font-size: 21px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; box-shadow: 0 8px 22px rgba(23, 154, 82, .4), inset 0 1px 0 rgba(255, 255, 255, .35); transition: transform .15s, filter .2s; animation: sbb-breathe 3.2s ease-in-out infinite; }
-  .sbb-buy::before { content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%; background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .45), transparent); transform: skewX(-20deg); animation: sbb-shine 3.2s ease-in-out infinite; pointer-events: none; }
+  .sbb-buy { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 64px; margin: 10px 0 0; padding: 14px 20px; border: 0; border-radius: 14px; background: linear-gradient(180deg, #2BC06E 0%, #179A52 60%, #12844A 100%); color: #fff; font: inherit; font-size: 21px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; box-shadow: 0 8px 22px rgba(23, 154, 82, .4), inset 0 1px 0 rgba(255, 255, 255, .35); transition: transform .15s, filter .2s; }
+  .sbb-buy::before { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 40%; background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .45), transparent); transform: translateX(-150%) skewX(-20deg); animation: sbb-shine 3.2s ease-in-out infinite; will-change: transform; pointer-events: none; }
   .sbb-buy svg { width: 22px; height: 22px; transition: transform .2s; }
   .sbb-buy:hover { filter: brightness(1.06); transform: translateY(-2px); animation-play-state: paused; }
   .sbb-buy:hover svg { transform: translateX(4px); }
   .sbb-buy:active { transform: translateY(1px) scale(.99); }
   .sbb-buy:focus-visible { outline: 3px solid #1A1A1A; outline-offset: 3px; }
   .sbb-buy[disabled] { opacity: .75; cursor: wait; animation: none; }
-  @keyframes sbb-shine { 0%, 55% { left: -60%; } 85%, 100% { left: 130%; } }
-  @keyframes sbb-breathe { 0%, 100% { box-shadow: 0 8px 22px rgba(23, 154, 82, .4), inset 0 1px 0 rgba(255, 255, 255, .35); } 50% { box-shadow: 0 8px 30px rgba(23, 154, 82, .6), 0 0 0 5px rgba(43, 192, 110, .18), inset 0 1px 0 rgba(255, 255, 255, .35); } }
+  @keyframes sbb-shine { 0%, 55% { transform: translateX(-150%) skewX(-20deg); } 85%, 100% { transform: translateX(330%) skewX(-20deg); } }
   .sbb-sticky { position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 12px; padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); background: rgba(255, 255, 255, .97); box-shadow: 0 -6px 20px rgba(0, 0, 0, .1); transform: translateY(110%); transition: transform .3s ease; }
   .sbb-sticky.is-visible { transform: none; }
   .sbb-sticky-text { display: flex; flex-direction: column; flex: 1; min-width: 0; }

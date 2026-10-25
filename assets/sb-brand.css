@@ -80,3 +80,8 @@ html body :is(.sb-cta-scroll-bundle, .sbh-btn, .sbt-btn):active { transform: tra
 #cart-drawer .sb-cart-trust svg { width: 13px; height: 13px; }
 #cart-drawer .sb-cart-pay { margin-top: 8px; gap: 4px; }
 #cart-drawer .sb-cart-pay svg { width: 32px; height: 20px; }
+
+/* Scroll reveal (assets/sb-reveal.js): content glides up and fades in as it enters the screen. */
+html .sb-rv { opacity: 0; transform: translate3d(0, 28px, 0); transition: opacity .7s cubic-bezier(.2, .7, .2, 1), transform .7s cubic-bezier(.2, .7, .2, 1); transition-delay: var(--sb-rv-delay, 0ms); }
+html .sb-rv.sb-rv-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .sb-rv { opacity: 1; transform: none; transition: none; } }
