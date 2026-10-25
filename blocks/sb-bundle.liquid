@@ -521,7 +521,8 @@
     });
 
     var state = load();
-    var start = tiers[state.tier] || activeTier() || tiers[0];
+    // Every visit opens on the preselected offer; saved colors and sizes come back only for that offer.
+    var start = activeTier() || tiers[0];
     if (start) selectTier(start, state.tier === tiers.indexOf(start) ? state.rows : null);
   })();
 </script>
