@@ -54,6 +54,19 @@
   }
 
   document.addEventListener('click', function (event) {
+    // "Edit" on a bundle row: on the product page, close the cart and glide to the colour and size picker.
+    var edit = event.target.closest('.sbcb-edit');
+    if (edit) {
+      var target = new URL(edit.href, window.location.href);
+      var picker = document.getElementById('sb-bundle');
+      if (target.pathname !== window.location.pathname || !picker) return;
+      event.preventDefault();
+      var drawer = document.querySelector('theme-drawer#cart-drawer');
+      if (drawer && typeof drawer.close === 'function') drawer.close();
+      setTimeout(function () { picker.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 250);
+      return;
+    }
+
     var add = event.target.closest('[data-sbcu-add]');
     var remove = event.target.closest('[data-sbcb-remove]');
     if (!add && !remove) return;

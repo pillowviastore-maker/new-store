@@ -51,9 +51,30 @@
   <ul class="sbcb-lines">
     {%- for line in cart.items -%}
       {%- if line.properties['_bundle'] == bundle_id -%}
-        <li>
-          <span>{{ line.variant.title }}</span>
-          {%- if line.quantity > 1 %}<span class="sbcb-x"> × {{ line.quantity }}</span>{% endif -%}
+        {%- liquid
+          assign sb_color = line.variant.option1 | downcase
+          case sb_color
+            when 'black'
+              assign sb_hex = '#111111'
+            when 'beige', 'nude'
+              assign sb_hex = '#D8B99A'
+            when 'navy'
+              assign sb_hex = '#1F2A44'
+            when 'lilac'
+              assign sb_hex = '#C7A6D9'
+            when 'purple', 'plum'
+              assign sb_hex = '#5B2A86'
+            when 'fuchsia pink', 'fuchsia'
+              assign sb_hex = '#D6247A'
+            else
+              assign sb_hex = '#CCCCCC'
+          endcase
+        -%}
+        <li title="{{ line.variant.title | escape }}">
+          <span class="sbcb-dot" style="--dot: {{ sb_hex }};" aria-hidden="true"></span>
+          <span class="visually-hidden">{{ line.variant.option1 }}, size</span>
+          {{ line.variant.option2 | default: line.variant.title }}
+          {%- if line.quantity > 1 %}<span class="sbcb-x">×{{ line.quantity }}</span>{% endif -%}
         </li>
       {%- endif -%}
     {%- endfor -%}
@@ -86,9 +107,10 @@
   .sbcb-media { position: relative; }
   .sbcb-count { position: absolute; right: 4px; bottom: 4px; padding: 2px 7px; border-radius: 999px; background: #A3426D; color: #fff; font-size: 12px; font-weight: 800; line-height: 1.4; }
   .sbcb-offer { display: inline-block; margin: 4px 0 0; padding: 3px 9px; border-radius: 999px; background: #FBE3EE; color: #A3426D; font-size: 12px; font-weight: 800; letter-spacing: .02em; }
-  .sbcb-lines { list-style: none; margin: 6px 0 4px; padding: 0; display: grid; gap: 2px; font-size: 13px; color: #4A3B42; }
-  .sbcb-lines li::before { content: "\2022\00a0"; color: #A3426D; }
-  .sbcb-x { font-weight: 700; }
+  .sbcb-lines { list-style: none; margin: 6px 0 4px; padding: 0; display: flex; flex-wrap: wrap; gap: 4px; font-size: 12px; font-weight: 700; color: #3A2C33; }
+  .sbcb-lines li { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px 2px 3px; border: 1px solid #EEDCE6; border-radius: 999px; background: #fff; line-height: 1.4; }
+  .sbcb-dot { width: 13px; height: 13px; border-radius: 50%; background: var(--dot); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .15); }
+  .sbcb-x { color: #A3426D; }
   .sbcb-save { display: inline-block; margin-left: 6px; color: #0B7F52; font-weight: 700; }
   .sbcb-actions { align-items: center; gap: 14px; }
   .sbcb-edit { font-size: 13px; font-weight: 700; color: #A3426D; text-decoration: underline; }

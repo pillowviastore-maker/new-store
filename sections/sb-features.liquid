@@ -35,7 +35,7 @@
   .sb-f3-title { margin-bottom: 8px; }
   .sb-f3-row { display: flex; flex-direction: column; gap: 0; background: #FBF3F7; border: 1px solid #F0DCE6; border-radius: 18px; overflow: hidden; transition: transform .25s, box-shadow .25s; }
   .sb-f3-row:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(163, 66, 109, .12); }
-  .sb-f3-media { position: relative; aspect-ratio: 4 / 5; min-width: 0; overflow: hidden; background: linear-gradient(100deg, #f3eef1 30%, #fbf6f8 50%, #f3eef1 70%) 0 0 / 300% 100%; animation: sb-f3-skeleton 1.4s ease-in-out 6; }
+  .sb-f3-media { position: relative; aspect-ratio: 4 / 5; min-width: 0; overflow: hidden; background: linear-gradient(100deg, #f3eef1 30%, #fbf6f8 50%, #f3eef1 70%) 0 0 / 300% 100%; animation: sb-f3-skeleton 1.4s ease-in-out infinite; }
   .sb-f3-media:has(video[src]) { animation: none; background: #f3eef1; }
   @keyframes sb-f3-skeleton { to { background-position: -100% 0; } }
   .sb-f3-media img, .sb-f3-media video { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; }
