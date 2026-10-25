@@ -79,18 +79,30 @@
               "type": "payment-icons",
               "settings": {},
               "blocks": {}
+            },
+            "reviews_inline": {
+              "type": "sb-reviews-inline",
+              "settings": {},
+              "blocks": {}
+            },
+            "wear": {
+              "type": "sb-wear",
+              "settings": {},
+              "blocks": {}
             }
           },
           "block_order": [
             "review",
             "title",
             "subtitle",
-            "benefits",
-            "reassure",
             "bundle",
             "size_finder",
             "guarantee",
-            "payment"
+            "payment",
+            "reviews_inline",
+            "wear",
+            "benefits",
+            "reassure"
           ]
         }
       },

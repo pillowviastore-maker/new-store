@@ -1,0 +1,103 @@
+{%- doc -%}
+  "What moms are saying": a swipeable card carousel of Judge.me text reviews inside the product details.
+  Imported reviews keep their "Imported review" label.
+{%- enddoc -%}
+{%- liquid
+  assign rv_product = closest.product | default: all_products['sculpt-brief']
+  assign data = rv_product.metafields.judgeme.review_widget_data.value
+-%}
+
+{%- if data != blank -%}
+  <div class="sbri" data-sbri>
+    <p class="sbri-title">{{ block.settings.title }}</p>
+    <div class="sbri-track" data-sbri-track>
+      {%- assign shown = 0 -%}
+      {%- assign pools = 'photo_gallery,reviews' | split: ',' -%}
+      {%- for pool in pools -%}
+      {%- for review in data[pool] -%}
+        {%- assign text = review.body_html | strip_html | strip -%}
+        {%- if shown < block.settings.limit and text.size > 25 -%}
+          {%- liquid
+            assign headline = review.title | strip_html | strip
+            if headline == blank
+              assign headline = text | split: '. ' | first | truncate: 70
+            endif
+          -%}
+          <article class="sbri-card">
+            <div class="sbri-head">
+              <span class="sbri-avatar" aria-hidden="true">{{ review.reviewer_name | slice: 0 | upcase }}</span>
+              <div>
+                <p class="sbri-name">{{ review.reviewer_name | split: ' ' | first }}{% assign last = review.reviewer_name | split: ' ' | last %}{% if last != review.reviewer_name %} {{ last | slice: 0 }}.{% endif %}</p>
+                <span class="sbri-stars" aria-label="{{ review.rating }} out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+              </div>
+            </div>
+            <p class="sbri-quote">&ldquo;{{ headline | escape }}&rdquo;</p>
+            {%- assign headline_size = headline.size | plus: 3 -%}
+            {%- if text.size > headline_size -%}
+              <p class="sbri-text">{{ text | truncate: 220 | escape }}</p>
+            {%- endif -%}
+            <p class="sbri-meta">{% if review.verified_buyer %}Verified buyer{% else %}Imported review{% endif %}</p>
+          </article>
+          {%- assign shown = shown | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- endfor -%}
+    </div>
+    <div class="sbri-dots" data-sbri-dots aria-hidden="true"></div>
+  </div>
+
+  <style>
+    .sbri { margin: 6px 0 2px; font-family: var(--font-body--family); }
+    .sbri-title { margin: 0 0 12px; text-align: center; font-size: 20px; font-weight: 800; color: #1A1A1A; }
+    .sbri-track { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+    .sbri-track::-webkit-scrollbar { display: none; }
+    .sbri-card { flex: 0 0 100%; scroll-snap-align: center; box-sizing: border-box; padding: 18px 18px 16px; border: 1.5px dashed #C96B95; border-radius: 16px; background: #fff; }
+    .sbri-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .sbri-avatar { flex: 0 0 44px; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #C2557F, #A3426D); color: #fff; font-weight: 800; font-size: 18px; }
+    .sbri-name { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: .02em; color: #1A1A1A; }
+    .sbri-stars { color: #F5A623; font-size: 14px; letter-spacing: 1px; }
+    .sbri-quote { margin: 0 0 6px; font-size: 16px; font-weight: 800; line-height: 1.3; color: #1A1A1A; }
+    .sbri-text { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #555; }
+    .sbri-meta { margin: 0; font-size: 12px; color: #8A7A82; }
+    .sbri-meta::before { content: "\1F6CD\00a0"; }
+    .sbri-dots { display: flex; justify-content: center; gap: 6px; margin-top: 10px; }
+    .sbri-dots span { width: 6px; height: 6px; border-radius: 50%; background: #E3CFD9; transition: background .2s, transform .2s; }
+    .sbri-dots span.is-on { background: #A3426D; transform: scale(1.3); }
+  </style>
+
+  <script>
+    (function () {
+      var root = document.currentScript.previousElementSibling.previousElementSibling;
+      var track = root && root.querySelector('[data-sbri-track]');
+      if (!track || !track.children.length) return;
+      var dots = root.querySelector('[data-sbri-dots]');
+      var cards = Array.prototype.slice.call(track.children);
+      cards.forEach(function () { dots.appendChild(document.createElement('span')); });
+      function current() { return Math.round(track.scrollLeft / Math.max(track.clientWidth, 1)); }
+      function paint() { var i = current(); Array.prototype.forEach.call(dots.children, function (d, k) { d.classList.toggle('is-on', k === i); }); }
+      track.addEventListener('scroll', function () { window.requestAnimationFrame(paint); }, { passive: true });
+      paint();
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var hold = 0, visible = false;
+      ['touchstart', 'pointerdown', 'wheel'].forEach(function (t) { track.addEventListener(t, function () { hold = Date.now() + 8000; }, { passive: true }); });
+      if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }).observe(track); else visible = true;
+      setInterval(function () {
+        if (!visible || document.hidden || Date.now() < hold) return;
+        var next = (current() + 1) % cards.length;
+        track.scrollTo({ left: next * track.clientWidth, behavior: 'smooth' });
+      }, 5000);
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Sculpt: reviews cards",
+  "tag": null,
+  "settings": [
+    { "type": "text", "id": "title", "label": "Heading", "default": "What moms are saying" },
+    { "type": "range", "id": "limit", "label": "Reviews", "min": 3, "max": 12, "step": 1, "default": 6 }
+  ],
+  "presets": [{ "name": "Sculpt: reviews cards", "category": "Sculpt" }]
+}
+{% endschema %}

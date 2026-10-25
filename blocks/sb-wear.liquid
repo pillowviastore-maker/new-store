@@ -3,13 +3,13 @@
   <div class="sb-wear-grid">
 
     <div class="sb-wear-item">
-      <video class="sb-wear-gif" data-sb-lazy data-src="{{ 'sb-clip-2.mp4' | file_url }}" data-poster="{{ 'sb-clip-2.jpg' | asset_url }}" muted loop playsinline autoplay preload="none" width="640" height="480" aria-label="Invisible under clothes"></video>
+      <div class="sb-wear-media"><video class="sb-wear-gif" data-sb-lazy data-src="{{ 'sb-clip-2.mp4' | file_url }}" data-poster="{{ 'sb-clip-2.jpg' | asset_url }}" muted loop playsinline autoplay preload="none" width="640" height="480" aria-label="Invisible under clothes"></video></div>
       <p class="sb-wear-label">Invisible under your clothes</p>
       <p class="sb-wear-sub">Seamless edges, no ridges or lines. It disappears under dresses, jeans and leggings.</p>
     </div>
 
     <div class="sb-wear-item">
-      <video class="sb-wear-gif" data-sb-lazy data-src="{{ 'sb-clip-1.mp4' | file_url }}" data-poster="{{ 'sb-clip-1.jpg' | asset_url }}" muted loop playsinline autoplay preload="none" width="640" height="480" aria-label="Stays in place all day"></video>
+      <div class="sb-wear-media"><video class="sb-wear-gif" data-sb-lazy data-src="{{ 'sb-clip-1.mp4' | file_url }}" data-poster="{{ 'sb-clip-1.jpg' | asset_url }}" muted loop playsinline autoplay preload="none" width="640" height="480" aria-label="Stays in place all day"></video></div>
       <p class="sb-wear-label">Stays put, morning to night</p>
       <p class="sb-wear-sub">Soft and breathable, it molds to you and never rolls or bunches. Slip it on and forget it.</p>
     </div>
@@ -20,6 +20,7 @@
   .sb-wear { max-width: 560px; width: 100%; margin: 14px auto; padding: 0 16px; box-sizing: border-box; font-family: var(--font-body--family); }
   .sb-wear-eyebrow { text-align: center; color: #A3426D; font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; margin: 0 0 12px; }
   .sb-wear-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .sb-wear-media { position: relative; border-radius: 14px; overflow: hidden; }
   .sb-wear-item { text-align: center; }
   .sb-wear-gif { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 12px; display: block; background: #f3eef1; }
   .sb-wear-label { font-size: 13.5px; font-weight: 700; color: #1A1A1A; margin: 8px 0 2px; line-height: 1.25; }
