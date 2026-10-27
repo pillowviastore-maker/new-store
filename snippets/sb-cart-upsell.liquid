@@ -100,11 +100,11 @@
   .sbcu-each { margin: 0; font-size: 13px; color: #4A3B42; }
   .sbcu-each s { color: #8A7A82; margin-right: 2px; }
   .sbcu-each strong { color: #0B7F52; font-size: 15px; }
-  .sbcu-btn { position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 13px 16px; border: 0; border-radius: 999px; background: linear-gradient(180deg, #EC3B33, #D42A22); color: #fff; font: inherit; font-size: 15.5px; font-weight: 800; letter-spacing: .02em; cursor: pointer; box-shadow: 0 6px 16px rgba(224, 50, 43, .32); transition: transform .15s, filter .2s; }
-  .sbcu-btn svg { width: 18px; height: 18px; transition: transform .2s; }
-  .sbcu-btn:hover { filter: brightness(1.05); transform: translateY(-1px); }
-  .sbcu-btn:hover svg { transform: translateX(4px); }
-  .sbcu-btn[disabled] { opacity: .7; cursor: wait; animation: none; }
+  .sbcu-btn { justify-self: center; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 16px; border: 1.5px solid #E0322B; border-radius: 999px; background: #fff; color: #D42A22; font: inherit; font-size: 14px; font-weight: 700; letter-spacing: .01em; cursor: pointer; transition: background .2s; }
+  .sbcu-btn svg { width: 15px; height: 15px; transition: transform .2s; }
+  .sbcu-btn:hover { background: #FFF0F0; }
+  .sbcu-btn:hover svg { transform: translateX(3px); }
+  .sbcu-btn[disabled] { opacity: .7; cursor: wait; }
   .sbcu-applied { justify-self: start; margin: 0; padding: 4px 10px; border-radius: 999px; background: #E6F6EE; color: #0B7F52; font-size: 12px; font-weight: 800; letter-spacing: .02em; }
   .sbcu-note { margin: 0; font-size: 11.5px; color: #6F5F66; }
   .sbcu--done { border-style: solid; grid-template-columns: auto 1fr; align-items: center; gap: 12px; border-color: #0B7F52; background: linear-gradient(135deg, #E6F6EE, #FFF4D6); }

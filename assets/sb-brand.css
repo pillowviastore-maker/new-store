@@ -91,7 +91,7 @@ html body :is(.sb-cta-scroll-bundle, .sbh-btn, .sbt-btn):active { transform: tra
 #cart-drawer .sbcu-title { font-size: 14px; }
 #cart-drawer .sbcu-bar { height: 6px; }
 #cart-drawer .sbcu-text { font-size: 12.5px; line-height: 1.35; }
-#cart-drawer .sbcu-btn { padding: 8px 14px; font-size: 14px; }
+#cart-drawer .sbcu-btn { padding: 5px 14px; font-size: 13px; }
 #cart-drawer .sbcu--done { padding: 8px 12px; gap: 8px; }
 #cart-drawer .cart__checkout-button { min-height: 46px; padding-block: 0; font-size: 16px; }
 #cart-drawer .cart__ctas { gap: 6px; --shopify-accelerated-checkout-button-block-size: 42px; --height-buy-buttons: 42px; }
