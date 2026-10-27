@@ -45,7 +45,7 @@
       <a href="{{ first.url | split: '?' | first }}#sb-bundle" class="cart-items__title">{{ first.product.title }} · {{ bundle_qty }}-pack</a>
     </div>
     {%- if offer != '' -%}
-      <p class="sbcb-offer">{{ offer | escape }}</p>
+      <p class="sbcb-offer">{{ offer | split: ': ' | last | escape }}</p>
     {%- endif -%}
   </div>
   <ul class="sbcb-lines">

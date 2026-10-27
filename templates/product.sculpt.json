@@ -62,7 +62,9 @@
             },
             "bundle": {
               "type": "sb-bundle",
-              "settings": {},
+              "settings": {
+                "default_tier": 1
+              },
               "blocks": {}
             },
             "size_finder": {
