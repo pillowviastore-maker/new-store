@@ -81,8 +81,7 @@
   </ul>
   <div class="cart-items__unit-price-wrapper">
     <div>
-      <span><bdi>{{ bundle_final | divided_by: bundle_qty | money }}</bdi> each</span>
-      {%- if bundle_save > 0 %} <span class="sbcb-save">You save {{ bundle_save | money }}</span>{% endif -%}
+      <span>{% if bundle_save > 0 %}<s class="sbcb-was-each"><bdi>{{ bundle_original | divided_by: bundle_qty | money }}</bdi></s> {% endif %}<bdi>{{ bundle_final | divided_by: bundle_qty | money }}</bdi> each</span>
     </div>
   </div>
 </td>
@@ -96,9 +95,11 @@
   </div>
 </td>
 <td class="cart-items__price cart-secondary-typography" role="cell" headers="productTotal">
-  <bdi>{{ bundle_final | money }}</bdi>
+  <bdi class="sbcb-now{% if bundle_original > bundle_final %} is-sale{% endif %}">{{ bundle_final | money }}</bdi>
   {%- if bundle_original > bundle_final -%}
+    {%- assign bundle_pct = bundle_save | times: 100.0 | divided_by: bundle_original | round -%}
     <s class="compare-at-price sbcb-was"><bdi>{{ bundle_original | money }}</bdi></s>
+    <span class="sbcb-pct">-{{ bundle_pct }}%</span>
   {%- endif -%}
 </td>
 
@@ -111,8 +112,10 @@
   .sbcb-lines li { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px 2px 3px; border: 1px solid #EEDCE6; border-radius: 999px; background: #fff; line-height: 1.4; }
   .sbcb-dot { width: 13px; height: 13px; border-radius: 50%; background: var(--dot); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .15); }
   .sbcb-x { color: #A3426D; }
-  .sbcb-save { display: inline-block; margin-left: 6px; color: #0B7F52; font-weight: 700; }
   .sbcb-actions { align-items: center; gap: 14px; }
   .sbcb-edit { font-size: 13px; font-weight: 700; color: #A3426D; text-decoration: underline; }
-  .sbcb-was { display: block; font-size: .85em; }
+  .sbcb-was { display: block; font-size: .85em; color: #8A7A82; }
+  .sbcb-now.is-sale { color: #D42A22; font-weight: 800; }
+  .sbcb-pct { display: inline-block; margin-top: 3px; padding: 1px 6px; border-radius: 6px; background: #D42A22; color: #fff; font-size: 11px; font-weight: 800; }
+  .sbcb-was-each { color: #8A7A82; }
 {% endstylesheet %}

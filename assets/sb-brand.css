@@ -63,7 +63,7 @@ html body :is(.sb-cta-scroll-bundle, .sbh-btn, .sbt-btn):active { transform: tra
 #cart-drawer details:has(> .cart-discount__summary) { display: none; }
 #cart-drawer .theme-drawer__header { padding-block: 10px 6px; min-height: 0; }
 #cart-drawer .theme-drawer__title { font-size: 22px; }
-#cart-drawer .cart-items__table-row.sbcb-row { display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; grid-template-areas: "m t t" "m o p" "m l p" "m u q"; column-gap: 10px; row-gap: 3px; align-items: center; padding-block: 2px 0; }
+#cart-drawer .cart-items__table-row.sbcb-row { display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; grid-template-areas: "m t t" "m o p" "m l p" "m u p" "m . q"; column-gap: 10px; row-gap: 3px; align-items: center; padding-block: 2px 0; }
 #cart-drawer .sbcb-row :is(.cart-items__details, .cart-items__product-info) { display: contents; }
 #cart-drawer .sbcb-row .cart-items__media { grid-area: m; align-self: start; width: 52px; }
 #cart-drawer .sbcb-row .cart-items__title-row { grid-area: t; }
@@ -71,7 +71,6 @@ html body :is(.sb-cta-scroll-bundle, .sbh-btn, .sbt-btn):active { transform: tra
 #cart-drawer .sbcb-row .sbcb-offer { grid-area: o; justify-self: start; margin: 0; padding: 1px 7px; font-size: 10.5px; line-height: 1.5; }
 #cart-drawer .sbcb-row .sbcb-lines { grid-area: l; margin: 0; font-size: 12px; }
 #cart-drawer .sbcb-row .cart-items__unit-price-wrapper { grid-area: u; margin: 0; font-size: 11.5px; line-height: 1.3; }
-#cart-drawer .sbcb-row .sbcb-save { margin-left: 4px; }
 #cart-drawer .sbcb-row .cart-items__price { grid-area: p; align-self: start; text-align: right; font-size: 14px; line-height: 1.25; }
 #cart-drawer .sbcb-row .cart-items__quantity { grid-area: q; justify-self: end; }
 #cart-drawer .sbcb-row .sbcb-actions { gap: 8px; }
@@ -83,7 +82,8 @@ html body :is(.sb-cta-scroll-bundle, .sbh-btn, .sbt-btn):active { transform: tra
 #cart-drawer .cart-totals { gap: 0; }
 #cart-drawer .cart-totals__container { padding-block: 2px 6px; }
 #cart-drawer .cart-totals__total-label { font-size: 14px; }
-#cart-drawer .cart-totals__total-value { font-size: 18px; }
+#cart-drawer .cart-totals__total-value { font-size: 20px; }
+#cart-drawer .sb-deal { margin-bottom: 8px; padding: 8px 12px; }
 #cart-drawer .sbcu { gap: 5px; padding: 8px 12px 10px; margin: 0 0 8px; }
 #cart-drawer :is(.sbcu-kicker, .sbcu-note, .sbcu-each, .sbcu-applied) { display: none; }
 #cart-drawer .sbcu-top { gap: 8px; }

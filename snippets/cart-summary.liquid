@@ -220,6 +220,26 @@
     else
       assign total_price = cart.total_price | money
     endif
+
+    # What the same items cost without the bundle offer, for the savings shown next to the total.
+    assign sb_original = 0
+    assign sb_offer = ''
+    for item in cart.items
+      assign sb_unit = item.original_price
+      if item.variant.compare_at_price > sb_unit
+        assign sb_unit = item.variant.compare_at_price
+      endif
+      assign sb_line = sb_unit | times: item.quantity
+      assign sb_original = sb_original | plus: sb_line
+      if sb_offer == '' and item.line_level_discount_allocations.size > 0
+        assign sb_offer = item.line_level_discount_allocations.first.discount_application.title | split: ': ' | last
+      endif
+    endfor
+    assign sb_save = sb_original | minus: cart.total_price
+    assign sb_percent = 0
+    if sb_save > 0
+      assign sb_percent = sb_save | times: 100.0 | divided_by: sb_original | round
+    endif
   -%}
 
   <div class="cart-totals__container{% if settings.show_installments %} cart-totals__container--has-installments{% endif %}">
@@ -228,6 +248,9 @@
       role="status"
     >
       <span class="cart-totals__total-label cart-primary-typography">{{ 'content.cart_estimated_total' | t }}</span>
+      {%- if sb_save > 0 -%}
+        <s class="sb-total-was"><bdi>{{ sb_original | money }}</bdi></s>
+      {%- endif -%}
       <text-component
         ref="cartTotal"
         value="{{ total_price | strip_html }}"
@@ -249,7 +272,15 @@
   </div>
 </div>
 
-{% render 'sb-cart-upsell' %}
+{%- if sb_save > 0 -%}
+  <div class="sb-deal" role="note">
+    <span class="sb-deal-pct">-{{ sb_percent }}%</span>
+    <p class="sb-deal-text">
+      <strong>You're saving {{ sb_save | money }}</strong>
+      {%- if sb_offer != '' %}<span>{{ sb_offer | escape }} applied to your order</span>{% endif -%}
+    </p>
+  </div>
+{%- endif -%}
 
 <div class="cart__ctas">
   <button
@@ -297,6 +328,14 @@
   .sb-cart-trust svg { width: 15px; height: 15px; color: #A3426D; flex-shrink: 0; }
   .sb-cart-pay { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
   .sb-cart-pay svg { display: block; width: 38px; height: 24px; }
+  .cart-totals__total:has(.sb-total-was) { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; }
+  .cart-totals__total:has(.sb-total-was) .cart-totals__total-label { margin-right: auto; }
+  .sb-total-was { color: #8A7A82; font-size: 14px; font-weight: 500; }
+  .cart-totals__total:has(.sb-total-was) .cart-totals__total-value { color: #D42A22; font-weight: 800; }
+  .sb-deal { display: flex; align-items: center; gap: 12px; margin: 0 0 12px; padding: 10px 14px; border-radius: 14px; background: linear-gradient(135deg, #E9F7EF, #FFF6DA); border: 1.5px solid #9ED6B6; font-family: var(--font-body--family); }
+  .sb-deal-pct { flex: 0 0 auto; padding: 6px 10px; border-radius: 10px; background: #D42A22; color: #fff; font-size: 18px; font-weight: 900; letter-spacing: .01em; line-height: 1; transform: rotate(-4deg); box-shadow: 0 4px 10px rgba(212, 42, 34, .25); }
+  .sb-deal-text { margin: 0; display: grid; gap: 1px; font-size: 12.5px; line-height: 1.3; color: #3A2C33; }
+  .sb-deal-text strong { color: #0B7F52; font-size: 16px; font-weight: 900; }
   .cart__checkout-button { min-height: 54px; border-radius: 999px; background: linear-gradient(180deg, #22B865, #179A52); color: #fff; border-color: #179A52; font-size: 17px; font-weight: 800; letter-spacing: .02em; box-shadow: 0 8px 20px rgba(23, 154, 82, .35); transition: transform .15s, filter .2s; }
   .cart__checkout-button:hover { color: #fff; filter: brightness(1.05); transform: translateY(-1px); }
 </style>
