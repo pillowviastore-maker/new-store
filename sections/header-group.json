@@ -17,7 +17,7 @@
         "announcement_1": {
           "type": "_announcement",
           "settings": {
-            "text": "<strong>BUY 2 GET 2 FREE</strong> · Our most popular deal",
+            "text": "<strong>BUY 1 GET 1 FREE</strong> · Mix any colors and sizes",
             "link": "shopify://products/sculpt-brief",
             "font": "var(--font-subheading--family)",
             "font_size": "0.875rem",
