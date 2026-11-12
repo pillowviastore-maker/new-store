@@ -231,8 +231,8 @@
       endif
       assign sb_line = sb_unit | times: item.quantity
       assign sb_original = sb_original | plus: sb_line
-      if sb_offer == '' and item.line_level_discount_allocations.size > 0
-        assign sb_offer = item.line_level_discount_allocations.first.discount_application.title | split: ': ' | last
+      if sb_offer == '' and item.discount_allocations.size > 0
+        assign sb_offer = item.discount_allocations.first.discount_application.title | split: ': ' | last
       endif
     endfor
     assign sb_save = sb_original | minus: cart.total_price

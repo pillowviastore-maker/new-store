@@ -15,7 +15,12 @@
   for line in cart.items
     if line.properties['_bundle'] == bundle_id
       assign bundle_qty = bundle_qty | plus: line.quantity
-      assign bundle_final = bundle_final | plus: line.final_line_price
+      # Count every discount on the line, including order-level ones allocated to it (used by some markets).
+      assign line_final = line.original_line_price
+      for allocation in line.discount_allocations
+        assign line_final = line_final | minus: allocation.amount
+      endfor
+      assign bundle_final = bundle_final | plus: line_final
       assign line_compare = line.original_price
       if line.variant.compare_at_price > line_compare
         assign line_compare = line.variant.compare_at_price
@@ -26,8 +31,8 @@
         assign bundle_keys = bundle_keys | append: ','
       endif
       assign bundle_keys = bundle_keys | append: line.key
-      if offer == '' and line.line_level_discount_allocations.size > 0
-        assign offer = line.line_level_discount_allocations.first.discount_application.title
+      if offer == '' and line.discount_allocations.size > 0
+        assign offer = line.discount_allocations.first.discount_application.title
       endif
     endif
   endfor

@@ -29,6 +29,19 @@
         assign unit_discount = unit_price | times: percent | divided_by: 100.0 | floor
         assign each = unit_price | minus: unit_discount
         assign total = each | times: qty
+        # Markets with their own bundle prices (order-level discounts there) show those totals instead.
+        assign market_rows = block.settings.market_totals | newline_to_br | split: '<br />'
+        for row in market_rows
+          assign row_market = row | split: ':' | first | strip | downcase
+          if row_market != blank and row_market == localization.market.handle
+            assign tier_index = i | minus: 1
+            assign row_total = row | split: ':' | last | split: ',' | slice: tier_index | first | strip
+            if row_total != blank
+              assign total = row_total | times: 100 | round
+              assign each = total | divided_by: qty
+            endif
+          endif
+        endfor
         assign discount = compare | minus: total
         assign save = discount | times: 100.0 | divided_by: compare | round
       -%}
@@ -556,6 +569,7 @@
     { "type": "text", "id": "tier_3_title", "label": "Title", "default": "BUY 3 GET 3 FREE" },
     { "type": "number", "id": "tier_3_qty", "label": "Items", "default": 6 },
     { "type": "text", "id": "tier_3_percent", "label": "Discount %", "default": "75.42" },
+    { "type": "textarea", "id": "market_totals", "label": "Bundle totals by market", "default": "united-kingdom: 27.99, 34.99, 38.99", "info": "One market per line: market handle, then the 1st, 2nd and 3rd offer totals in that market's currency. Must match that market's discounts in Shopify." },
     { "type": "text", "id": "tier_3_badge", "label": "Badge", "default": "BEST VALUE 🔥" }
   ],
   "presets": [{ "name": "Sculpt: bundle offers", "category": "Sculpt" }]
