@@ -91,12 +91,21 @@
               "type": "sb-wear",
               "settings": {},
               "blocks": {}
+            },
+            "offer_timer": {
+              "type": "sb-offer-timer",
+              "settings": {
+                "label": "Offer ends in",
+                "ends_at": ""
+              },
+              "blocks": {}
             }
           },
           "block_order": [
             "review",
             "title",
             "subtitle",
+            "offer_timer",
             "bundle",
             "size_finder",
             "guarantee",
@@ -142,10 +151,15 @@
     "reviews": {
       "type": "sb-reviews-carousel",
       "settings": {}
+    },
+    "marquee": {
+      "type": "sb-marquee",
+      "settings": {}
     }
   },
   "order": [
     "main",
+    "marquee",
     "videos",
     "reviews",
     "features",

@@ -1,0 +1,53 @@
+{%- doc -%}
+  Countdown to the real end of an offer. Shows nothing until an end date is set, and hides itself once that date has passed.
+{%- enddoc -%}
+{%- assign ends_at = block.settings.ends_at | strip -%}
+{%- if ends_at != blank -%}
+  <div class="sbt" data-sbt data-ends="{{ ends_at | escape }}" hidden>
+    <p class="sbt-label">{{ block.settings.label }}</p>
+    <div class="sbt-clock" role="timer" aria-live="off">
+      <span><b data-sbt-d>00</b><i>days</i></span>
+      <span><b data-sbt-h>00</b><i>hrs</i></span>
+      <span><b data-sbt-m>00</b><i>min</i></span>
+      <span><b data-sbt-s>00</b><i>sec</i></span>
+    </div>
+  </div>
+  <style>
+    .sbt { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 4px 0 10px; padding: 9px 12px; border-radius: 12px; background: linear-gradient(135deg, #2A1A23, #5B1E3D); color: #fff; font-family: var(--font-body--family); }
+    .sbt-label { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+    .sbt-clock { display: flex; gap: 5px; }
+    .sbt-clock span { display: flex; flex-direction: column; align-items: center; min-width: 34px; padding: 3px 4px; border-radius: 8px; background: rgba(255, 255, 255, .14); }
+    .sbt-clock b { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.1; }
+    .sbt-clock i { font-style: normal; font-size: 9px; opacity: .8; text-transform: uppercase; }
+  </style>
+  <script>
+    (function () {
+      var root = document.currentScript.previousElementSibling.previousElementSibling;
+      var end = Date.parse(root.dataset.ends);
+      if (isNaN(end)) return;
+      var parts = ['d', 'h', 'm', 's'].map(function (k) { return root.querySelector('[data-sbt-' + k + ']'); });
+      function pad(n) { return (n < 10 ? '0' : '') + n; }
+      function tick() {
+        var left = Math.floor((end - Date.now()) / 1000);
+        if (left <= 0) { root.hidden = true; clearInterval(timer); return; }
+        var vals = [Math.floor(left / 86400), Math.floor(left % 86400 / 3600), Math.floor(left % 3600 / 60), left % 60];
+        vals.forEach(function (v, i) { parts[i].textContent = pad(v); });
+        root.hidden = false;
+      }
+      var timer = setInterval(tick, 1000);
+      tick();
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Sculpt: offer countdown",
+  "tag": null,
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "Offer ends in" },
+    { "type": "text", "id": "ends_at", "label": "Offer end (date and time)", "info": "The real end of the offer, e.g. 2026-12-01T00:00:00Z (UTC). Leave empty to hide the countdown. It disappears by itself when this time has passed." }
+  ],
+  "presets": [{ "name": "Sculpt: offer countdown", "category": "Sculpt" }]
+}
+{% endschema %}

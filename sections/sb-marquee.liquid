@@ -1,0 +1,39 @@
+{%- liquid
+  assign items = section.settings.items | newline_to_br | split: '<br />'
+-%}
+<div class="sb-mq" style="--sb-mq-speed: {{ section.settings.speed }}s;" aria-label="{{ items | join: ' · ' | strip_html | escape }}">
+  {%- comment -%} Two identical tracks slide left together, so the band loops without a seam. {%- endcomment -%}
+  {%- for n in (1..2) -%}
+    <ul class="sb-mq-track"{% if n == 2 %} aria-hidden="true"{% endif %}>
+      {%- for item in items -%}
+        {%- assign text = item | strip -%}
+        {%- if text != blank -%}
+          <li><span class="sb-mq-star" aria-hidden="true">✦</span>{{ text }}</li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  {%- endfor -%}
+</div>
+
+<style>
+  .sb-mq { display: flex; overflow: hidden; margin: 8px 0; padding: 12px 0; background: #2A1A23; color: #fff; font-family: var(--font-body--family); user-select: none; }
+  .sb-mq-track { flex: 0 0 auto; display: flex; gap: 34px; margin: 0; padding: 0 17px; list-style: none; animation: sb-mq-slide var(--sb-mq-speed, 28s) linear infinite; }
+  .sb-mq-track li { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; font-size: 14px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  .sb-mq-star { color: #E7B9CF; font-size: 12px; }
+  .sb-mq:hover .sb-mq-track { animation-play-state: paused; }
+  @keyframes sb-mq-slide { to { transform: translateX(-100%); } }
+  @media (prefers-reduced-motion: reduce) { .sb-mq-track { animation: none; } .sb-mq { overflow-x: auto; } }
+</style>
+
+{% schema %}
+{
+  "name": "Sculpt: moving strip",
+  "tag": "section",
+  "class": "sb-section",
+  "settings": [
+    { "type": "textarea", "id": "items", "label": "Messages (one per line)", "default": "Free delivery\n90-day money-back guarantee\nFree size exchange\nSizes XS to 5XL\nInvisible under clothes\n360° crossed-band support" },
+    { "type": "range", "id": "speed", "label": "Seconds per loop", "min": 10, "max": 60, "step": 2, "default": 28 }
+  ],
+  "presets": [{ "name": "Sculpt: moving strip", "category": "Sculpt" }]
+}
+{% endschema %}

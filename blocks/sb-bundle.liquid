@@ -4,7 +4,7 @@
   assign color_option_index = -1
   for option in product.options_with_values
     assign option_name = option.name | downcase
-    if option_name == 'color' or option_name == 'colour'
+    if option_name == 'color' or option_name == 'colour' or option_name == 'couleur' or option_name == 'kleur' or option_name == 'farbe'
       assign color_option_index = forloop.index0
     endif
   endfor
@@ -93,7 +93,17 @@
                       endfor
                     endif
                   -%}
-                  <button type="button" class="sbb-swatch" role="radio" aria-checked="false" data-sbb-swatch="{{ value | escape }}" style="--swatch: {{ swatch }};" title="{{ value | escape }}" aria-label="{{ value | escape }}"></button>
+                  {%- liquid
+                    # A small photo of the brief in this colour, so shoppers see the real shade.
+                    assign swatch_img = ''
+                    for v in product.variants
+                      if v.options[color_option_index] == value and v.featured_media
+                        assign swatch_img = v.featured_media | image_url: width: 120, height: 120, crop: 'center'
+                        break
+                      endif
+                    endfor
+                  -%}
+                  <button type="button" class="sbb-swatch{% if swatch_img != '' %} sbb-swatch--photo{% endif %}" role="radio" aria-checked="false" data-sbb-swatch="{{ value | escape }}" style="--swatch: {{ swatch }};{% if swatch_img != '' %} --swatch-img: url('{{ swatch_img }}');{% endif %}" title="{{ value | escape }}" aria-label="{{ value | escape }}"></button>
                 {%- endfor -%}
               </div>
               <span class="sbb-color-name" data-sbb-color-name>Choose color</span>
@@ -195,6 +205,8 @@
   .sbb-swatch:hover { transform: scale(1.1); }
   .sbb-swatch:focus-visible { outline: 2px solid var(--sbb-accent); outline-offset: 3px; }
   .sbb-swatch.is-active { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--sbb-accent); animation: sbb-pop .25s; }
+  .sbb-swatch--photo { width: 38px; height: 38px; border-radius: 10px; border: 2px solid var(--swatch); background: #fff var(--swatch-img) center / 118% no-repeat; }
+  .sbb-swatch--photo.is-active { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--sbb-accent); }
   @keyframes sbb-pop { 50% { transform: scale(1.18); } }
   .sbb-color-name { font-size: 12px; color: #6B5E65; }
   .sbb-color-name.is-set { color: #1A1A1A; font-weight: 700; }
