@@ -100,6 +100,27 @@ html body :is(.sb-cta-scroll-bundle, .sbh-btn, .sbt-btn):active { transform: tra
 #cart-drawer .sb-cart-pay { margin-top: 6px; gap: 3px; flex-wrap: nowrap; }
 #cart-drawer .sb-cart-pay svg { width: 30px; height: 19px; }
 
+/* Cart drawer dressed in the announcement-bar plum: dark header, framed bundle card, plum savings card and trust box. */
+#cart-drawer .theme-drawer__dialog { --sb-plum: #2A1A23; --sb-plum-2: #5B1E3D; --sb-blush: #F6E3EC; }
+#cart-drawer .theme-drawer__header { background: var(--sb-plum); color: #fff; padding: 12px 16px; margin: 0 0 10px; }
+#cart-drawer .theme-drawer__title { color: #fff; }
+#cart-drawer .theme-drawer__badge { background: #E7B9CF; color: var(--sb-plum); font-weight: 800; }
+#cart-drawer .theme-drawer__close-button { color: #fff; background: rgba(255, 255, 255, .12); border-radius: 50%; }
+#cart-drawer .cart-items__table-row.sbcb-row { padding: 10px; border: 1.5px solid var(--sb-plum); border-radius: 14px; background: linear-gradient(180deg, #fff, #FBF3F7); box-shadow: 0 6px 16px rgba(42, 26, 35, .08); }
+#cart-drawer .sbcb-row .cart-items__media-image { border-radius: 10px; }
+#cart-drawer .sbcb-count { background: var(--sb-plum-2); }
+#cart-drawer .sbcb-offer { background: var(--sb-plum); color: #fff; }
+#cart-drawer .sbcb-offer::before { color: #E7B9CF; }
+#cart-drawer .sbcb-lines li { border-color: #E2C7D4; }
+#cart-drawer .cart-totals__container { border-top: 1px dashed #D9B8C8; padding-top: 8px; }
+#cart-drawer .sb-deal { position: relative; width: 100%; box-sizing: border-box; background: linear-gradient(135deg, var(--sb-plum), var(--sb-plum-2)); border: 0; box-shadow: 0 8px 20px rgba(42, 26, 35, .22); }
+#cart-drawer .sb-deal-text { color: rgba(255, 255, 255, .85); }
+#cart-drawer .sb-deal-text strong { color: #fff; }
+#cart-drawer .sb-deal-pct { background: #E7B9CF; color: var(--sb-plum); box-shadow: none; }
+#cart-drawer .sb-cart-trust { margin-top: 8px; padding: 7px 8px 5px; border: 1.5px solid var(--sb-plum); border-bottom: 0; border-radius: 12px 12px 0 0; background: var(--sb-blush); color: var(--sb-plum); font-weight: 700; }
+#cart-drawer .sb-cart-trust svg { color: var(--sb-plum-2); }
+#cart-drawer .sb-cart-pay { margin-top: 0; padding: 6px 8px 8px; border: 1.5px solid var(--sb-plum); border-top: 1px dashed #D9B8C8; border-radius: 0 0 12px 12px; background: #fff; }
+
 /* Scroll reveal (assets/sb-reveal.js): content glides up and fades in as it enters the screen. */
 html .sb-rv { opacity: 0; transform: translate3d(0, 28px, 0); transition: opacity .7s cubic-bezier(.2, .7, .2, 1), transform .7s cubic-bezier(.2, .7, .2, 1); transition-delay: var(--sb-rv-delay, 0ms); }
 html .sb-rv.sb-rv-in { opacity: 1; transform: none; }
