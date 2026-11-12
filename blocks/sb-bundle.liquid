@@ -8,9 +8,27 @@
       assign color_option_index = forloop.index0
     endif
   endfor
+
+  # Preselect from a variant when one is set: its option values come in the shopper's language (Noir, not Black).
+  assign default_color = block.settings.default_color
+  assign default_size = block.settings.default_size
+  assign default_variant_id = block.settings.default_variant_id | plus: 0
+  if default_variant_id > 0
+    for v in product.variants
+      if v.id == default_variant_id
+        for opt in v.options
+          if forloop.index0 == color_option_index
+            assign default_color = opt
+          else
+            assign default_size = opt
+          endif
+        endfor
+      endif
+    endfor
+  endif
 -%}
 
-<div class="sbb" id="sb-bundle" data-sbb data-color-index="{{ color_option_index }}" data-default-color="{{ block.settings.default_color | escape }}" data-default-size="{{ block.settings.default_size | escape }}">
+<div class="sbb" id="sb-bundle" data-sbb data-color-index="{{ color_option_index }}" data-default-color="{{ default_color | escape }}" data-default-size="{{ default_size | escape }}">
   {%- if block.settings.heading != blank -%}
     <div class="sbb-head"><span>{{ block.settings.heading }}</span></div>
   {%- endif -%}
@@ -566,6 +584,7 @@
     { "type": "textarea", "id": "swatch_colors", "label": "Color swatches", "info": "One per line: Color name: #hex. Used when the color has no swatch in Shopify.", "default": "Black: #111111\nBeige: #D8B99A\nNavy: #1F2A44\nLilac: #C7A6D9\nPurple: #5B2A86\nFuchsia pink: #D6247A" },
     { "type": "text", "id": "default_color", "label": "Preselected color", "default": "Black", "info": "Leave empty to make shoppers pick a color." },
     { "type": "text", "id": "default_size", "label": "Preselected size", "default": "M", "info": "Leave empty to make shoppers pick a size." },
+    { "type": "text", "id": "default_variant_id", "label": "Preselected variant ID", "info": "Optional. When set, its colour and size are preselected in every language, overriding the two fields above." },
     { "type": "range", "id": "default_tier", "label": "Preselected offer", "min": 1, "max": 3, "step": 1, "default": 1 },
     { "type": "header", "content": "Offer 1" },
     { "type": "text", "id": "tier_1_title", "label": "Title", "default": "BUY 1 GET 1 FREE" },

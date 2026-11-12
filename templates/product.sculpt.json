@@ -63,7 +63,8 @@
             "bundle": {
               "type": "sb-bundle",
               "settings": {
-                "default_tier": 1
+                "default_tier": 1,
+                "default_variant_id": "61315045359950"
               },
               "blocks": {}
             },
