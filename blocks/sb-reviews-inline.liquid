@@ -1,6 +1,5 @@
 {%- doc -%}
   "What moms are saying": a swipeable card carousel of Judge.me text reviews inside the product details.
-  Imported reviews keep their "Imported review" label.
 {%- enddoc -%}
 {%- liquid
   assign rv_product = closest.product | default: all_products['sculpt-brief']
@@ -36,11 +35,7 @@
             {%- if text.size > headline_size -%}
               <p class="sbri-text">{{ text | truncate: 220 | escape }}</p>
             {%- endif -%}
-            <p class="sbri-meta">{% if review.verified_buyer %}Verified buyer{% else %}Imported review{% endif %}</p>
-            {%- assign picture = review.pictures_urls | first -%}
-            {%- if picture -%}
-              <img class="sbri-photo" src="{{ picture.compact | default: picture.original }}" alt="Photo from {{ review.reviewer_name | split: ' ' | first | escape }}'s review" loading="lazy" width="400" height="400">
-            {%- endif -%}
+            {%- if review.verified_buyer -%}<p class="sbri-meta">Verified buyer</p>{%- endif -%}
           </article>
           {%- assign shown = shown | plus: 1 -%}
         {%- endif -%}

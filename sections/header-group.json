@@ -31,7 +31,7 @@
         "announcement_2": {
           "type": "_announcement",
           "settings": {
-            "text": "<strong>Free US shipping</strong> on every order",
+            "text": "<strong>Free UK delivery</strong> on every order",
             "link": "shopify://products/sculpt-brief",
             "font": "var(--font-subheading--family)",
             "font_size": "0.875rem",

@@ -39,7 +39,7 @@
         <figcaption>
           <p class="sbhb-card-title">{{ section.settings.quote_title }}</p>
           <blockquote>{{ quote.body_html | strip_html | truncate: 260 }}</blockquote>
-          <p class="sbhb-card-meta"><span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span> {{ quote.reviewer_name }}{% unless quote.verified_buyer %} <span class="sbhb-source">Imported review</span>{% endunless %}</p>
+          <p class="sbhb-card-meta"><span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span> {{ quote.reviewer_name }}</p>
         </figcaption>
       {%- endif -%}
     </figure>

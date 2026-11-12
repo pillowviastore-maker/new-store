@@ -3,7 +3,6 @@
   Accepts: review (Judge.me review object), show_source (boolean)
 {%- endcomment -%}
 {%- assign stars = review.rating | plus: 0 -%}
-{%- assign picture = review.pictures_urls | first -%}
 <article class="sbrc-card">
   <span class="sbrc-avatar" aria-hidden="true">{{ review.reviewer_name | slice: 0 | upcase }}</span>
   <div class="sbrc-card-top">
@@ -14,13 +13,6 @@
   </div>
   {%- if review.verified_buyer -%}
     <span class="sbrc-source">Verified buyer</span>
-  {%- elsif show_source -%}
-    <span class="sbrc-source">Imported review</span>
   {%- endif -%}
   <div class="sbrc-text">{{ review.body_html }}</div>
-  {%- if picture -%}
-    <button type="button" class="sbrc-thumb" data-sbrc-thumb aria-label="Enlarge photo from {{ review.reviewer_name | escape }}">
-      <img src="{{ picture.compact | default: picture.original }}" data-full="{{ picture.original | default: picture.compact }}" alt="Review photo from {{ review.reviewer_name | escape }}" loading="lazy" width="400" height="400">
-    </button>
-  {%- endif -%}
 </article>

@@ -128,3 +128,15 @@ html .sb-rv.sb-rv-in { opacity: 1; transform: none; }
 
 /* Bundles keep their extra lines as hidden rows, so the last *visible* row also loses its bottom spacing and divider. */
 #cart-drawer .cart-drawer__items .cart-items__table-row:not([hidden]):not(:has(~ .cart-items__table-row:not([hidden]))) { padding-block-end: 0; margin-block-end: 0; border-block-end: 0; }
+
+/* Desktop product page (phones untouched): a centred two-column layout instead of an edge-to-edge gallery. */
+@media screen and (min-width: 990px) {
+  .product-information__grid.product-information__grid--half { grid-template-columns: minmax(32px, 1fr) minmax(0, 620px) minmax(0, 540px) minmax(32px, 1fr) !important; column-gap: 0 !important; }
+  .product-information__grid--half .product-information__media { grid-column: 2 / 3 !important; padding: 24px 48px 0 0 !important; }
+  .product-information__grid--half .product-details { grid-column: 3 / 4 !important; padding: 24px 0 0 !important; }
+  .product-information__media slideshow-component, .product-information__media .slideshow-controls__thumbnails { max-width: 100%; }
+  .product-information__media slideshow-slides { border-radius: 16px; overflow: hidden; }
+  .product-details .text-block--align-center:has(> h1) { text-align: left; justify-content: flex-start; }
+  .product-details .text-block:has(> h1) h1 { font-size: 46px; line-height: 1.05; }
+  .product-details .sb-subtitle { text-align: left; margin-left: 0; }
+}

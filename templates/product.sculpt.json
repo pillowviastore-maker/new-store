@@ -31,7 +31,7 @@
           },
           "blocks": {
             "review": {
-              "type": "review",
+              "type": "sb-rating",
               "settings": {},
               "blocks": {}
             },

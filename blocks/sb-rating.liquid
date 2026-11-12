@@ -1,0 +1,96 @@
+{%- doc -%}
+  Rating line above the product title: reviewer initials, stars that fill in one by one,
+  and the score and review count counting up when the line comes into view.
+{%- enddoc -%}
+{%- liquid
+  assign rating_product = closest.product | default: all_products['sculpt-brief']
+  assign rating = rating_product.metafields.reviews.rating.value.rating | default: 5
+  assign scale_max = rating_product.metafields.reviews.rating.value.scale_max | default: 5
+  assign rating_count = rating_product.metafields.reviews.rating_count | default: 0
+  assign score = rating | round: 1
+  assign data = rating_product.metafields.judgeme.review_widget_data.value
+  assign names = ''
+  for review in data.reviews limit: 3
+    assign initial = review.reviewer_name | strip | slice: 0 | upcase
+    assign names = names | append: initial | append: ','
+  endfor
+  assign initials = names | split: ','
+-%}
+
+{%- if rating_count > 0 -%}
+  <a class="sbr" href="#sb-reviews" data-sbr aria-label="Rated {{ score }} out of {{ scale_max }}, {{ rating_count }} reviews">
+    {%- if initials.size > 0 -%}
+      <span class="sbr-faces" aria-hidden="true">
+        {%- for letter in initials -%}<span class="sbr-face sbr-face--{{ forloop.index }}">{{ letter }}</span>{%- endfor -%}
+      </span>
+    {%- endif -%}
+    <span class="sbr-stars" aria-hidden="true">
+      {%- for i in (1..5) -%}<span class="sbr-star" style="--i: {{ i }};">&#9733;</span>{%- endfor -%}
+    </span>
+    <span class="sbr-score"><b data-sbr-count="{{ score }}" data-sbr-decimals="1">{{ score }}</b>/{{ scale_max }}</span>
+    <span class="sbr-dot" aria-hidden="true">•</span>
+    <span class="sbr-count"><b data-sbr-count="{{ rating_count }}" data-sbr-decimals="0">{{ rating_count }}</b> reviews</span>
+  </a>
+
+  <style>
+    .sbr { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 0 0 4px; color: #2A1A23; font-family: var(--font-body--family); font-size: 14px; text-decoration: none; }
+    .sbr-faces { display: inline-flex; }
+    .sbr-face { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; margin-left: -8px; border: 2px solid #fff; border-radius: 50%; color: #fff; font-size: 11px; font-weight: 800; animation: sbr-pop .5s cubic-bezier(.2, 1.4, .4, 1) both; }
+    .sbr-face:first-child { margin-left: 0; }
+    .sbr-face--1 { background: linear-gradient(135deg, #C2557F, #A3426D); }
+    .sbr-face--2 { background: linear-gradient(135deg, #5B1E3D, #2A1A23); animation-delay: .08s; }
+    .sbr-face--3 { background: linear-gradient(135deg, #E3A72F, #D17A2B); animation-delay: .16s; }
+    .sbr-stars { display: inline-flex; gap: 1px; font-size: 16px; line-height: 1; }
+    .sbr-star { color: #E3A72F; }
+    @supports (-webkit-background-clip: text) or (background-clip: text) {
+      .sbr-star { color: transparent; -webkit-text-fill-color: transparent; background: linear-gradient(90deg, #F2B33D, #E3A72F) no-repeat 0 0 / 0 100%, linear-gradient(#E7D7DF, #E7D7DF); -webkit-background-clip: text; background-clip: text; animation: sbr-fill .35s ease-out forwards; animation-delay: calc(.25s + var(--i) * .12s); }
+    }
+    .sbr-score b, .sbr-count b { font-weight: 800; font-variant-numeric: tabular-nums; }
+    .sbr-score { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #E3C8D5; }
+    .sbr-dot { color: #A3426D; }
+    .sbr-count { color: #5A4A52; }
+    .sbr:hover .sbr-count { color: #A3426D; }
+    @keyframes sbr-fill { to { background-size: 100% 100%, 100% 100%; } }
+    @keyframes sbr-pop { from { opacity: 0; transform: scale(.4); } }
+    @media (prefers-reduced-motion: reduce) {
+      .sbr-face { animation: none; }
+      .sbr-star { animation: none; background-size: 100% 100%, 100% 100%; }
+    }
+  </style>
+
+  <script>
+    (function () {
+      var root = document.currentScript.previousElementSibling.previousElementSibling;
+      var nums = root.querySelectorAll('[data-sbr-count]');
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // Clicking scrolls to the reviews section.
+      root.addEventListener('click', function (e) {
+        var target = document.querySelector('.sbrc') || document.querySelector('.sbri');
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      });
+      if (reduce) return;
+      // Count the score and the number of reviews up from zero once.
+      nums.forEach(function (el) {
+        var end = parseFloat(el.dataset.sbrCount), dec = +el.dataset.sbrDecimals, start = performance.now(), dur = 1100;
+        el.textContent = (0).toFixed(dec);
+        function step(now) {
+          var t = Math.min(1, (now - start) / dur), eased = 1 - Math.pow(1 - t, 3);
+          el.textContent = (end * eased).toFixed(dec);
+          if (t < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      });
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Sculpt: rating line",
+  "tag": null,
+  "settings": [],
+  "presets": [{ "name": "Sculpt: rating line", "category": "Sculpt" }]
+}
+{% endschema %}

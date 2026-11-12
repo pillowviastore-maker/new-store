@@ -54,10 +54,6 @@
             {%- endfor -%}
           </ul>
         {%- endif -%}
-        <div class="sbrc-chips" role="group" aria-label="Filter reviews">
-          <button type="button" class="sbrc-chip is-on" data-sbrc-filter="all" aria-pressed="true">All</button>
-          <button type="button" class="sbrc-chip" data-sbrc-filter="photos" aria-pressed="false">With photos</button>
-        </div>
       </div>
       <div class="sbrc-list" data-sbrc-list data-shop="{{ shop.permanent_domain }}" data-product="{{ reviews_product.id }}" data-total="{{ rating_count }}"></div>
       <template data-sbrc-template>
@@ -179,14 +175,11 @@
       function cardHtml(r) {
         var stars = '', n = +r.rating || 5;
         for (var i = 1; i <= 5; i++) stars += i <= n ? '&#9733;' : '<span class="sbrc-star-off">&#9733;</span>';
-        var pic = r.pictures_urls && r.pictures_urls[0];
-        var imported = (r.transparency_badges || []).indexOf('review_collected_from_another_provider') > -1 || !r.verified_buyer;
         return '<article class="sbrc-card">' +
           '<span class="sbrc-avatar" aria-hidden="true">' + esc((r.reviewer_name || '?').charAt(0).toUpperCase()) + '</span>' +
           '<div class="sbrc-card-top"><span class="sbrc-name">' + esc(r.reviewer_name) + '</span><span class="sbrc-stars" aria-label="' + n + ' out of 5 stars">' + stars + '</span></div>' +
-          '<span class="sbrc-source">' + (r.verified_buyer ? 'Verified buyer' : (imported ? 'Imported review' : '')) + '</span>' +
+          (r.verified_buyer ? '<span class="sbrc-source">Verified buyer</span>' : '') +
           '<div class="sbrc-text">' + esc(plain(r).trim()) + '</div>' +
-          (pic ? '<button type="button" class="sbrc-thumb" data-sbrc-thumb aria-label="Enlarge photo from ' + esc(r.reviewer_name) + '"><img src="' + esc(pic.compact || pic.original) + '" data-full="' + esc(pic.original || pic.compact) + '" alt="Review photo from ' + esc(r.reviewer_name) + '" loading="lazy" width="400" height="400"></button>' : '') +
           '</article>';
       }
       function updateCount() { if (countEl) countEl.textContent = 'Showing ' + list.querySelectorAll('.sbrc-card').length + ' of ' + total + ' reviews'; }

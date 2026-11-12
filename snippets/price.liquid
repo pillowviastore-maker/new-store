@@ -50,6 +50,23 @@
     endif
   endif
 
+  # Product cards show the Sculpt Brief's entry offer (2 briefs) rather than the single-brief price.
+  # Keep in step with the bundle block: UK has its own totals, other markets use the 50.02% discount.
+  assign bundle_note = ''
+  if is_product_card and product_resource.handle == 'sculpt-brief'
+    assign unit = selected_variant.price
+    if localization.market.handle == 'united-kingdom'
+      assign price = 2799
+    else
+      assign unit_discount = unit | times: 50.02 | divided_by: 100.0 | floor
+      assign price = unit | minus: unit_discount | times: 2
+    endif
+    assign compare_at_price = unit | times: 2
+    assign show_compare_price = true
+    assign has_volume_pricing = false
+    assign bundle_note = 'for 2 · Buy 1 Get 1 Free'
+  endif
+
   # Determine if currency code should be shown
   assign use_currency = false
   if product.handle == product_resource.handle
@@ -126,6 +143,9 @@
     {% render 'unit-price', price: unit_price, measurement: selected_variant.unit_price_measurement %}
   {%- endif -%}
 </div>
+{%- if bundle_note != '' -%}
+  <small class="price-bundle-note" style="display:block;margin-top:2px;font-size:12px;font-weight:700;color:#A3426D;">{{ bundle_note }}</small>
+{%- endif -%}
 {%- if has_volume_pricing -%}
   <small
     ref="volumePricingNote"
