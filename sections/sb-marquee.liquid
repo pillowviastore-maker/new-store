@@ -2,27 +2,64 @@
   assign items = section.settings.items | newline_to_br | split: '<br />'
 -%}
 <div class="sb-mq" style="--sb-mq-speed: {{ section.settings.speed }}s;" aria-label="{{ items | join: ' · ' | strip_html | escape }}">
-  {%- comment -%} Two identical tracks slide left together, so the band loops without a seam. {%- endcomment -%}
-  {%- for n in (1..2) -%}
-    <ul class="sb-mq-track"{% if n == 2 %} aria-hidden="true"{% endif %}>
-      {%- for item in items -%}
-        {%- assign text = item | strip -%}
-        {%- if text != blank -%}
-          <li><span class="sb-mq-star" aria-hidden="true">✦</span>{{ text }}</li>
-        {%- endif -%}
-      {%- endfor -%}
-    </ul>
-  {%- endfor -%}
+  <div class="sb-mq-row">
+    {%- comment -%} Two identical tracks slide left together, so the band loops without a seam. {%- endcomment -%}
+    {%- for n in (1..2) -%}
+      <ul class="sb-mq-track"{% if n == 2 %} aria-hidden="true"{% endif %}>
+        {%- for item in items -%}
+          {%- assign text = item | strip -%}
+          {%- if text != blank -%}
+            {%- assign style = forloop.index | modulo: 2 -%}
+            <li class="sb-mq-item{% if style == 0 %} sb-mq-item--serif{% endif %}">
+              <span class="sb-mq-gem" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M12 0c.8 6.6 5.4 11.2 12 12-6.6.8-11.2 5.4-12 12-.8-6.6-5.4-11.2-12-12C6.6 11.2 11.2 6.6 12 0z" fill="currentColor"/></svg></span>
+              <span class="sb-mq-text">{{ text }}</span>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    {%- endfor -%}
+  </div>
 </div>
 
 <style>
-  .sb-mq { display: flex; overflow: hidden; margin: 8px 0; padding: 12px 0; background: #2A1A23; color: #fff; font-family: var(--font-body--family); user-select: none; }
-  .sb-mq-track { flex: 0 0 auto; display: flex; gap: 34px; margin: 0; padding: 0 17px; list-style: none; animation: sb-mq-slide var(--sb-mq-speed, 28s) linear infinite; }
-  .sb-mq-track li { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; font-size: 14px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
-  .sb-mq-star { color: #E7B9CF; font-size: 12px; }
+  .sb-mq {
+    position: relative; overflow: hidden; margin: 10px 0; padding: 15px 0;
+    background: radial-gradient(120% 220% at 50% 0%, #5B1E3D 0%, #3A1A2C 45%, #22131C 100%);
+    color: #F6E3EC; font-family: var(--font-body--family); user-select: none;
+    box-shadow: inset 0 1px 0 rgba(231, 196, 140, .45), inset 0 -1px 0 rgba(231, 196, 140, .45), inset 0 4px 0 #22131C, inset 0 -4px 0 #22131C, inset 0 5px 0 rgba(231, 196, 140, .18), inset 0 -5px 0 rgba(231, 196, 140, .18);
+  }
+  /* A slow band of light sweeps across, like light catching satin. */
+  .sb-mq::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(105deg, transparent 35%, rgba(255, 236, 214, .13) 48%, rgba(255, 236, 214, .02) 56%, transparent 66%);
+    transform: translateX(-100%); animation: sb-mq-sheen 7s ease-in-out infinite;
+  }
+  /* The text fades out at both edges instead of being cut off. */
+  .sb-mq-row {
+    display: flex; width: 100%;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+  }
+  .sb-mq-track { flex: 0 0 auto; display: flex; align-items: center; gap: 44px; margin: 0; padding: 0 22px; list-style: none; animation: sb-mq-slide var(--sb-mq-speed, 34s) linear infinite; will-change: transform; }
+  .sb-mq-item { display: inline-flex; align-items: center; gap: 14px; white-space: nowrap; font-size: 12.5px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; }
+  .sb-mq-item--serif .sb-mq-text { font-family: var(--font-heading--family); font-size: 19px; font-style: italic; font-weight: 400; letter-spacing: .01em; text-transform: none; color: #fff; }
+  .sb-mq-gem { display: inline-flex; color: #E7C48C; filter: drop-shadow(0 0 6px rgba(231, 196, 140, .55)); animation: sb-mq-twinkle 3.2s ease-in-out infinite; }
+  .sb-mq-item:nth-child(3n+2) .sb-mq-gem { animation-delay: -1.1s; }
+  .sb-mq-item:nth-child(3n) .sb-mq-gem { animation-delay: -2.2s; }
   .sb-mq:hover .sb-mq-track { animation-play-state: paused; }
   @keyframes sb-mq-slide { to { transform: translateX(-100%); } }
-  @media (prefers-reduced-motion: reduce) { .sb-mq-track { animation: none; } .sb-mq { overflow-x: auto; } }
+  @keyframes sb-mq-sheen { 0% { transform: translateX(-100%); } 60%, 100% { transform: translateX(100%); } }
+  @keyframes sb-mq-twinkle { 0%, 100% { transform: scale(.82) rotate(0deg); opacity: .75; } 50% { transform: scale(1.12) rotate(45deg); opacity: 1; } }
+  @media screen and (min-width: 990px) {
+    .sb-mq { padding: 18px 0; }
+    .sb-mq-item { font-size: 13px; }
+    .sb-mq-item--serif .sb-mq-text { font-size: 22px; }
+    .sb-mq-track { gap: 60px; padding: 0 30px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sb-mq-track, .sb-mq-gem, .sb-mq::after { animation: none; }
+    .sb-mq-row { overflow-x: auto; }
+  }
 </style>
 
 {% schema %}
@@ -32,7 +69,7 @@
   "class": "sb-section",
   "settings": [
     { "type": "textarea", "id": "items", "label": "Messages (one per line)", "default": "Free delivery\n90-day money-back guarantee\nFree size exchange\nSizes XS to 5XL\nInvisible under clothes\n360° crossed-band support" },
-    { "type": "range", "id": "speed", "label": "Seconds per loop", "min": 10, "max": 60, "step": 2, "default": 28 }
+    { "type": "range", "id": "speed", "label": "Seconds per loop", "min": 10, "max": 60, "step": 2, "default": 34 }
   ],
   "presets": [{ "name": "Sculpt: moving strip", "category": "Sculpt" }]
 }
