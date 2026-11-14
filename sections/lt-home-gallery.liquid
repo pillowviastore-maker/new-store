@@ -1,0 +1,199 @@
+<section class="lt-wall-section">
+  <div class="lt-wall-container">
+
+    
+
+      <p class="lt-wall-eyebrow">Tried and Loved</p>
+
+      <h2>Everyday moments with<span>Lithella</span>
+      </h2>
+
+      <p class="lt-wall-subtitle">Warmth and massage on the sofa, at your desk or on the go.</p>
+
+    
+
+    <div class="lt-wall-grid">
+
+      <img src="{{ 'lt-5B97F1BD-AE12-4891-B5AE-41EA83E7C969.jpg' | file_url }}" alt="Lithella Period Belt in use">
+      
+      <img src="{{ 'lt-719AC12B-19F9-422F-8D5C-B372BE5734C0.jpg' | file_url }}" alt="Lithella Period Belt in use">
+      
+      <img src="{{ 'lt-B4FB0359-8EC9-4031-9EDB-6DB3367415FA.jpg' | file_url }}" alt="Lithella Period Belt in use">
+      
+      <img src="{{ 'lt-001CB50C-EFDD-4D00-B654-B0D2EDF3340E.jpg' | file_url }}" alt="Lithella Period Belt in use">
+      
+      <img src="{{ 'lt-B083B7A2-B889-4D41-8506-41EF897467DE.jpg' | file_url }}" alt="Lithella Period Belt in use">
+      
+      <img src="{{ 'lt-26071428-7A8F-4C14-8568-D4DBEDF87668.jpg' | file_url }}" alt="Lithella Period Belt in use">
+
+    </div>
+
+    
+      <a href="{{ all_products["period-belt"].url | default: "/products/period-belt" }}" class="lt-cta-btn">Try it with our 30-day guarantee</a>
+    
+
+  </div>
+</section>
+
+<style>
+
+.lt-wall-section {
+  background: #ffffff;
+  padding: 58px 14px;
+  font-family: inherit;
+}
+
+.lt-wall-container {
+  max-width: 1150px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* EYEBROW */
+
+.lt-wall-eyebrow {
+  color: #EFC7C4;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  font-size: 12px;
+  font-weight: 800;
+  margin: 0 0 10px;
+}
+
+/* TITLE */
+
+.lt-wall-container h2 {
+  color: #4B2834;
+  font-size: 38px;
+  line-height: 1.1;
+  font-weight: 900;
+  margin: 0 0 12px;
+}
+
+.lt-wall-container h2 span {
+  color: #EFC7C4;
+}
+
+/* SUBTITLE */
+
+.lt-wall-subtitle {
+  color: #6F5B60;
+  font-size: 16px;
+  line-height: 1.45;
+  margin: 0 auto 32px;
+}
+
+/* IMAGE GRID */
+
+.lt-wall-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.lt-wall-grid img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 18px;
+  display: block;
+}
+
+.lt-wall-grid img:nth-child(3n) {
+  height: 330px;
+}
+
+.lt-wall-grid img:nth-child(4n) {
+  height: 220px;
+}
+
+/* CTA */
+
+.lt-cta-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin: 32px auto 0;
+  padding: 18px 32px;
+
+  background: #EFC7C4;
+  color: #FAF5EF !important;
+
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 800;
+
+  border-radius: 999px;
+
+  transition: all .2s ease;
+
+  box-shadow: 0 8px 24px rgba(75, 40, 52, .18);
+}
+
+.lt-cta-btn:hover {
+  transform: translateY(-2px);
+  background: #CFA8A4;
+  color: #4B2834 !important;
+}
+
+/* MOBILE */
+
+@media(max-width: 768px) {
+
+  .lt-wall-section {
+    padding: 42px 10px;
+  }
+
+  .lt-wall-container h2 {
+    font-size: 28px;
+  }
+
+  .lt-wall-subtitle {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .lt-wall-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .lt-wall-grid img {
+    height: 210px;
+    border-radius: 14px;
+  }
+
+  .lt-wall-grid img:nth-child(3n) {
+    height: 250px;
+  }
+
+  .lt-wall-grid img:nth-child(4n) {
+    height: 180px;
+  }
+
+  .lt-cta-btn {
+    width: 100%;
+    max-width: 340px;
+    padding: 16px 24px;
+    font-size: 15px;
+    margin-top: 24px;
+  }
+
+}
+
+</style>
+
+{% schema %}
+{
+  "name": "Belt: home gallery",
+  "tag": "section",
+  "class": "lt-section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Belt: home gallery"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,31 @@
+{
+  "sections": {
+    "hero": {
+      "type": "lt-home-hero",
+      "settings": {}
+    },
+    "strip": {
+      "type": "lt-strip",
+      "settings": {}
+    },
+    "gallery": {
+      "type": "lt-home-gallery",
+      "settings": {}
+    },
+    "strip2": {
+      "type": "lt-strip-caps",
+      "settings": {}
+    },
+    "guarantee": {
+      "type": "lt-guarantee",
+      "settings": {}
+    }
+  },
+  "order": [
+    "hero",
+    "strip",
+    "gallery",
+    "strip2",
+    "guarantee"
+  ]
+}

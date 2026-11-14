@@ -1,0 +1,122 @@
+{
+  "sections": {
+    "main": {
+      "type": "product-information",
+      "blocks": {
+        "media-gallery": {
+          "type": "_product-media-gallery",
+          "static": true,
+          "settings": {
+            "media_presentation": "carousel",
+            "slideshow_controls_style": "thumbnails",
+            "slideshow_mobile_controls_style": "dots",
+            "thumbnail_position": "bottom",
+            "aspect_ratio": "1",
+            "media_fit": "cover",
+            "media_radius": 12,
+            "zoom": true,
+            "constrain_to_viewport": true,
+            "hide_variants": false
+          },
+          "blocks": {}
+        },
+        "product-details": {
+          "type": "_product-details",
+          "static": true,
+          "settings": {
+            "gap": 12,
+            "sticky_details_desktop": false,
+            "padding-block-start": 16,
+            "padding-block-end": 24
+          },
+          "blocks": {
+            "review": {
+              "type": "sb-rating",
+              "settings": {},
+              "blocks": {}
+            },
+            "title": {
+              "type": "text",
+              "settings": {
+                "text": "<h1>{{ closest.product.title }}</h1>",
+                "alignment": "center",
+                "type_preset": "h2",
+                "width": "100%"
+              },
+              "blocks": {}
+            },
+            "perks": {
+              "type": "lt-perks",
+              "settings": {},
+              "blocks": {}
+            },
+            "offer": {
+              "type": "lt-offer",
+              "settings": {},
+              "blocks": {}
+            },
+            "payment": {
+              "type": "payment-icons",
+              "settings": {},
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "review",
+            "title",
+            "perks",
+            "offer",
+            "payment"
+          ]
+        }
+      },
+      "settings": {
+        "enable_sticky_add_to_cart": false,
+        "equal_columns": true
+      }
+    },
+    "strip": {
+      "type": "lt-strip",
+      "settings": {}
+    },
+    "ugc": {
+      "type": "lt-ugc",
+      "settings": {}
+    },
+    "feature": {
+      "type": "lt-feature",
+      "settings": {}
+    },
+    "benefits": {
+      "type": "lt-benefits",
+      "settings": {}
+    },
+    "why": {
+      "type": "lt-why",
+      "settings": {}
+    },
+    "strip2": {
+      "type": "lt-strip-caps",
+      "settings": {}
+    },
+    "faq": {
+      "type": "lt-faq",
+      "settings": {}
+    },
+    "guarantee": {
+      "type": "lt-guarantee",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "strip",
+    "ugc",
+    "feature",
+    "benefits",
+    "why",
+    "strip2",
+    "faq",
+    "guarantee"
+  ]
+}

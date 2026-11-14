@@ -1,0 +1,514 @@
+<section class="lt-feature-section">
+
+  <div class="lt-feature-container">
+
+    <div class="lt-feature-content">
+
+      <h2>A little comfort<br>
+        <span>that lifts your mood.</span>
+      </h2>
+
+      <p class="lt-feature-subtext">Lithella stays by your side on your period days to make them a little easier.</p>
+
+      <div class="lt-feature-layout">
+
+        
+
+        <div class="lt-ba-wrap" data-lt-ba-slider>
+
+          <div class="lt-ba-after">
+            <img
+              src="{{ 'lt-IMG-1688.png' | file_url }}"
+              alt="Lithella heated period belt"
+            >
+          </div>
+
+          <div class="lt-ba-before" data-lt-ba-before>
+            <img
+              src="{{ 'lt-609C68F5-CF1E-4BEC-B40C-BF3643D54C60.jpg' | file_url }}"
+              alt="Traditional hot water bottle"
+            >
+          </div>
+
+          <div class="lt-ba-label lt-ba-label-before">Before</div>
+          <div class="lt-ba-label lt-ba-label-after">With Lithella</div>
+
+          <div class="lt-ba-divider" data-lt-ba-divider></div>
+
+          <button
+            class="lt-ba-handle"
+            data-lt-ba-handle
+            type="button"
+            aria-label="Drag to see the difference"
+          >
+            <span></span>
+          </button>
+
+        </div>
+
+        
+
+        <div class="lt-how-section">
+          <div class="lt-how-box">
+
+            <h2>How it works</h2>
+
+            <div class="lt-how-steps">
+
+              <div class="lt-how-step">
+                <img
+                  src="{{ 'lt-C2AFF4A9-B65C-4829-B98E-07006AC39B50.jpg' | file_url }}"
+                  alt="Wear Lithella"
+                >
+
+                <div>
+                  <h3>Put it on</h3>
+                  <p>Place Lithella where you need it and adjust the strap so it feels secure and comfortable.</p>
+                </div>
+              </div>
+
+
+              <div class="lt-how-step">
+                <img
+                  src="{{ 'lt-IMG-1623.jpg' | file_url }}"
+                  alt="Choose your heat"
+                >
+
+                <div>
+                  <h3>Choose your heat</h3>
+                  <p>Pick the heat level that feels best and let steady warmth wrap around the area.</p>
+                </div>
+              </div>
+
+
+              <div class="lt-how-step">
+                <img
+                  src="{{ 'lt-IMG-1624.jpg' | file_url }}"
+                  alt="Switch on the massage"
+                >
+
+                <div>
+                  <h3>Switch on the massage</h3>
+                  <p>Choose your favourite intensity and let the massage and heat work together to help you relax.</p>
+                </div>
+              </div>
+<div class="lt-how-step">
+                <img
+                  src="{{ 'lt-IMG-1636.jpg' | file_url }}"
+                  alt="Relax, wherever you are"
+                >
+
+                <div>
+                  <h3>Relax, wherever you are</h3>
+                  <p>Take a moment for yourself on the sofa, in bed or while you’re out and about.</p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<style>
+
+.lt-feature-section {
+  background: #FFFFFF;
+  padding: 70px 18px;
+}
+
+.lt-feature-container {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.lt-feature-content {
+  text-align: center;
+}
+
+.lt-feature-content > h2 {
+  font-size: 40px;
+  line-height: 1.05;
+  font-weight: 900;
+  color: #4B2834;
+  margin: 0 0 16px;
+}
+
+.lt-feature-content > h2 span {
+  color: #EFC7C4;
+}
+
+.lt-feature-subtext {
+  max-width: 650px;
+  margin: 0 auto 40px;
+  font-size: 18px;
+  line-height: 1.5;
+  color: #6F5B60;
+}
+
+.lt-feature-layout {
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  align-items: center;
+  gap: 26px;
+}
+
+
+/* BEFORE / AFTER */
+
+.lt-ba-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  overflow: hidden;
+  border-radius: 22px;
+  background: #FAF5EF;
+  cursor: ew-resize;
+  user-select: none;
+  touch-action: none;
+  box-shadow: 0 14px 35px rgba(75,40,52,.12);
+}
+
+.lt-ba-wrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+}
+
+.lt-ba-after {
+  position: relative;
+  width: 100%;
+}
+
+.lt-ba-before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 50%;
+  overflow: hidden;
+}
+
+.lt-ba-before img {
+  height: 100%;
+  width: auto;
+  max-width: none;
+}
+
+.lt-ba-label {
+  position: absolute;
+  top: 14px;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 900;
+  padding: 6px 12px;
+  border-radius: 999px;
+  z-index: 5;
+  transition: opacity .25s ease;
+}
+
+.lt-ba-label.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.lt-ba-label-before {
+  left: 14px;
+  background: #8F6A70;
+}
+
+.lt-ba-label-after {
+  right: 14px;
+  background: #EFC7C4;
+  color: #ffffff;
+}
+
+.lt-ba-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  background: #FFFFFF;
+  transform: translateX(-50%);
+  z-index: 4;
+}
+
+.lt-ba-handle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 52px;
+  height: 52px;
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(239,199,196,.90);
+  z-index: 6;
+  cursor: ew-resize;
+}
+
+.lt-ba-handle span:before,
+.lt-ba-handle span:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lt-ba-handle span:before {
+  left: 13px;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 9px solid #4B2834;
+}
+
+.lt-ba-handle span:after {
+  right: 13px;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 9px solid #4B2834;
+}
+
+
+/* HOW IT WORKS */
+
+.lt-how-section {
+  background: transparent;
+  padding: 0;
+  font-family: inherit;
+}
+
+.lt-how-box {
+  background: #FFFFFF;
+  border: 1px solid rgba(239,199,196,.55);
+  border-radius: 18px;
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  align-items: center;
+  gap: 24px;
+  box-shadow: 0 8px 28px rgba(75,40,52,.08);
+}
+
+.lt-how-box > h2 {
+  color: #4B2834;
+  font-size: 30px;
+  line-height: 1.1;
+  font-weight: 900;
+  margin: 0;
+  text-align: left;
+}
+
+.lt-how-steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+.lt-how-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  text-align: left;
+}
+
+.lt-how-step img {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #FAF5EF;
+}
+
+.lt-how-step h3 {
+  color: #4B2834;
+  font-size: 18px;
+  line-height: 1.1;
+  font-weight: 900;
+  margin: 0 0 6px;
+}
+
+.lt-how-step p {
+  color: #6F5B60;
+  font-size: 15px;
+  line-height: 1.35;
+  margin: 0;
+}
+
+
+/* MOBILE */
+
+@media(max-width: 768px) {
+
+  .lt-feature-section {
+    padding: 45px 14px;
+  }
+
+  .lt-feature-content > h2 {
+    font-size: 34px;
+  }
+
+  .lt-feature-subtext {
+    font-size: 15px;
+    margin-bottom: 28px;
+  }
+
+  .lt-feature-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .lt-ba-wrap {
+    max-width: 100%;
+    border-radius: 18px;
+  }
+
+  .lt-ba-label {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
+  .lt-ba-handle {
+    width: 44px;
+    height: 44px;
+  }
+
+  .lt-how-box {
+    width: 100%;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 22px 16px;
+    border-radius: 16px;
+  }
+
+  .lt-how-box > h2 {
+    text-align: center;
+    font-size: 26px;
+  }
+
+  .lt-how-steps {
+    gap: 16px;
+  }
+
+  .lt-how-step {
+    align-items: center;
+    gap: 12px;
+  }
+
+  .lt-how-step img {
+    width: 58px;
+    height: 58px;
+  }
+
+  .lt-how-step h3 {
+    font-size: 16px;
+  }
+
+  .lt-how-step p {
+    font-size: 13px;
+  }
+
+}
+
+</style>
+
+<script>
+
+(function() {
+
+  function initLtBeforeAfter(slider) {
+
+    var before = slider.querySelector('[data-lt-ba-before]');
+    var divider = slider.querySelector('[data-lt-ba-divider]');
+    var handle = slider.querySelector('[data-lt-ba-handle]');
+
+    function setPosition(clientX) {
+
+      var rect = slider.getBoundingClientRect();
+      var x = clientX - rect.left;
+      var percent = Math.max(0, Math.min(100, (x / rect.width) * 100));
+
+      before.style.width = percent + "%";
+      divider.style.left = percent + "%";
+      handle.style.left = percent + "%";
+
+      var beforeLabel = slider.querySelector(".lt-ba-label-before");
+      var afterLabel = slider.querySelector(".lt-ba-label-after");
+
+      if (percent < 8) {
+        beforeLabel.classList.add("hidden");
+      } else {
+        beforeLabel.classList.remove("hidden");
+      }
+
+      if (percent > 92) {
+        afterLabel.classList.add("hidden");
+      } else {
+        afterLabel.classList.remove("hidden");
+      }
+
+    }
+
+    slider.addEventListener('mousedown', function(e) {
+      setPosition(e.clientX);
+    });
+
+    slider.addEventListener('mousemove', function(e) {
+      if (e.buttons !== 1) return;
+      setPosition(e.clientX);
+    });
+
+    slider.addEventListener('click', function(e) {
+      setPosition(e.clientX);
+    });
+
+    slider.addEventListener('touchstart', function(e) {
+
+      if (!e.touches.length) return;
+
+      setPosition(e.touches[0].clientX);
+
+    }, { passive: true });
+
+    slider.addEventListener('touchmove', function(e) {
+
+      if (!e.touches.length) return;
+
+      e.preventDefault();
+
+      setPosition(e.touches[0].clientX);
+
+    }, { passive: false });
+
+  }
+
+  document
+    .querySelectorAll('[data-lt-ba-slider]')
+    .forEach(initLtBeforeAfter);
+
+})();
+
+</script>
+
+{% schema %}
+{
+  "name": "Belt: before/after",
+  "tag": "section",
+  "class": "lt-section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Belt: before/after"
+    }
+  ]
+}
+{% endschema %}

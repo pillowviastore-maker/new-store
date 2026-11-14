@@ -1,0 +1,455 @@
+<section class="lt-results-section">
+  <div class="lt-results-container">
+
+    <div class="lt-results-header">
+      <h2>More Comfort, Fewer Interrupted Days</h2>
+      <p>Lithella is designed to soothe period cramps with targeted massage, adjustable heat and the freedom to move.</p>
+    </div>
+
+    <div class="lt-results-layout">
+
+      <div class="lt-stats-column">
+
+        <div class="lt-result-card stat1">
+          <div class="lt-card-top">
+            <span>Soothing warmth</span>
+          </div>
+          <p>Steady heat on your tummy, lower back or legs during the first days of your period.</p>
+        </div>
+
+        <div class="lt-result-card stat2">
+          <div class="lt-card-top">
+            <span>More freedom</span>
+          </div>
+          <p>Wireless, so you can move, work or study instead of sitting still with a hot water bottle.</p>
+        </div>
+
+        <div class="lt-result-card stat3">
+          <div class="lt-card-top">
+            <span>Adjustable heat</span>
+          </div>
+          <p>Choose the heat level that suits you best, from gentle to cosy.</p>
+        </div>
+
+        <div class="lt-result-card stat4">
+          <div class="lt-card-top">
+            <span>More practical</span>
+          </div>
+          <p>Easier to use day to day than traditional solutions. Charge it, pop it in your bag, wear it under a jumper.</p>
+        </div>
+
+      </div>
+
+      
+
+      <div class="lt-image-area">
+
+        <div class="lt-image-carousel" id="ltImageCarousel">
+
+          <div class="lt-image-slide active">
+            <img
+              src="{{ 'lt-719AC12B-19F9-422F-8D5C-B372BE5734C0.jpg' | file_url }}"
+              alt="Lithella Period Belt in use"
+            >
+          </div>
+
+          <div class="lt-image-slide">
+            <img
+              src="{{ 'lt-B4FB0359-8EC9-4031-9EDB-6DB3367415FA.jpg' | file_url }}"
+              alt="Lithella Period Belt in use"
+            >
+          </div>
+
+          <div class="lt-image-slide">
+            <img
+              src="{{ 'lt-5B97F1BD-AE12-4891-B5AE-41EA83E7C969.jpg' | file_url }}"
+              alt="Lithella Period Belt in use"
+            >
+          </div>
+
+          <div class="lt-image-slide">
+            <img
+              src="{{ 'lt-3D6B267A-43E0-4CB8-950B-C4031AE06C40.jpg' | file_url }}"
+              alt="Lithella Period Belt in use"
+            >
+          </div>
+
+        </div>
+
+        <div class="lt-image-dots">
+          <button class="active" data-lt-image-dot="0" aria-label="Lithella Period Belt"></button>
+          <button data-lt-image-dot="1" aria-label="Lithella Period Belt"></button>
+          <button data-lt-image-dot="2" aria-label="Lithella Period Belt"></button>
+          <button data-lt-image-dot="3" aria-label="Lithella Period Belt"></button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<style>
+
+.lt-results-section {
+  background: #FFFFFF;
+  color: #4B2834;
+  padding: 42px 10px;
+  font-family: inherit;
+  overflow: hidden;
+}
+
+.lt-results-container {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+/* HEADER */
+
+.lt-results-header {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.lt-results-header h2 {
+  color: #4B2834;
+  font-size: 32px;
+  line-height: 1.1;
+  font-weight: 900;
+  margin: 0 0 8px;
+}
+
+.lt-results-header p {
+  color: #6F5B60;
+  font-size: 15px;
+  line-height: 1.45;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* LAYOUT */
+
+.lt-results-layout {
+  display: grid;
+  grid-template-columns: 1fr 310px;
+  gap: 8px;
+  align-items: start;
+}
+
+/* STATS */
+
+.lt-stats-column {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lt-result-card {
+  background: rgba(239, 199, 196, .22);
+  border: 1px solid rgba(239, 199, 196, .55);
+  border-radius: 13px;
+  padding: 10px 12px;
+  height: fit-content;
+  min-height: auto;
+}
+
+.lt-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.lt-card-top span {
+  font-size: 16px;
+  line-height: 1.05;
+  font-weight: 900;
+  color: #4B2834;
+  max-width: 165px;
+}
+
+.lt-card-top strong {
+  font-size: 40px;
+  line-height: 1;
+  font-weight: 900;
+  color: #EFC7C4;
+}
+
+.lt-result-card p {
+  margin: 0;
+  color: #6F5B60;
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+/* NOTE */
+
+.lt-results-note {
+  grid-column: 1 / 2;
+  color: #8A777B;
+  font-size: 11px;
+  line-height: 1.35;
+  margin-top: 6px;
+  text-align: left;
+}
+
+/* IMAGE CAROUSEL */
+
+.lt-image-area {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  grid-column: 2 / 3;
+  grid-row: 1 / 3;
+}
+
+.lt-image-carousel {
+  width: 100%;
+  border-radius: 13px;
+  overflow: hidden;
+  background: #FAF5EF;
+}
+
+.lt-image-slide {
+  display: none;
+}
+
+.lt-image-slide.active {
+  display: block;
+}
+
+.lt-image-slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* CAROUSEL DOTS */
+
+.lt-image-dots {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 8px;
+}
+
+.lt-image-dots button {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 0;
+  background: #EFC7C4;
+  opacity: .45;
+  padding: 0;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.lt-image-dots button.active {
+  width: 22px;
+  border-radius: 99px;
+  background: #EFC7C4;
+  opacity: 1;
+}
+
+/* MOBILE */
+
+@media(max-width: 768px) {
+
+  .lt-results-section {
+    padding: 34px 6px;
+  }
+
+  .lt-results-header {
+    margin-bottom: 18px;
+    padding: 0 8px;
+  }
+
+  .lt-results-header h2 {
+    font-size: 24px;
+  }
+
+  .lt-results-header p {
+    font-size: 13px;
+  }
+
+  .lt-results-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .lt-image-area {
+    order: 1;
+    width: 100%;
+  }
+
+  .lt-stats-column {
+    order: 2;
+    width: 100%;
+    max-width: 700px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .lt-results-note {
+    order: 3;
+    text-align: center;
+    padding: 0 8px;
+    margin-top: 8px;
+    font-size: 10px;
+  }
+
+  .lt-result-card {
+    padding: 8px;
+    border-radius: 11px;
+  }
+
+  .lt-card-top {
+    margin-bottom: 4px;
+    gap: 5px;
+  }
+
+  .lt-card-top span {
+    font-size: 12px;
+    max-width: 82px;
+  }
+
+  .lt-card-top strong {
+    font-size: 27px;
+  }
+
+  .lt-result-card p {
+    font-size: 10.5px;
+    line-height: 1.22;
+  }
+
+  .lt-image-carousel {
+    border-radius: 11px;
+  }
+
+  .lt-image-slide img {
+    height: 392px;
+    object-fit: cover;
+  }
+
+  .lt-image-dots {
+    margin-top: 6px;
+  }
+
+}
+
+</style>
+
+<script>
+
+(function() {
+
+  function initLtImageCarousel() {
+
+    var carousel = document.getElementById('ltImageCarousel');
+
+    if (!carousel) return;
+
+    var section = carousel.closest('.lt-results-section');
+    var slides = carousel.querySelectorAll('.lt-image-slide');
+    var dots = section.querySelectorAll('[data-lt-image-dot]');
+
+    var currentIndex = 0;
+
+    function showSlide(index) {
+
+      if (index < 0) {
+        index = slides.length - 1;
+      }
+
+      if (index >= slides.length) {
+        index = 0;
+      }
+
+      currentIndex = index;
+
+      slides.forEach(function(slide, i) {
+        slide.classList.toggle('active', i === index);
+      });
+
+      dots.forEach(function(dot, i) {
+        dot.classList.toggle('active', i === index);
+      });
+
+    }
+
+    dots.forEach(function(dot) {
+
+      dot.addEventListener('click', function() {
+        showSlide(Number(dot.dataset.ltImageDot));
+      });
+
+    });
+
+    var startX = 0;
+    var endX = 0;
+
+    carousel.addEventListener('touchstart', function(e) {
+      startX = e.touches[0].clientX;
+    }, { passive: true });
+
+    carousel.addEventListener('touchend', function(e) {
+
+      endX = e.changedTouches[0].clientX;
+
+      var diff = startX - endX;
+
+      if (Math.abs(diff) > 40) {
+
+        if (diff > 0) {
+          showSlide(currentIndex + 1);
+        } else {
+          showSlide(currentIndex - 1);
+        }
+
+      }
+
+    }, { passive: true });
+
+    showSlide(0);
+
+  }
+
+  document.addEventListener(
+    'DOMContentLoaded',
+    initLtImageCarousel
+  );
+
+  document.addEventListener(
+    'shopify:section:load',
+    initLtImageCarousel
+  );
+
+  window.addEventListener(
+    'load',
+    initLtImageCarousel
+  );
+
+})();
+
+</script>
+
+{% schema %}
+{
+  "name": "Belt: benefits",
+  "tag": "section",
+  "class": "lt-section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Belt: benefits"
+    }
+  ]
+}
+{% endschema %}

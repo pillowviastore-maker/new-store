@@ -1,0 +1,133 @@
+<section class="lt-image-cta">
+  <div class="lt-image-cta__container">
+
+    
+      <div class="lt-image-cta__image">
+        <img
+          src="{{ 'lt-0001670C-B370-4CE4-8F8B-1E12FE5852B2.png' | file_url }}"
+          alt="Woman wearing the Lithella heated belt"
+          loading="lazy"
+        >
+      </div>
+    
+
+    <div class="lt-image-cta__content">
+      <h2>A little comfort that lifts your mood!</h2>
+
+      <p>Say goodbye to period-day discomfort with the Lithella belt</p>
+
+      <a
+        href="{{ all_products["period-belt"].url | default: "/products/period-belt" }}"
+        class="lt-image-cta__button"
+      >Take me there 👉</a>
+    </div>
+
+  </div>
+</section>
+
+<style>
+.lt-image-cta {
+  padding: 0 14px;
+  background: #FFFFFF;
+  font-family: inherit;
+}
+
+.lt-image-cta__container {
+  max-width: 720px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #FFFFFF;
+}
+
+.lt-image-cta__image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.lt-image-cta__content {
+  padding: 48px 28px 34px;
+  text-align: center;
+}
+
+.lt-image-cta__content h2 {
+  max-width: 520px;
+  margin: 0 auto 18px;
+  color: #000000;
+  font-size: 28.5px;
+  line-height: 1.25;
+  font-weight: 800;
+}
+
+.lt-image-cta__content p {
+  max-width: 520px;
+  margin: 0 auto 28px;
+  color: #171717;
+  font-size: 15.75px;
+  line-height: 1.6;
+  letter-spacing: .3px;
+}
+
+.lt-image-cta__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 24px;
+  border-radius: 10px;
+  background: #EFC7C4;
+  color: #FFFFFF !important;
+  text-decoration: none;
+  font-size: 15.75px;
+  line-height: 1.3;
+  font-weight: 800;
+  letter-spacing: .5px;
+  transition: background .2s ease, transform .2s ease;
+}
+
+.lt-image-cta__button:hover {
+  background: #CFA8A4;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .lt-image-cta {
+    padding: 0;
+  }
+
+  .lt-image-cta__content {
+    padding: 48px 24px 32px;
+  }
+
+  .lt-image-cta__content h2 {
+    max-width: 360px;
+    font-size: 24px;
+    margin-bottom: 18px;
+  }
+
+  .lt-image-cta__content p {
+    max-width: 380px;
+    font-size: 15px;
+    margin-bottom: 28px;
+  }
+
+  .lt-image-cta__button {
+    font-size: 15px;
+    padding: 10px 24px;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Belt: home hero",
+  "tag": "section",
+  "class": "lt-section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Belt: home hero"
+    }
+  ]
+}
+{% endschema %}

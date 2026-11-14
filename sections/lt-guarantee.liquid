@@ -1,0 +1,58 @@
+<section class="ltg">
+  <div class="ltg-card">
+    <div class="ltg-shield" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="34" height="34"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m8.5 12 2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h2>{{ section.settings.heading }}</h2>
+    <p class="ltg-lead">{{ section.settings.lead }}</p>
+    <p class="ltg-text">{{ section.settings.text }}</p>
+    <div class="ltg-imgs">
+      {%- for f in (1..3) -%}
+        {%- case f -%}{%- when 1 -%}{%- assign fn = 'lt-194A412C-44FB-4C5F-9689-2974FF9B1CC9.png' -%}{%- when 2 -%}{%- assign fn = 'lt-6794409D-43E7-41FD-838C-9D50CDE5C52B.png' -%}{%- else -%}{%- assign fn = 'lt-F468C96B-64C9-4B77-B252-6F45039DE39F.png' -%}{%- endcase -%}
+        <img src="{{ fn | file_url }}" alt="" loading="lazy" width="300" height="300">
+      {%- endfor -%}
+    </div>
+    <a class="ltg-cta" href="#MainContent" data-ltg-top>{{ section.settings.cta }}</a>
+    <ul class="ltg-icons">
+      <li>💗 {{ section.settings.icon1 }}</li>
+      <li>🎁 {{ section.settings.icon2 }}</li>
+      <li>🔒 {{ section.settings.icon3 }}</li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .ltg { padding: 50px 16px; background: #FFF8F7; font-family: var(--font-body--family); color: #4B2834; }
+  .ltg-card { max-width: 760px; margin: 0 auto; padding: 32px 22px; border-radius: 22px; background: #fff; box-shadow: 0 14px 35px rgba(75, 40, 52, .1); text-align: center; }
+  .ltg-shield { display: inline-flex; padding: 12px; border-radius: 50%; background: #FBEFEE; color: #B36A72; }
+  .ltg h2 { margin: 12px 0 8px; font-size: 30px; line-height: 1.1; font-weight: 900; color: #4B2834; }
+  .ltg-lead { margin: 0 0 6px; font-size: 17px; font-weight: 700; }
+  .ltg-text { margin: 0 auto 18px; max-width: 520px; font-size: 15px; line-height: 1.5; color: #6F5B60; }
+  .ltg-imgs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+  .ltg-imgs img { width: 100%; height: auto; border-radius: 14px; }
+  .ltg-cta { display: inline-block; padding: 16px 34px; border-radius: 999px; background: #B36A72; color: #fff; font-weight: 800; letter-spacing: .06em; text-decoration: none; }
+  .ltg-icons { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 18px; margin: 20px 0 0; padding: 0; list-style: none; font-size: 14px; font-weight: 700; }
+</style>
+<script>
+  document.querySelectorAll('[data-ltg-top]').forEach(function (a) {
+    a.addEventListener('click', function (e) { var t = document.querySelector('[data-lto]'); if (!t) return; e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Belt: guarantee",
+  "tag": "section",
+  "class": "lt-section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "30-Day Money-Back Guarantee!" },
+    { "type": "text", "id": "lead", "label": "Lead", "default": "Try Lithella for 30 days and put it to the test on your period." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "If it's not for you or doesn't give you the comfort you were looking for, we'll refund 100% of your order. No risk." },
+    { "type": "text", "id": "cta", "label": "Button", "default": "I WANT IT 👉" },
+    { "type": "text", "id": "icon1", "label": "Icon 1", "default": "Heat + massage" },
+    { "type": "text", "id": "icon2", "label": "Icon 2", "default": "Free UK delivery" },
+    { "type": "text", "id": "icon3", "label": "Icon 3", "default": "Secure payment" }
+  ],
+  "presets": [{ "name": "Belt: guarantee" }]
+}
+{% endschema %}

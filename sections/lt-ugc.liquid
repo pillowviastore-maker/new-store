@@ -1,0 +1,585 @@
+<section class="lt-ugc">
+  <div class="lt-ugc-container">
+
+    <div class="lt-ugc-header">
+      <p>LITHELLA IN REAL LIFE</p>
+
+      <h2>See Lithella<br>
+        <span>in everyday life.</span>
+      </h2>
+
+      <div class="lt-ugc-subtitle">Warmth and massage on your period days, at home or on the go.</div>
+    </div>
+
+    <div class="lt-video-row">
+
+      
+      <div class="lt-video-card">
+        <img
+          class="lt-video-cover"
+          src="{{ 'lt-FullSizeRender_94e3e796-ab24-4778-9d3b-ad898606f814.jpg' | file_url }}"
+          alt="Lithella Period Belt in use"
+        >
+
+        <video
+          playsinline
+          preload="none"
+          loop
+          muted
+          controlslist="nodownload"
+          disablepictureinpicture
+        >
+          <source
+            src="https://cdn.shopify.com/videos/c/vp/b4ac121c5fd04b83a6de1fe398914b76/b4ac121c5fd04b83a6de1fe398914b76.HD-720p-1.6Mbps-101396013.mp4"
+            type="video/mp4"
+          >
+        </video>
+
+        <div class="lt-play-button">▶</div>
+
+        <div class="lt-video-overlay">
+          
+
+          <p>Warmth the moment your period starts 💕</p>
+        </div>
+      </div>
+
+
+      
+      <div class="lt-video-card">
+        <img
+          class="lt-video-cover"
+          src="{{ 'lt-FullSizeRender_f290ed76-53ce-4a74-b0be-51dd67a8d917.jpg' | file_url }}"
+          alt="Lithella Period Belt in use"
+        >
+
+        <video
+          playsinline
+          preload="none"
+          loop
+          muted
+          controlslist="nodownload"
+          disablepictureinpicture
+        >
+          <source
+            src="https://cdn.shopify.com/videos/c/vp/a4def9b79efb4d828d574a88ab01a6ef/a4def9b79efb4d828d574a88ab01a6ef.HD-720p-1.6Mbps-101396012.mp4"
+            type="video/mp4"
+          >
+        </video>
+
+        <div class="lt-play-button">▶</div>
+
+        <div class="lt-video-overlay">
+          
+
+          <p>Heat and massage, together ❤️‍🩹</p>
+        </div>
+      </div>
+
+
+      
+      <div class="lt-video-card">
+        <img
+          class="lt-video-cover"
+          src="{{ 'lt-FullSizeRender_c2710597-511f-40d2-9278-a6610dc6c405.jpg' | file_url }}"
+          alt="Lithella Period Belt in use"
+        >
+
+        <video
+          playsinline
+          preload="none"
+          loop
+          muted
+          controlslist="nodownload"
+          disablepictureinpicture
+        >
+          <source
+            src="https://cdn.shopify.com/videos/c/vp/c13e3440607a407896a5924c6033f5c4/c13e3440607a407896a5924c6033f5c4.HD-720p-1.6Mbps-101396011.mp4"
+            type="video/mp4"
+          >
+        </video>
+
+        <div class="lt-play-button">▶</div>
+
+        <div class="lt-video-overlay">
+          
+
+          <p>Made for that time of the month</p>
+        </div>
+      </div>
+
+
+
+  </div>
+</section>
+
+
+<style>
+
+.lt-ugc {
+  background: #FFFFFF;
+  padding: 55px 0;
+  font-family: inherit;
+}
+
+.lt-ugc-container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+
+/* HEADER */
+
+.lt-ugc-header {
+  text-align: center;
+  padding: 0 16px;
+  margin-bottom: 28px;
+}
+
+.lt-ugc-header p {
+  color: #CFA8A4;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  margin: 0 0 10px;
+}
+
+.lt-ugc-header h2 {
+  font-size: 44px;
+  line-height: 1.05;
+  font-weight: 900;
+  color: #4B2834;
+  margin: 0;
+}
+
+.lt-ugc-header h2 span {
+  color: #CFA8A4;
+}
+
+.lt-ugc-subtitle {
+  max-width: 620px;
+  margin: 18px auto 0;
+  font-size: 17px;
+  line-height: 1.6;
+  color: #6F5B60;
+}
+
+
+/* VIDEO ROW */
+
+.lt-video-row {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  padding: 0 18px 10px;
+
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+.lt-video-row::-webkit-scrollbar {
+  height: 6px;
+}
+
+.lt-video-row::-webkit-scrollbar-thumb {
+  background: #CFA8A4;
+  border-radius: 999px;
+}
+
+
+/* VIDEO CARD */
+
+.lt-video-card {
+  position: relative;
+
+  flex: 0 0 340px;
+  aspect-ratio: 9 / 16;
+
+  scroll-snap-align: center;
+
+  border-radius: 20px;
+  overflow: hidden;
+
+  background: #EFC7C4;
+
+  box-shadow: 0 12px 30px rgba(75, 40, 52, .10);
+
+  cursor: pointer;
+}
+
+.lt-video-card video,
+.lt-video-cover {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  display: block;
+
+  border-radius: 20px;
+}
+
+.lt-video-card video {
+  z-index: 1;
+}
+
+.lt-video-cover {
+  z-index: 2;
+  background: #EFC7C4;
+}
+
+.lt-video-card.playing .lt-video-cover {
+  display: none;
+}
+
+
+/* PLAY BUTTON */
+
+.lt-play-button {
+  position: absolute;
+
+  left: 50%;
+  top: 42%;
+
+  transform: translate(-50%, -50%);
+
+  width: 72px;
+  height: 72px;
+
+  border-radius: 50%;
+
+  background: rgba(250, 245, 239, .95);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 34px;
+
+  color: #4B2834;
+
+  box-shadow: 0 10px 30px rgba(75, 40, 52, .20);
+
+  transition: .25s ease;
+
+  z-index: 20;
+
+  pointer-events: none;
+
+  padding-left: 4px;
+}
+
+.lt-video-card.playing .lt-play-button {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(.9);
+}
+
+
+/* REVIEW OVERLAY */
+
+.lt-video-overlay {
+  position: absolute;
+
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+
+  padding: 12px 12px 11px;
+
+  border-radius: 16px;
+
+  background: rgba(250, 245, 239, .90);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  text-align: left;
+
+  box-shadow: 0 8px 22px rgba(75, 40, 52, .13);
+
+  transition: .25s ease;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+.lt-video-card.playing .lt-video-overlay {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+
+/* STARS */
+
+.lt-stars {
+  color: #EFC7C4;
+  font-size: 12px;
+  letter-spacing: .8px;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+
+/* REVIEW COPY */
+
+.lt-video-overlay p {
+  margin: 0 0 7px;
+
+  color: #4B2834;
+
+  font-size: 13px;
+  line-height: 1.25;
+  font-weight: 800;
+}
+
+.lt-video-overlay strong {
+  display: block;
+
+  color: #6F5B60;
+
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+
+/* MORE */
+
+.lt-more {
+  margin-top: 18px;
+
+  text-align: center;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  color: #CFA8A4;
+}
+
+
+/* MOBILE */
+
+@media(max-width: 768px) {
+
+  .lt-ugc {
+    padding: 42px 0;
+  }
+
+  .lt-ugc-header h2 {
+    font-size: 31px;
+  }
+
+  .lt-ugc-subtitle {
+    font-size: 15px;
+  }
+
+  .lt-video-card {
+    flex-basis: 78vw;
+    max-width: 290px;
+  }
+
+  .lt-play-button {
+    width: 64px;
+    height: 64px;
+    font-size: 30px;
+  }
+
+  .lt-video-overlay {
+    left: 9px;
+    right: 9px;
+    bottom: 9px;
+
+    padding: 10px;
+
+    border-radius: 14px;
+  }
+
+  .lt-video-overlay p {
+    font-size: 12px;
+  }
+
+  .lt-video-overlay strong {
+    font-size: 10px;
+  }
+
+}
+
+</style>
+
+
+<script>
+
+(function(){
+
+  function initLtVideos(){
+
+    document
+      .querySelectorAll('.lt-video-card')
+      .forEach(function(card){
+
+        if(card.dataset.ltVideoReady === 'true') return;
+
+        card.dataset.ltVideoReady = 'true';
+
+        var video = card.querySelector('video');
+
+        if(!video) return;
+
+
+        card.addEventListener('click', async function(){
+
+          document
+            .querySelectorAll('.lt-video-card video')
+            .forEach(function(v){
+
+              if(v !== video){
+
+                v.pause();
+                v.currentTime = 0;
+                v.muted = true;
+
+                var c = v.closest('.lt-video-card');
+
+                if(c){
+                  c.classList.remove('playing');
+                }
+
+              }
+
+            });
+
+
+          video.muted = false;
+          video.volume = 1;
+
+          card.classList.add('playing');
+
+
+          try {
+            await video.play();
+          } catch(e) {}
+
+
+          try {
+
+            if(video.requestFullscreen) {
+
+              await video.requestFullscreen();
+
+            } else if(video.webkitEnterFullscreen) {
+
+              video.webkitEnterFullscreen();
+
+            } else if(video.webkitRequestFullscreen) {
+
+              await video.webkitRequestFullscreen();
+
+            }
+
+          } catch(e) {}
+
+        });
+
+
+        video.addEventListener('pause', function(){
+
+          card.classList.remove('playing');
+
+        });
+
+
+        video.addEventListener('ended', function(){
+
+          card.classList.remove('playing');
+
+          video.currentTime = 0;
+          video.muted = true;
+
+        });
+
+      });
+
+  }
+
+
+  document.addEventListener(
+    'DOMContentLoaded',
+    initLtVideos
+  );
+
+  document.addEventListener(
+    'shopify:section:load',
+    initLtVideos
+  );
+
+  window.addEventListener(
+    'load',
+    initLtVideos
+  );
+
+
+  function resetLtVideos(){
+
+    document
+      .querySelectorAll('.lt-video-card video')
+      .forEach(function(video){
+
+        video.pause();
+        video.currentTime = 0;
+        video.muted = true;
+
+        var card = video.closest('.lt-video-card');
+
+        if(card){
+          card.classList.remove('playing');
+        }
+
+      });
+
+  }
+
+
+  document.addEventListener(
+    'fullscreenchange',
+    function(){
+
+      if(!document.fullscreenElement){
+        resetLtVideos();
+      }
+
+    }
+  );
+
+
+  document.addEventListener(
+    'webkitfullscreenchange',
+    function(){
+
+      if(!document.webkitFullscreenElement){
+        resetLtVideos();
+      }
+
+    }
+  );
+
+})();
+
+</script>
+
+{% schema %}
+{
+  "name": "Belt: videos",
+  "tag": "section",
+  "class": "lt-section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Belt: videos"
+    }
+  ]
+}
+{% endschema %}

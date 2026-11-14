@@ -1,0 +1,234 @@
+{%- doc -%}
+  Period belt offer picker: Single (1 belt), Kit (1 belt + a free blanket) and Double Kit (2 belts + 2 free blankets).
+  Free blankets are added as their own cart lines; an automatic "buy a belt, get a blanket" discount makes them free.
+{%- enddoc -%}
+{%- liquid
+  assign belt = closest.product
+  assign blanket = all_products[block.settings.blanket_handle]
+  assign v1 = belt.selected_or_first_available_variant
+  assign belt_price = v1.price
+  assign belt_compare = v1.compare_at_price | default: v1.price
+  assign double_factor = 100 | minus: block.settings.double_off_percent
+  assign double_price = belt_price | times: 2 | times: double_factor | divided_by: 100
+  assign double_compare = belt_compare | times: 2
+  assign first_blanket = blanket.variants.first
+  assign blanket_price = first_blanket.price | default: 0
+-%}
+
+<div class="lto" data-lto data-default="{{ block.settings.default_tier }}" {{ block.shopify_attributes }}>
+  {%- if block.settings.heading != blank -%}<p class="lto-head">{{ block.settings.heading }}</p>{%- endif -%}
+
+  {%- comment -%} Belt colour, shared by every tier {%- endcomment -%}
+  {%- capture belt_colours -%}
+    <div class="lto-colours" role="radiogroup" aria-label="Belt colour">
+      {%- for v in belt.variants -%}
+        {%- assign vt = v.title | downcase -%}
+        <button type="button" class="lto-colour{% if forloop.first %} is-on{% endif %}" role="radio" aria-checked="{% if forloop.first %}true{% else %}false{% endif %}" data-variant="{{ v.id }}" title="{{ v.title }}" style="--c: {% if vt == 'pink' %}#F2C6CC{% elsif vt == 'white' %}#FFFFFF{% else %}#dddddd{% endif %};">
+          {%- if v.featured_image -%}<img src="{{ v.featured_image | image_url: width: 120 }}" alt="" width="40" height="40" loading="lazy">{%- endif -%}
+          <span class="visually-hidden">{{ v.title }}</span>
+        </button>
+      {%- endfor -%}
+    </div>
+  {%- endcapture -%}
+
+  {%- capture gift_row -%}
+    <div class="lto-gift" data-gift>
+      <img class="lto-gift-img" src="{{ 'lt-IMG-4743.png' | file_url }}" alt="" width="44" height="44" loading="lazy">
+      <div class="lto-gift-main">
+        <p class="lto-gift-title">+ {{ block.settings.gift_label }} 🎁</p>
+        {%- if blanket -%}
+          <div class="lto-gift-selects">
+            {%- for opt in blanket.options_with_values -%}
+              <select class="lto-select" data-gift-opt="{{ forloop.index0 }}" aria-label="{{ opt.name }}">
+                {%- for val in opt.values -%}<option value="{{ val | escape }}">{{ val }}</option>{%- endfor -%}
+              </select>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+      <div class="lto-gift-price"><b>{{ 0 | money }}</b><s data-gift-compare>{{ blanket_price | money }}</s></div>
+    </div>
+  {%- endcapture -%}
+
+  <div class="lto-tiers">
+    {%- for t in (1..3) -%}
+      {%- liquid
+        if t == 1
+            assign t_title = block.settings.t1_title
+            assign t_sub = '1x ' | append: block.settings.belt_name
+            assign t_price = belt_price
+            assign t_compare = belt_compare
+            assign t_badge = block.settings.t1_badge
+            assign t_img = 'lt-IMG-2678.png'
+            assign t_gifts = 0
+            assign t_qty = 1
+        elsif t == 2
+            assign t_title = block.settings.t2_title
+            assign t_sub = '1x ' | append: block.settings.belt_name
+            assign t_price = belt_price
+            assign t_compare = belt_compare | plus: blanket_price
+            assign t_badge = block.settings.t2_badge
+            assign t_img = 'lt-IMG-4357.png'
+            assign t_gifts = 1
+            assign t_qty = 1
+        else
+            assign t_title = block.settings.t3_title
+            assign t_sub = '2x ' | append: block.settings.belt_name
+            assign t_price = double_price
+            assign blankets2 = blanket_price | times: 2
+            assign t_compare = double_compare | plus: blankets2
+            assign t_badge = block.settings.t3_badge
+            assign t_img = 'lt-IMG-4359.png'
+            assign t_gifts = 2
+            assign t_qty = 2
+        endif
+        assign t_save = t_compare | minus: t_price
+      -%}
+      <div class="lto-tier" data-tier="{{ t }}" data-qty="{{ t_qty }}" data-gifts="{{ t_gifts }}">
+        {%- if t_badge != blank -%}<span class="lto-badge">{{ t_badge }}</span>{%- endif -%}
+        <button type="button" class="lto-tier-head" aria-pressed="false">
+          <span class="lto-radio" aria-hidden="true"></span>
+          <img class="lto-tier-img" src="{{ t_img | file_url }}" alt="" width="96" height="64" loading="lazy">
+          <span class="lto-tier-text">
+            <span class="lto-tier-title">{{ t_title }}</span>
+            <span class="lto-tier-sub">{{ t_sub }}</span>
+            {%- if t_save > 0 -%}<span class="lto-tier-save">Save {{ t_save | money_without_trailing_zeros }}</span>{%- endif -%}
+            <span class="lto-tier-price"><b>{{ t_price | money }}</b>{% if t_compare > t_price %}<s>{{ t_compare | money }}</s>{% endif %}</span>
+          </span>
+        </button>
+        <div class="lto-tier-body">
+          {%- for n in (1..t_qty) -%}
+            <div class="lto-line" data-line>
+              <p class="lto-line-label">Belt colour{% if t_qty > 1 %} #{{ n }}{% endif %}</p>
+              {{ belt_colours }}
+            </div>
+          {%- endfor -%}
+          {%- if t_gifts > 0 and blanket -%}
+            {%- for n in (1..t_gifts) -%}{{ gift_row }}{%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  <p class="lto-error" data-error role="alert" hidden></p>
+  <button type="button" class="lto-atc" data-atc>{{ block.settings.atc_label }}</button>
+  <p class="lto-note">🚚 {{ block.settings.delivery_note }}</p>
+
+  <script type="application/json" data-blanket>
+    {%- if blanket -%}[{%- for v in blanket.variants -%}{"id":{{ v.id }},"options":{{ v.options | json }},"price":{{ v.price }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]{%- else -%}[]{%- endif -%}
+  </script>
+</div>
+
+<style>
+  .lto { --lto-ink: #4B2834; --lto-pink: #EFC7C4; --lto-soft: #FBEFEE; --lto-mid: #C98C93; display: grid; gap: 12px; font-family: var(--font-body--family); color: var(--lto-ink); }
+  .lto-head { margin: 0; text-align: center; font-weight: 800; font-size: 15px; }
+  .lto-tiers { display: grid; gap: 14px; }
+  .lto-tier { position: relative; border: 2px solid #EEE3E3; border-radius: 16px; background: #fff; overflow: visible; transition: border-color .2s, box-shadow .2s; }
+  .lto-tier.is-on { border-color: var(--lto-mid); box-shadow: 0 8px 22px rgba(75, 40, 52, .12); }
+  .lto-badge { position: absolute; top: -11px; right: 14px; padding: 3px 10px; border-radius: 6px 6px 0 0; background: var(--lto-mid); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+  .lto-tier-head { display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px; border: 0; background: none; text-align: left; cursor: pointer; color: inherit; font: inherit; }
+  .lto-radio { flex: 0 0 22px; width: 22px; height: 22px; border: 2px solid #C9B9BC; border-radius: 50%; }
+  .lto-tier.is-on .lto-radio { border: 6px solid var(--lto-mid); }
+  .lto-tier-img { width: 96px; height: auto; object-fit: contain; }
+  .lto-tier-text { display: grid; gap: 2px; }
+  .lto-tier-title { font-size: 17px; font-weight: 800; }
+  .lto-tier-sub { font-size: 13px; color: var(--lto-mid); }
+  .lto-tier-save { font-size: 14px; color: #6F5B60; }
+  .lto-tier-price b { font-size: 19px; font-weight: 800; }
+  .lto-tier-price s { margin-left: 6px; color: #9A8A8E; font-size: 14px; }
+  .lto-tier-body { display: none; padding: 0 14px 14px; gap: 10px; }
+  .lto-tier.is-on .lto-tier-body { display: grid; }
+  .lto-line-label { margin: 0 0 6px; font-size: 13px; font-weight: 700; }
+  .lto-colours { display: flex; gap: 8px; }
+  .lto-colour { width: 42px; height: 42px; padding: 0; border: 2px solid #E4D8DA; border-radius: 10px; background: var(--c); cursor: pointer; overflow: hidden; }
+  .lto-colour img { width: 100%; height: 100%; object-fit: cover; }
+  .lto-colour.is-on { border-color: var(--lto-ink); box-shadow: 0 0 0 2px #fff inset; }
+  .lto-gift { display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 10px; padding: 10px; border-radius: 12px; background: var(--lto-soft); }
+  .lto-gift-img { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; }
+  .lto-gift-title { margin: 0 0 6px; font-size: 13px; font-weight: 800; }
+  .lto-gift-selects { display: flex; flex-wrap: wrap; gap: 6px; }
+  .lto-select { padding: 5px 8px; border: 1px solid #E4D8DA; border-radius: 8px; background: #fff; font-size: 13px; color: inherit; }
+  .lto-gift-price { display: grid; justify-items: end; font-size: 14px; }
+  .lto-gift-price s { color: #9A8A8E; font-size: 13px; }
+  .lto-atc { width: 100%; min-height: 56px; border: 0; border-radius: 12px; background: #B36A72; color: #fff; font-size: 17px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
+  .lto-atc[aria-busy="true"] { opacity: .7; }
+  .lto-error { margin: 0; color: #B3261E; font-size: 14px; }
+  .lto-note { margin: 0; text-align: center; font-size: 14px; color: #6F5B60; }
+</style>
+
+<script>
+  (function () {
+    var root = document.currentScript.previousElementSibling.previousElementSibling;
+    var tiers = [].slice.call(root.querySelectorAll('[data-tier]'));
+    var blanket = JSON.parse(root.querySelector('[data-blanket]').textContent || '[]');
+    var atc = root.querySelector('[data-atc]');
+    var err = root.querySelector('[data-error]');
+    var label = atc.textContent;
+    var money = function (cents) { return (window.Shopify && Shopify.formatMoney) ? Shopify.formatMoney(cents) : (cents / 100).toFixed(2); };
+
+    function select(tier) {
+      tiers.forEach(function (t) { var on = t === tier; t.classList.toggle('is-on', on); t.querySelector('.lto-tier-head').setAttribute('aria-pressed', on); });
+    }
+    tiers.forEach(function (t) { t.querySelector('.lto-tier-head').addEventListener('click', function () { select(t); }); });
+    select(tiers[(+root.dataset.default || 2) - 1] || tiers[0]);
+
+    root.addEventListener('click', function (e) {
+      var b = e.target.closest('.lto-colour'); if (!b) return;
+      b.parentNode.querySelectorAll('.lto-colour').forEach(function (x) { x.classList.toggle('is-on', x === b); x.setAttribute('aria-checked', x === b); });
+    });
+
+    function giftVariant(row) {
+      var picked = [].slice.call(row.querySelectorAll('[data-gift-opt]')).map(function (s) { return s.value; });
+      return blanket.filter(function (v) { return picked.every(function (p, i) { return v.options[i] === p; }); })[0];
+    }
+    root.addEventListener('change', function (e) {
+      var row = e.target.closest('[data-gift]'); if (!row) return;
+      var v = giftVariant(row); if (v) row.querySelector('[data-gift-compare]').textContent = money(v.price);
+    });
+
+    function collect() {
+      var t = root.querySelector('.lto-tier.is-on'); var lines = [];
+      t.querySelectorAll('[data-line] .lto-colour.is-on').forEach(function (b) { lines.push({ id: +b.dataset.variant, quantity: 1, properties: {} }); });
+      t.querySelectorAll('[data-gift]').forEach(function (row) { var v = giftVariant(row); if (v) lines.push({ id: v.id, quantity: 1, properties: { _gift: 'Free blanket' } }); });
+      return lines;
+    }
+
+    atc.addEventListener('click', function () {
+      err.hidden = true; atc.setAttribute('aria-busy', 'true');
+      var bundle = 'K' + Date.now().toString(36);
+      var items = collect().map(function (l) { l.properties._bundle = bundle; return l; });
+      fetch('{{ routes.cart_add_url }}.js', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ items: items }) })
+        .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.description || d.message); }); })
+        .then(function () {
+          try { sessionStorage.setItem('lithella-open-cart', '1'); } catch (e) {}
+          window.location.reload();
+        })
+        .catch(function (e) { atc.removeAttribute('aria-busy'); atc.textContent = label; err.textContent = (e && e.message) || 'Something went wrong. Please try again.'; err.hidden = false; });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Belt: offer picker",
+  "tag": null,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Choose your bundle" },
+    { "type": "text", "id": "belt_name", "label": "Belt name in tiers", "default": "Lithella Belt" },
+    { "type": "text", "id": "blanket_handle", "label": "Gift blanket handle", "default": "comfort-blanket" },
+    { "type": "text", "id": "gift_label", "label": "Gift label", "default": "Free blanket" },
+    { "type": "range", "id": "default_tier", "label": "Selected by default", "min": 1, "max": 3, "step": 1, "default": 2 },
+    { "type": "text", "id": "t1_title", "label": "Tier 1 title", "default": "Single" },
+    { "type": "text", "id": "t1_badge", "label": "Tier 1 badge", "default": "" },
+    { "type": "text", "id": "t2_title", "label": "Tier 2 title", "default": "Lithella Kit ⭐" },
+    { "type": "text", "id": "t2_badge", "label": "Tier 2 badge", "default": "Most popular" },
+    { "type": "text", "id": "t3_title", "label": "Tier 3 title", "default": "Double Kit 💕" },
+    { "type": "text", "id": "t3_badge", "label": "Tier 3 badge", "default": "Best value" },
+    { "type": "range", "id": "double_off_percent", "label": "Double Kit belt discount (%)", "min": 0, "max": 50, "step": 1, "default": 14, "info": "Must match the automatic discount set up in Shopify." },
+    { "type": "text", "id": "atc_label", "label": "Button", "default": "Add to cart" },
+    { "type": "text", "id": "delivery_note", "label": "Delivery note", "default": "Free UK delivery" }
+  ],
+  "presets": [{ "name": "Belt: offer picker" }]
+}
+{% endschema %}

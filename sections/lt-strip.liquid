@@ -1,0 +1,111 @@
+<section class="lt-trust-bar">
+
+  <div class="lt-trust-track">
+
+    
+
+    <span>🇬🇧 Free UK delivery</span>
+    <span>•</span>
+
+    <span>🛡️ 30-day money-back guarantee</span>
+    <span>•</span>
+
+    <span>🔒 Secure SSL payment</span>
+    <span>•</span>
+
+    <span>🌸 Comfort on your period days</span>
+    <span>•</span>
+
+    <span>💗 Heat and massage in one belt</span>
+    <span>•</span>
+
+    
+
+    
+
+    <span>🇬🇧 Free UK delivery</span>
+    <span>•</span>
+
+    <span>🛡️ 30-day money-back guarantee</span>
+    <span>•</span>
+
+    <span>🔒 Secure SSL payment</span>
+    <span>•</span>
+
+    <span>🌸 Comfort on your period days</span>
+    <span>•</span>
+
+    <span>💗 Heat and massage in one belt</span>
+
+  </div>
+
+</section>
+
+<style>
+
+.lt-trust-bar {
+    background: #EFC7C4;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 14px 0;
+    border-top: 1px solid rgba(217, 169, 167, 0.35);
+    border-bottom: 1px solid rgba(217, 169, 167, 0.35);
+}
+
+.lt-trust-track {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    width: max-content;
+    animation: ltScroll 35s linear infinite;
+}
+
+.lt-trust-track span {
+    color: #FAF5EF;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.lt-trust-track strong {
+    color: #D9A9A7;
+}
+
+@keyframes ltScroll {
+
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+
+}
+
+@media(max-width: 768px) {
+
+    .lt-trust-bar {
+        padding: 11px 0;
+    }
+
+    .lt-trust-track span {
+        font-size: 13px;
+    }
+
+}
+
+</style>
+
+{% schema %}
+{
+  "name": "Belt: trust strip",
+  "tag": "section",
+  "class": "lt-section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Belt: trust strip"
+    }
+  ]
+}
+{% endschema %}
