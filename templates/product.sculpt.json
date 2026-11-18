@@ -64,6 +64,7 @@
               "type": "sb-bundle",
               "settings": {
                 "default_tier": 1,
+                "heading": "🖤 Early Black Friday · ends 30 November",
                 "default_variant_id": "61315045359950"
               },
               "blocks": {}
@@ -96,8 +97,8 @@
             "offer_timer": {
               "type": "sb-offer-timer",
               "settings": {
-                "label": "Offer ends in",
-                "ends_at": ""
+                "label": "Black Friday deals end in",
+                "ends_at": "2026-12-01T00:00:00Z"
               },
               "blocks": {}
             }
@@ -155,7 +156,7 @@
     },
     "marquee": {
       "type": "sb-marquee",
-      "settings": {}
+      "settings": { "items": "Early Black Friday: Buy 1 Get 1 Free\nBlack Friday prices end 30 November\nFree UK delivery\n90-day money-back guarantee\nFree size exchange\nSizes XS to 5XL" }
     }
   },
   "order": [

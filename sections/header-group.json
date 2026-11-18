@@ -17,7 +17,7 @@
         "announcement_1": {
           "type": "_announcement",
           "settings": {
-            "text": "<strong>BUY 1 GET 1 FREE</strong> · Mix any colors and sizes",
+            "text": "<strong>EARLY BLACK FRIDAY</strong> · Buy 1 Get 1 Free · ends 30 November",
             "link": "shopify://products/sculpt-brief",
             "font": "var(--font-subheading--family)",
             "font_size": "0.875rem",
@@ -45,7 +45,7 @@
         "announcement_3": {
           "type": "_announcement",
           "settings": {
-            "text": "<strong>90-day money-back guarantee</strong> · Free size exchange",
+            "text": "<strong>Black Friday prices</strong> end 30 November at midnight",
             "link": "shopify://products/sculpt-brief",
             "font": "var(--font-subheading--family)",
             "font_size": "0.875rem",
