@@ -8,8 +8,9 @@
   assign v1 = belt.selected_or_first_available_variant
   assign belt_price = v1.price
   assign belt_compare = v1.compare_at_price | default: v1.price
-  assign double_factor = 100 | minus: block.settings.double_off_percent
-  assign double_price = belt_price | times: 2 | times: double_factor | divided_by: 100
+  assign double_gross = belt_price | times: 2
+  assign double_cut = double_gross | times: 3929 | divided_by: 10000
+  assign double_price = double_gross | minus: double_cut
   assign double_compare = belt_compare | times: 2
   assign first_blanket = blanket.variants.first
   assign blanket_price = first_blanket.price | default: 0
@@ -37,13 +38,6 @@
       <div class="lto-gift-main">
         <p class="lto-gift-title">+ {{ block.settings.gift_label }} 🎁</p>
         {%- if blanket -%}
-          <div class="lto-gift-selects">
-            {%- for opt in blanket.options_with_values -%}
-              <select class="lto-select" data-gift-opt="{{ forloop.index0 }}" aria-label="{{ opt.name }}">
-                {%- for val in opt.values -%}<option value="{{ val | escape }}">{{ val }}</option>{%- endfor -%}
-              </select>
-            {%- endfor -%}
-          </div>
         {%- endif -%}
       </div>
       <div class="lto-gift-price"><b>{{ 0 | money }}</b><s data-gift-compare>{{ blanket_price | money }}</s></div>
@@ -59,7 +53,7 @@
             assign t_price = belt_price
             assign t_compare = belt_compare
             assign t_badge = block.settings.t1_badge
-            assign t_img = 'lt-IMG-2678.png'
+            assign t_img = 'lt-en-tier-kit.png'
             assign t_gifts = 0
             assign t_qty = 1
         elsif t == 2
@@ -227,7 +221,7 @@
     { "type": "text", "id": "t3_badge", "label": "Tier 3 badge", "default": "Best value" },
     { "type": "range", "id": "double_off_percent", "label": "Double Kit belt discount (%)", "min": 0, "max": 50, "step": 1, "default": 14, "info": "Must match the automatic discount set up in Shopify." },
     { "type": "text", "id": "atc_label", "label": "Button", "default": "Add to cart" },
-    { "type": "text", "id": "delivery_note", "label": "Delivery note", "default": "Free UK delivery" }
+    { "type": "text", "id": "delivery_note", "label": "Delivery note", "default": "Free US delivery" }
   ],
   "presets": [{ "name": "Belt: offer picker" }]
 }
